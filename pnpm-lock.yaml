@@ -18,7 +18,7 @@ importers:
         specifier: ^5.4.5
         version: 5.6.2
 
-  apps/docs:
+  apps/admin:
     dependencies:
       '@repo/ui':
         specifier: workspace:*
@@ -58,7 +58,7 @@ importers:
         specifier: ^5
         version: 5.6.2
 
-  apps/web:
+  apps/client:
     dependencies:
       '@radix-ui/react-accordion':
         specifier: ^1.2.0
