@@ -1,26 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  LayoutDashboard,
-  Users,
-  BarChart,
-  Settings,
-  FileText,
-  UserCog,
-} from "lucide-react";
-import Link from "next/link";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { LayoutDashboard, Users, BarChart, Settings, FileText, UserCog } from 'lucide-react';
+import Link from 'next/link';
+import { CLUBS } from '@/constants/data';
+import { Club } from '@/types';
 
 interface SidebarProps {
-  selectedClub: string;
+  selectedClub: Club;
   onClubChange: (club: string) => void;
 }
 
@@ -28,54 +17,54 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
   const menuItems = [
     {
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-      label: "대시보드",
-      href: "/dashboard",
+      label: '대시보드',
+      href: '/',
     },
     {
       icon: <FileText className="mr-2 h-4 w-4" />,
-      label: "모집 공고 관리",
-      href: "/recruitment",
+      label: '모집 공고 관리',
+      href: '/recruitment',
     },
     {
       icon: <BarChart className="mr-2 h-4 w-4" />,
-      label: "동아리 통계",
-      href: "/statistics",
+      label: '동아리 통계',
+      href: '/statistics',
     },
     {
       icon: <Settings className="mr-2 h-4 w-4" />,
-      label: "동아리 정보 수정",
-      href: "/club-info",
+      label: '동아리 정보 수정',
+      href: '/club-info',
     },
     {
       icon: <FileText className="mr-2 h-4 w-4" />,
-      label: "템플릿 관리",
-      href: "/templates",
+      label: '템플릿 관리',
+      href: '/templates',
     },
     {
       icon: <UserCog className="mr-2 h-4 w-4" />,
-      label: "운영진 관리",
-      href: "/admin-management",
+      label: '운영진 관리',
+      href: '/admin-management',
     },
     {
       icon: <Users className="mr-2 h-4 w-4" />,
-      label: "프로필 설정",
-      href: "/profile",
+      label: '프로필 설정',
+      href: '/profile',
     },
   ];
 
   return (
-    <div className="flex flex-col w-64 bg-gray-900 border-r border-gray-800">
+    <div className="flex w-64 flex-col border-r border-gray-800 bg-gray-900">
       <div className="p-4">
-        <Select onValueChange={onClubChange} defaultValue={selectedClub}>
-          <SelectTrigger className="w-full bg-gray-800 text-gray-100 border-gray-700">
+        <Select onValueChange={onClubChange} defaultValue={String(selectedClub.id)}>
+          <SelectTrigger className="w-full border-gray-700 bg-gray-800 text-gray-100">
             <SelectValue placeholder="동아리 선택" />
           </SelectTrigger>
-          <SelectContent className="bg-gray-800 text-gray-100 border-gray-700">
-            <SelectItem value="GDG On Campus Gachon">
-              GDG On Campus Gachon
-            </SelectItem>
-            <SelectItem value="AI 연구회">AI 연구회</SelectItem>
-            <SelectItem value="웹 개발 동아리">웹 개발 동아리</SelectItem>
+          <SelectContent className="border-gray-700 bg-gray-800 text-gray-100">
+            {CLUBS.map((club, index) => (
+              <SelectItem key={index} value={String(club.id)}>
+                {club.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -87,7 +76,7 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
             className="w-full justify-start px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white"
             asChild
           >
-            <Link href={item.href}>
+            <Link href={`/dashboard/${selectedClub.id}${item.href}`}>
               {item.icon}
               {item.label}
             </Link>

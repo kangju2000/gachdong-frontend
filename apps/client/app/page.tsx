@@ -1,86 +1,73 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ChevronDown,
-  Search,
-  Filter,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  Eye,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Header } from "@/components/layout/header";
-import { RECRUIT_LIST, CLUBS } from "@/constants/data";
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown, Search, Filter, ChevronLeft, ChevronRight, Calendar, Eye } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Header } from '@/components/layout/header';
+import { RECRUIT_LIST, CLUBS } from '@/constants/data';
 
 const ANNOUNCEMENTS = [
   {
     id: 1,
-    title: "2024학년도 1학기 동아리 등록 안내",
-    image: "/placeholder.svg?height=200&width=400",
+    title: '2024학년도 1학기 동아리 등록 안내',
+    image: '/placeholder.svg?height=200&width=400',
   },
   {
     id: 2,
-    title: "동아리 공간 사용 규정 변경 안내",
-    image: "/placeholder.svg?height=200&width=400",
+    title: '동아리 공간 사용 규정 변경 안내',
+    image: '/placeholder.svg?height=200&width=400',
   },
   {
     id: 3,
-    title: "2024 동아리 박람회 개최 안내",
-    image: "/placeholder.svg?height=200&width=400",
+    title: '2024 동아리 박람회 개최 안내',
+    image: '/placeholder.svg?height=200&width=400',
   },
 ];
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const bannerItems = [...RECRUIT_LIST, ...ANNOUNCEMENTS];
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('전체');
   const [showRecruitingOnly, setShowRecruitingOnly] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerItems.length);
+      setCurrentSlide(prevSlide => (prevSlide + 1) % bannerItems.length);
     }, 5000);
     return () => clearInterval(timer);
   }, [bannerItems.length]);
 
   const nextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerItems.length);
+    setCurrentSlide(prevSlide => (prevSlide + 1) % bannerItems.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide(
-      (prevSlide) => (prevSlide - 1 + bannerItems.length) % bannerItems.length
-    );
+    setCurrentSlide(prevSlide => (prevSlide - 1 + bannerItems.length) % bannerItems.length);
   };
 
-  const filteredClubs = CLUBS.filter((club) => {
-    const matchesSearch = club.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "전체" || club.category === selectedCategory;
+  const filteredClubs = CLUBS.filter(club => {
+    const matchesSearch = club.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
     const matchesRecruiting = !showRecruitingOnly || club.recruiting;
     return matchesSearch && matchesCategory && matchesRecruiting;
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
+    <div className="bg-background text-foreground min-h-screen font-sans">
       <Header />
-      <main className="max-w-[980px] mx-auto px-4 py-8">
+      <main className="mx-auto max-w-[980px] px-4 py-8">
         <section className="mb-8">
           <Card className="w-full overflow-hidden">
             <div className="relative h-[200px]">
@@ -88,28 +75,17 @@ export default function Home() {
                 <div
                   key={index}
                   className={`absolute inset-0 transition-opacity duration-500 ${
-                    index === currentSlide ? "opacity-100" : "opacity-0"
+                    index === currentSlide ? 'opacity-100' : 'opacity-0'
                   }`}
                 >
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white p-8">
+                  <Image src={item.image} alt={item.title} layout="fill" objectFit="cover" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 p-8 text-white">
                     <div className="text-center">
-                      <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
-                      <Link
-                        href={
-                          item.id
-                            ? `/announcements/${item.id}`
-                            : `/recruits/${item.id}`
-                        }
-                      >
+                      <h2 className="mb-2 text-2xl font-bold">{item.title}</h2>
+                      <Link href={item.id ? `/announcements/${item.id}` : `/recruits/${item.id}`}>
                         <Button
                           variant="outline"
-                          className="bg-white text-black border-white hover:bg-gray-200 hover:text-black"
+                          className="border-white bg-white text-black hover:bg-gray-200 hover:text-black"
                         >
                           자세히 보기
                         </Button>
@@ -120,13 +96,13 @@ export default function Home() {
               ))}
               <button
                 onClick={prevSlide}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-black bg-opacity-50 p-2 text-white"
               >
                 <ChevronLeft className="h-6 w-6" />
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-black bg-opacity-50 p-2 text-white"
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
@@ -134,71 +110,53 @@ export default function Home() {
           </Card>
         </section>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col gap-8 lg:flex-row">
           <section className="flex-grow">
-            <div className="flex justify-between items-center mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <h2 className="text-2xl font-semibold">동아리 목록</h2>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="text-muted-foreground absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />
                   <Input
                     type="search"
                     placeholder="동아리 검색"
-                    className="pl-8 w-[200px]"
+                    className="w-[200px] pl-8"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4 mr-2" />
+                      <Filter className="mr-2 h-4 w-4" />
                       필터
-                      <ChevronDown className="h-4 w-4 ml-2" />
+                      <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => setShowRecruitingOnly(!showRecruitingOnly)}
-                    >
-                      {showRecruitingOnly
-                        ? "모든 동아리 보기"
-                        : "모집 중인 동아리만"}
+                    <DropdownMenuItem onClick={() => setShowRecruitingOnly(!showRecruitingOnly)}>
+                      {showRecruitingOnly ? '모든 동아리 보기' : '모집 중인 동아리만'}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
-            <Tabs
-              defaultValue="전체"
-              className="w-full mb-4"
-              onValueChange={setSelectedCategory}
-            >
+            <Tabs defaultValue="전체" className="mb-4 w-full" onValueChange={setSelectedCategory}>
               <TabsList>
-                {[
-                  "전체",
-                  "IT · 프로그래밍",
-                  "학술 · 사회",
-                  "문화 · 예술",
-                  "체육 · 건강",
-                ].map((tab) => (
-                  <TabsTrigger
-                    key={tab}
-                    value={tab}
-                    className="px-3 py-1.5 text-sm whitespace-nowrap"
-                  >
+                {['전체', 'IT · 프로그래밍', '학술 · 사회', '문화 · 예술', '체육 · 건강'].map(tab => (
+                  <TabsTrigger key={tab} value={tab} className="whitespace-nowrap px-3 py-1.5 text-sm">
                     {tab}
                   </TabsTrigger>
                 ))}
               </TabsList>
             </Tabs>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredClubs.map((club) => (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {filteredClubs.map(club => (
                 <Link href={`/clubs/${club.id}`} key={club.id}>
-                  <Card className="overflow-hidden hover:shadow-md transition-shadow h-24">
-                    <CardContent className="p-3 h-full">
-                      <div className="flex items-center space-x-3 h-full">
-                        <div className="w-16 h-16 bg-muted rounded-full flex-shrink-0 overflow-hidden">
+                  <Card className="h-24 overflow-hidden transition-shadow hover:shadow-md">
+                    <CardContent className="h-full p-3">
+                      <div className="flex h-full items-center space-x-3">
+                        <div className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
                           <Image
                             src={club.image}
                             alt={`${club.name} logo`}
@@ -207,29 +165,17 @@ export default function Home() {
                             className="rounded-full object-cover"
                           />
                         </div>
-                        <div className="flex-grow flex flex-col justify-between h-full py-1 overflow-hidden">
+                        <div className="flex h-full flex-grow flex-col justify-between overflow-hidden py-1">
                           <div>
-                            <h3 className="font-semibold text-lg leading-tight truncate">
-                              {club.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground truncate">
-                              {club.category}
-                            </p>
+                            <h3 className="truncate text-lg font-semibold leading-tight">{club.name}</h3>
+                            <p className="text-muted-foreground truncate text-sm">{club.category}</p>
                           </div>
-                          <div className="flex items-center mt-1">
+                          <div className="mt-1 flex items-center">
                             <span
-                              className={`w-2 h-2 rounded-full ${
-                                club.recruiting ? "bg-green-500" : "bg-red-500"
-                              } mr-2`}
+                              className={`h-2 w-2 rounded-full ${club.recruiting ? 'bg-green-500' : 'bg-red-500'} mr-2`}
                             ></span>
-                            <span
-                              className={`text-sm ${
-                                club.recruiting
-                                  ? "text-green-600"
-                                  : "text-red-600"
-                              }`}
-                            >
-                              {club.recruiting ? "모집중" : "모집 마감"}
+                            <span className={`text-sm ${club.recruiting ? 'text-green-600' : 'text-red-600'}`}>
+                              {club.recruiting ? '모집중' : '모집 마감'}
                             </span>
                           </div>
                         </div>
@@ -242,17 +188,14 @@ export default function Home() {
           </section>
 
           <section className="lg:w-1/3">
-            <h2 className="text-2xl font-semibold mb-4">최근 올라온 공고</h2>
-            <div className="space-y-3 flex flex-col">
-              {RECRUIT_LIST.slice(0, 3).map((announcement) => (
-                <Link
-                  href={`/recruits/${announcement.id}`}
-                  key={announcement.id}
-                >
-                  <Card className="hover:shadow-md transition-shadow">
+            <h2 className="mb-4 text-2xl font-semibold">최근 올라온 공고</h2>
+            <div className="flex flex-col space-y-3">
+              {RECRUIT_LIST.slice(0, 3).map(announcement => (
+                <Link href={`/recruits/${announcement.id}`} key={announcement.id}>
+                  <Card className="transition-shadow hover:shadow-md">
                     <CardContent className="p-3">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-muted rounded-full flex-shrink-0 overflow-hidden">
+                        <div className="bg-muted h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
                           <Image
                             src={announcement.image}
                             alt={`${announcement.club} logo`}
@@ -261,26 +204,22 @@ export default function Home() {
                             className="rounded-full object-cover"
                           />
                         </div>
-                        <div className="flex-grow min-w-0">
-                          <h3 className="font-semibold text-sm truncate">
-                            {announcement.title}
-                          </h3>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {announcement.club}
-                          </p>
-                          <div className="flex items-center text-xs text-muted-foreground mt-1 space-x-2">
+                        <div className="min-w-0 flex-grow">
+                          <h3 className="truncate text-sm font-semibold">{announcement.title}</h3>
+                          <p className="text-muted-foreground truncate text-xs">{announcement.club}</p>
+                          <div className="text-muted-foreground mt-1 flex items-center space-x-2 text-xs">
                             <span className="flex items-center">
-                              <Calendar className="h-3 w-3 mr-1" />
+                              <Calendar className="mr-1 h-3 w-3" />
                               {announcement.endDate}
                             </span>
                             <span className="flex items-center">
-                              <Eye className="h-3 w-3 mr-1" />
+                              <Eye className="mr-1 h-3 w-3" />
                               {announcement.views}
                             </span>
                           </div>
                         </div>
-                        <div className="text-right flex-shrink-0">
-                          <span className="inline-block bg-primary/10 text-primary text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                        <div className="flex-shrink-0 text-right">
+                          <span className="bg-primary/10 text-primary inline-block rounded-full px-1.5 py-0.5 text-xs font-semibold">
                             D-{announcement.daysLeft}
                           </span>
                         </div>
@@ -290,7 +229,7 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <div className="text-center mt-4">
+            <div className="mt-4 text-center">
               <Button variant="outline" asChild>
                 <Link href="/recruits">+ 더보기</Link>
               </Button>

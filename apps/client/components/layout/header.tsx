@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,56 +11,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Bell,
-  LogOut,
-  Settings,
-  User,
-  Users,
-  Megaphone,
-  Newspaper,
-} from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Bell, LogOut, Settings, User, Users, Megaphone, Newspaper } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // This should be replaced with actual auth state
   const [notifications, setNotifications] = useState([
-    { id: 1, message: "새로운 동아리 지원이 있습니다." },
-    { id: 2, message: "프로필 업데이트를 완료해주세요." },
+    { id: 1, message: '새로운 동아리 지원이 있습니다.' },
+    { id: 2, message: '프로필 업데이트를 완료해주세요.' },
   ]);
 
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/clubs", label: "동아리", icon: Users },
-    { href: "/recruits", label: "모집 공고", icon: Megaphone },
-    { href: "/announcements", label: "공지사항", icon: Newspaper },
+    { href: '/clubs', label: '동아리', icon: Users },
+    { href: '/recruits', label: '모집 공고', icon: Megaphone },
+    { href: '/announcements', label: '공지사항', icon: Newspaper },
   ];
 
   return (
     <header className="bg-background border-b">
-      <div className="max-w-[980px] mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="mx-auto flex max-w-[980px] items-center justify-between px-4 py-4">
         <div className="flex items-center space-x-6">
           <Link href="/" className="text-2xl font-bold">
             GACHDONG
           </Link>
-          <nav className="hidden sm:flex items-center space-x-4">
-            {navItems.map((item) => {
+          <nav className="hidden items-center space-x-4 sm:flex">
+            {navItems.map(item => {
               const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium ${
+                  className={`flex items-center space-x-1 rounded-md px-3 py-2 text-sm font-medium ${
                     pathname === item.href
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -83,12 +71,10 @@ export function Header() {
                   <div className="grid gap-4">
                     <div className="space-y-2">
                       <h4 className="font-medium leading-none">알림</h4>
-                      <p className="text-sm text-muted-foreground">
-                        최근 알림 목록입니다.
-                      </p>
+                      <p className="text-muted-foreground text-sm">최근 알림 목록입니다.</p>
                     </div>
                     <ul className="space-y-2">
-                      {notifications.map((notification) => (
+                      {notifications.map(notification => (
                         <li key={notification.id} className="text-sm">
                           {notification.message}
                         </li>

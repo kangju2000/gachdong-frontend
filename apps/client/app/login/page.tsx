@@ -1,25 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Header } from "@/components/layout/header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { useState } from 'react';
+import { Header } from '@/components/layout/header';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -27,22 +20,18 @@ export default function LoginPage() {
     e.preventDefault();
     const email = `${username}@gachon.ac.kr`;
     // Here you would typically handle the login logic
-    console.log("Login attempt", { email, password, rememberMe });
+    console.log('Login attempt', { email, password, rememberMe });
   };
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="bg-background min-h-screen font-sans">
       <Header />
 
-      <main className="max-w-[400px] mx-auto py-6 px-4">
+      <main className="mx-auto max-w-[400px] px-4 py-6">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">
-              로그인
-            </CardTitle>
-            <CardDescription className="text-center">
-              GACHDONG에 오신 것을 환영합니다
-            </CardDescription>
+            <CardTitle className="text-center text-2xl font-bold">로그인</CardTitle>
+            <CardDescription className="text-center">GACHDONG에 오신 것을 환영합니다</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,11 +43,11 @@ export default function LoginPage() {
                     type="text"
                     placeholder="아이디"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={e => setUsername(e.target.value)}
                     required
                     className="rounded-r-none"
                   />
-                  <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-input bg-muted text-muted-foreground text-sm">
+                  <span className="border-input bg-muted text-muted-foreground inline-flex items-center rounded-r-md border border-l-0 px-3 text-sm">
                     @gachon.ac.kr
                   </span>
                 </div>
@@ -68,22 +57,18 @@ export default function LoginPage() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="비밀번호"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 transform"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
@@ -91,9 +76,7 @@ export default function LoginPage() {
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
-                  onCheckedChange={(checked) =>
-                    setRememberMe(checked as boolean)
-                  }
+                  onCheckedChange={checked => setRememberMe(checked as boolean)}
                 />
                 <Label
                   htmlFor="remember"
@@ -108,14 +91,11 @@ export default function LoginPage() {
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-center text-muted-foreground hover:text-primary"
-            >
+            <Link href="/forgot-password" className="text-muted-foreground hover:text-primary text-center text-sm">
               비밀번호를 잊으셨나요?
             </Link>
-            <div className="text-sm text-center">
-              계정이 없으신가요?{" "}
+            <div className="text-center text-sm">
+              계정이 없으신가요?{' '}
               <Link href="/signup" className="text-primary hover:underline">
                 회원가입
               </Link>

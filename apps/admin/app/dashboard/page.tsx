@@ -55,12 +55,12 @@ export default function SelectClub() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-6 flex items-center justify-center">
-      <Card className="w-full max-w-md bg-gray-800 border-gray-700">
+    <div className="flex min-h-screen items-center justify-center bg-gray-900 p-6 text-gray-100">
+      <Card className="w-full max-w-md border-gray-700 bg-gray-800">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-white mb-4">동아리를 선택해주세요</CardTitle>
-          <div className="flex justify-center items-center space-x-2">
-            <span className="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">{email}</span>
+          <CardTitle className="mb-4 text-center text-2xl font-bold text-white">동아리를 선택해주세요</CardTitle>
+          <div className="flex items-center justify-center space-x-2">
+            <span className="rounded-full bg-gray-700 px-3 py-1 text-sm text-gray-300">{email}</span>
             <Button variant="ghost" size="sm" asChild className="text-gray-400">
               <Link href="/login">변경</Link>
             </Button>
@@ -71,10 +71,10 @@ export default function SelectClub() {
             <Link
               key={club.id}
               href={`/dashboard/${club.id}`}
-              className="flex items-center justify-between bg-gray-700 p-4 rounded-lg"
+              className="flex items-center justify-between rounded-lg bg-gray-700 p-4"
             >
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-800 relative">
+                <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-800">
                   <Image src={club.logoUrl} alt={`${club.name} logo`} className="object-cover" fill />
                 </div>
                 <div>
@@ -88,10 +88,10 @@ export default function SelectClub() {
         </CardContent>
         <CardFooter className="flex justify-center space-x-4">
           <Button variant="link" className="text-blue-400 hover:text-blue-300">
-            <Plus className="w-4 h-4 mr-2" /> 동아리 추가하기
+            <Plus className="mr-2 h-4 w-4" /> 동아리 추가하기
           </Button>
           <Button variant="link" className="text-gray-400 hover:text-gray-300">
-            <Key className="w-4 h-4 mr-2" /> 초대코드 입력
+            <Key className="mr-2 h-4 w-4" /> 초대코드 입력
           </Button>
         </CardFooter>
       </Card>

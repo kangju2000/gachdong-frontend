@@ -1,17 +1,17 @@
-import { Announcement, Club, Recruit } from "@/types";
+import { Announcement, Club, Recruit } from '@/types';
 
 export const RECRUIT_LIST: Recruit[] = [
   {
     id: 1,
-    title: "GDSC Gachon 24-25 Member 모집",
-    club: "GDG On Campus Gachon",
-    category: "IT · 프로그래밍",
-    startDate: "2024-03-01",
-    endDate: "2024-03-15",
+    title: 'GDSC Gachon 24-25 Member 모집',
+    club: 'GDG On Campus Gachon',
+    category: 'IT · 프로그래밍',
+    startDate: '2024-03-01',
+    endDate: '2024-03-15',
     views: 245,
     daysLeft: 5,
     image:
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # GDSC Gachon 24-25 Member 모집
 
@@ -37,20 +37,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 00명
     `,
-    recruitmentCount: "00",
-    activityPeriod: "2024년 4월 ~ 2025년 3월",
+    recruitmentCount: '00',
+    activityPeriod: '2024년 4월 ~ 2025년 3월',
   },
   {
     id: 2,
-    title: "가천대 토론 동아리 신입 모집",
-    club: "가천대 토론 동아리",
-    category: "학술 · 사회",
-    startDate: "2024-03-05",
-    endDate: "2024-03-20",
+    title: '가천대 토론 동아리 신입 모집',
+    club: '가천대 토론 동아리',
+    category: '학술 · 사회',
+    startDate: '2024-03-05',
+    endDate: '2024-03-20',
     views: 180,
     daysLeft: 10,
     image:
-      "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천대 토론 동아리 신입 모집
 
@@ -75,20 +75,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 15명
     `,
-    recruitmentCount: "15",
-    activityPeriod: "2024년 3월 ~ 2025년 2월",
+    recruitmentCount: '15',
+    activityPeriod: '2024년 3월 ~ 2025년 2월',
   },
   {
     id: 3,
-    title: "가천 미술 동아리 회원 모집",
-    club: "가천 미술 동아리",
-    category: "문화 · 예술",
-    startDate: "2024-03-10",
-    endDate: "2024-03-25",
+    title: '가천 미술 동아리 회원 모집',
+    club: '가천 미술 동아리',
+    category: '문화 · 예술',
+    startDate: '2024-03-10',
+    endDate: '2024-03-25',
     views: 120,
     daysLeft: 15,
     image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천 미술 동아리 회원 모집
 
@@ -113,20 +113,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 20명
     `,
-    recruitmentCount: "20",
-    activityPeriod: "2024년 4월 ~ 2025년 2월",
+    recruitmentCount: '20',
+    activityPeriod: '2024년 4월 ~ 2025년 2월',
   },
   {
     id: 4,
-    title: "가천 축구회 신입 부원 모집",
-    club: "가천 축구회",
-    category: "체육 · 건강",
-    startDate: "2024-03-15",
-    endDate: "2024-03-30",
+    title: '가천 축구회 신입 부원 모집',
+    club: '가천 축구회',
+    category: '체육 · 건강',
+    startDate: '2024-03-15',
+    endDate: '2024-03-30',
     views: 200,
     daysLeft: 20,
     image:
-      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천 축구회 신입 부원 모집
 
@@ -151,20 +151,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 25명
     `,
-    recruitmentCount: "25",
-    activityPeriod: "2024년 4월 ~ 2025년 3월",
+    recruitmentCount: '25',
+    activityPeriod: '2024년 4월 ~ 2025년 3월',
   },
   {
     id: 5,
-    title: "가천대 로봇 동아리 2024 신입생 모집",
-    club: "가천대 로봇 동아리",
-    category: "IT · 프로그래밍",
-    startDate: "2024-03-20",
-    endDate: "2024-04-05",
+    title: '가천대 로봇 동아리 2024 신입생 모집',
+    club: '가천대 로봇 동아리',
+    category: 'IT · 프로그래밍',
+    startDate: '2024-03-20',
+    endDate: '2024-04-05',
     views: 150,
     daysLeft: 25,
     image:
-      "https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천대 로봇 동아리 2024 신입생 모집
 
@@ -189,20 +189,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 15명
     `,
-    recruitmentCount: "15",
-    activityPeriod: "2024년 4월 ~ 2025년 2월",
+    recruitmentCount: '15',
+    activityPeriod: '2024년 4월 ~ 2025년 2월',
   },
   {
     id: 6,
-    title: "가천 영화 감상 클럽 회원 모집",
-    club: "가천 영화 감상 클럽",
-    category: "문화 · 예술",
-    startDate: "2024-03-25",
-    endDate: "2024-04-10",
+    title: '가천 영화 감상 클럽 회원 모집',
+    club: '가천 영화 감상 클럽',
+    category: '문화 · 예술',
+    startDate: '2024-03-25',
+    endDate: '2024-04-10',
     views: 100,
     daysLeft: 30,
     image:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천 영화 감상 클럽 회원 모집
 
@@ -227,20 +227,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 ## 👥 모집 인원
 30명
     `,
-    recruitmentCount: "30",
-    activityPeriod: "2024년 4월 ~ 2025년 3월",
+    recruitmentCount: '30',
+    activityPeriod: '2024년 4월 ~ 2025년 3월',
   },
   {
     id: 7,
-    title: "가천대 경제학회 신입회원 모집",
-    club: "가천대 경제학회",
-    category: "학술 · 사회",
-    startDate: "2024-04-01",
-    endDate: "2024-04-15",
+    title: '가천대 경제학회 신입회원 모집',
+    club: '가천대 경제학회',
+    category: '학술 · 사회',
+    startDate: '2024-04-01',
+    endDate: '2024-04-15',
     views: 130,
     daysLeft: 35,
     image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천대 경제학회 신입회원 모집
 
@@ -299,20 +299,20 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 
 많은 관심과 지원 부탁드립니다. 가천대 경제학회에서 여러분의 경제학적 시야를 넓혀보세요!
   `,
-    recruitmentCount: "20",
-    activityPeriod: "2024년 5월 ~ 2025년 4월",
+    recruitmentCount: '20',
+    activityPeriod: '2024년 5월 ~ 2025년 4월',
   },
   {
     id: 8,
-    title: "가천 테니스 클럽 회원 모집",
-    club: "가천 테니스 클럽",
-    category: "체육 · 건강",
-    startDate: "2024-04-05",
-    endDate: "2024-04-20",
+    title: '가천 테니스 클럽 회원 모집',
+    club: '가천 테니스 클럽',
+    category: '체육 · 건강',
+    startDate: '2024-04-05',
+    endDate: '2024-04-20',
     views: 90,
     daysLeft: 40,
     image:
-      "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80",
+      'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
     content: `
 # 가천 테니스 클럽 회원 모집
 
@@ -381,21 +381,21 @@ GDSC(Google Developer Student Clubs)는 구글 개발자 기술에 관심이 있
 테니스를 통해 건강한 대학 생활을 만들어가고 싶으신 분들의 많은 관심과 지원 부탁드립니다. 
 가천 테니스 클럽에서 여러분의 테니스 실력과 즐거운 추억을 함께 만들어가요! 🏆🎾
   `,
-    recruitmentCount: "20",
-    activityPeriod: "2024년 5월 ~ 2025년 4월",
+    recruitmentCount: '20',
+    activityPeriod: '2024년 5월 ~ 2025년 4월',
   },
 ];
 export const CLUBS: Club[] = [
   {
     id: 1,
-    name: "GDG On Campus Gachon",
-    category: "IT · 프로그래밍",
+    name: 'GDG On Campus Gachon',
+    category: 'IT · 프로그래밍',
     recruiting: true,
     image:
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80",
-    description: "Google 기술에 관심 있는 학생들의 커뮤니티",
+      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80',
+    description: 'Google 기술에 관심 있는 학생들의 커뮤니티',
     establishedYear: 2018,
-    activities: ["세미나", "해커톤", "스터디 그룹"],
+    activities: ['세미나', '해커톤', '스터디 그룹'],
     introduction: `
 # GDG On Campus Gachon
 
@@ -424,14 +424,14 @@ GDG On Campus Gachon은 Google 기술에 관심 있는 학생들이 모여 지�
   },
   {
     id: 2,
-    name: "가천대 토론 동아리",
-    category: "학술 · 사회",
+    name: '가천대 토론 동아리',
+    category: '학술 · 사회',
     recruiting: false,
     image:
-      "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80",
-    description: "다양한 주제로 토론 실력을 키우는 동아리",
+      'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80',
+    description: '다양한 주제로 토론 실력을 키우는 동아리',
     establishedYear: 2010,
-    activities: ["정기 토론회", "대학 간 토론 대회 참가"],
+    activities: ['정기 토론회', '대학 간 토론 대회 참가'],
     introduction: `
 # 가천대 토론 동아리
 
@@ -461,14 +461,14 @@ GDG On Campus Gachon은 Google 기술에 관심 있는 학생들이 모여 지�
   },
   {
     id: 3,
-    name: "가천 미술 동아리",
-    category: "문화 · 예술",
+    name: '가천 미술 동아리',
+    category: '문화 · 예술',
     recruiting: true,
     image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80",
-    description: "다양한 미술 활동을 즐기는 동아리",
+      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80',
+    description: '다양한 미술 활동을 즐기는 동아리',
     establishedYear: 2015,
-    activities: ["정기 전시회", "야외 스케치", "미술관 탐방"],
+    activities: ['정기 전시회', '야외 스케치', '미술관 탐방'],
     introduction: `
 # 가천 미술 동아리
 
@@ -500,14 +500,14 @@ GDG On Campus Gachon은 Google 기술에 관심 있는 학생들이 모여 지�
   // ... 나머지 클럽들에 대해서도 같은 방식으로 introduction 필드를 추가합니다.
   {
     id: 8,
-    name: "가천 테니스 클럽",
-    category: "체육 · 건강",
+    name: '가천 테니스 클럽',
+    category: '체육 · 건강',
     recruiting: true,
     image:
-      "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80",
-    description: "테니스를 즐기는 학생들의 모임",
+      'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80',
+    description: '테니스를 즐기는 학생들의 모임',
     establishedYear: 2012,
-    activities: ["정기 훈련", "교내 대회 개최", "타 대학과의 교류전"],
+    activities: ['정기 훈련', '교내 대회 개최', '타 대학과의 교류전'],
     introduction: `
 # 가천 테니스 클럽
 
@@ -542,7 +542,7 @@ Let's Ace It! 🏆
 export const ANNOUNCEMENTS: Announcement[] = [
   {
     id: 1,
-    title: "2024학년도 1학기 동아리 등록 안내",
+    title: '2024학년도 1학기 동아리 등록 안내',
     content: `
 안녕하세요, 가천대학교 학생 여러분!
 
@@ -573,13 +573,13 @@ export const ANNOUNCEMENTS: Announcement[] = [
 
 감사합니다.
     `,
-    createdAt: "2024-01-15T09:00:00Z",
-    updatedAt: "2024-01-15T09:00:00Z",
+    createdAt: '2024-01-15T09:00:00Z',
+    updatedAt: '2024-01-15T09:00:00Z',
     views: 200,
   },
   {
     id: 2,
-    title: "동아리 공간 사용 규정 변경 안내",
+    title: '동아리 공간 사용 규정 변경 안내',
     content: `
 가천대학교 동아리 회원 여러분께 알립니다.
 
@@ -615,13 +615,13 @@ export const ANNOUNCEMENTS: Announcement[] = [
 
 감사합니다.
     `,
-    createdAt: "2024-02-20T14:30:00Z",
-    updatedAt: "2024-02-20T14:30:00Z",
+    createdAt: '2024-02-20T14:30:00Z',
+    updatedAt: '2024-02-20T14:30:00Z',
     views: 150,
   },
   {
     id: 3,
-    title: "2024 동아리 박람회 개최 안내",
+    title: '2024 동아리 박람회 개최 안내',
     content: `
 안녕하세요, 가천대학교 학우 여러분!
 
@@ -655,8 +655,8 @@ export const ANNOUNCEMENTS: Announcement[] = [
 
 문의: 학생처 동아리연합회 (02-1234-5678)
     `,
-    createdAt: "2024-02-28T11:00:00Z",
-    updatedAt: "2024-02-28T11:00:00Z",
+    createdAt: '2024-02-28T11:00:00Z',
+    updatedAt: '2024-02-28T11:00:00Z',
     views: 180,
   },
 ];

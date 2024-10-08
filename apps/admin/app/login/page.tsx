@@ -24,13 +24,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <Card className="w-full max-w-md bg-gray-800 border-gray-700 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-gray-900">
+      <Card className="w-full max-w-md border-gray-700 bg-gray-800 shadow-lg">
         <CardHeader className="space-y-1">
-          <div className="flex justify-center mb-4">
-            <Shield className="w-12 h-12 text-blue-400" />
+          <div className="mb-4 flex justify-center">
+            <Shield className="h-12 w-12 text-blue-400" />
           </div>
-          <CardTitle className="text-2xl font-bold text-center text-white">관리자 로그인</CardTitle>
+          <CardTitle className="text-center text-2xl font-bold text-white">관리자 로그인</CardTitle>
           <CardDescription className="text-center text-gray-400">관리자 계정으로 로그인하세요</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -43,13 +43,13 @@ export default function AdminLogin() {
                 <Input
                   id="email"
                   type="text"
-                  placeholder="아이디 입력"
+                  placeholder="아이디"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="flex-1 bg-gray-700 border-0 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                 />
-                <span className="flex items-center px-3 text-gray-400 bg-gray-600 rounded-r-md">@gachon.ac.kr</span>
+                <span className="flex items-center rounded-r-md bg-gray-600 px-3 text-gray-400">@gachon.ac.kr</span>
               </div>
             </div>
             <div className="space-y-2">
@@ -62,7 +62,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full bg-gray-700 border-0 text-white focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -81,12 +81,12 @@ export default function AdminLogin() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               // type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+              className="w-full bg-blue-500 text-white hover:bg-blue-600"
               onClick={() => router.push('/dashboard')}
             >
               로그인
             </Button>
-            <div className="text-sm text-center space-y-2">
+            <div className="space-y-2 text-center text-sm">
               <Link href="/forgot-password" className="text-blue-400 hover:underline">
                 비밀번호를 잊으셨나요?
               </Link>
