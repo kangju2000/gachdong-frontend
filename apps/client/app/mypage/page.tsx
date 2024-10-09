@@ -11,7 +11,7 @@ export default function MyPage() {
   const [user, setUser] = useState({
     name: '강주혁',
     major: '컴퓨터공학과',
-    year: '3학년',
+    year: '4학년',
     avatar: '/placeholder.svg?height=100&width=100',
   });
 
