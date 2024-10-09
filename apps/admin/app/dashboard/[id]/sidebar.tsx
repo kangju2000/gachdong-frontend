@@ -22,7 +22,7 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
     },
     {
       icon: <FileText className="mr-2 h-4 w-4" />,
-      label: '모집 공고 관리',
+      label: '모집 공고',
       href: '/recruitment',
     },
     {

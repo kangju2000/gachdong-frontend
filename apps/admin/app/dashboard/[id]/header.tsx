@@ -17,9 +17,9 @@ export function Header() {
   const pathname = usePathname();
   const breadcrumbs = pathname
     .split('/')
-    .slice(3)
+    .filter(isNaN)
     .map((path, index, paths) => {
-      const href = `/${paths.slice(0, index + 1).join('/')}`;
+      const href = paths.slice(0, index + 1).join('/');
       return {
         label: path,
         href: index === paths.length - 1 ? undefined : href,
@@ -30,27 +30,37 @@ export function Header() {
     <header className="border-b border-gray-800 bg-gray-900 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 text-sm">
-          <a href="/dashboard" className="text-gray-400 hover:text-gray-100">
+          {/* <Link href="/dashboard" className="text-gray-400 hover:text-gray-100">
             대시보드
-          </a>
-          {breadcrumbs.length > 0 && <ChevronRight className="h-4 w-4 text-gray-400" />}
+          </Link>
+          <ChevronRight className="h-4 w-4 text-gray-400" />
+          {breadcrumbs.length === 0 && (
+            <Link href={pathname} className="text-gray-100">
+              홈
+            </Link>
+          )} */}
+
           {breadcrumbs.map((item, index) => (
             <React.Fragment key={index}>
               {index > 0 && <ChevronRight className="h-4 w-4 text-gray-400" />}
-              {item.href ? (
-                <a
-                  href={item.href}
-                  className={`hover:text-gray-100 ${
-                    index === breadcrumbs.length - 1 ? 'text-gray-100' : 'text-gray-400'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <span className={index === breadcrumbs.length - 1 ? 'text-gray-100' : 'text-gray-400'}>
-                  {item.label}
-                </span>
-              )}
+              <Link
+                href={item.href ?? '#'}
+                className={`hover:text-gray-100 ${
+                  index === breadcrumbs.length - 1 ? 'text-gray-100' : 'text-gray-400'
+                }`}
+              >
+                {{
+                  dashboard: '홈',
+                  recruitment: '모집 공고',
+                  recruitmentId: '모집 공고 상세',
+                  applicant: '지원자 목록',
+                  applicantId: '지원자 상세',
+                  statistics: '동아리 통계',
+                  settings: '동아리 설정',
+                  'admin-management': '운영진 관리',
+                  new: '생성',
+                }[item.label] ?? item.label}
+              </Link>
             </React.Fragment>
           ))}
         </div>

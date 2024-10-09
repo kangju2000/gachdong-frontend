@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar, Plus, X, Eye, ArrowUp, ArrowDown } from 'lucide-react';
+import { Calendar, Plus, X, Eye, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
@@ -172,7 +172,7 @@ export default function RecruitmentPostCreation() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <Card className="border-gray-700 bg-gray-800 shadow-lg">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-gray-100">모집 공고 생성</CardTitle>
@@ -298,12 +298,13 @@ export default function RecruitmentPostCreation() {
                 <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
                   {questions.map((question, index) => (
                     <Draggable key={`question-${index}`} draggableId={`question-${index}`} index={index}>
-                      {provided => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="rounded-lg border border-gray-700 p-4"
+                          className={`rounded-lg border border-gray-700 p-4 ${
+                            snapshot.isDragging ? 'bg-gray-700' : 'bg-gray-800'
+                          }`}
                         >
                           <div className="mb-4 flex items-center justify-between">
                             <div className="flex items-center space-x-2">
@@ -334,9 +335,14 @@ export default function RecruitmentPostCreation() {
                                 }}
                               />
                             </div>
-                            <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">
-                              삭제
-                            </Button>
+                            <div className="flex items-center space-x-2">
+                              <Button onClick={() => removeQuestion(index)} variant="destructive" size="sm">
+                                삭제
+                              </Button>
+                              <div {...provided.dragHandleProps} className="flex cursor-move items-center space-x-2">
+                                <GripVertical className="h-4 w-4 text-gray-400" />
+                              </div>
+                            </div>
                           </div>
                           <div className="space-y-2">
                             <Label className="text-gray-200">질문 유형</Label>

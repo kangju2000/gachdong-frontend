@@ -27,7 +27,7 @@ export default function RecruitmentManagement() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <Card className="border-gray-700 bg-gray-800 shadow-lg">
         <CardHeader className="border-b border-gray-700">
           <CardTitle className="text-2xl font-bold text-gray-100">모집 공고 관리</CardTitle>

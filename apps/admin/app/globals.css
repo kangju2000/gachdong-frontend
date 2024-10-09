@@ -21,30 +21,30 @@ a {
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    --background: 220 20% 10%;
     --foreground: 210 40% 98%;
-    --card: 222 47% 13%;
+    --card: 215, 27.9%, 16.9%;
     --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
+    --popover: 220 20% 10%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
+    --primary: 210 100% 50%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 217 33% 17%;
+    --secondary: 220 16% 22%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 17%;
+    --muted: 220 16% 22%;
+    --muted-foreground: 220 15% 70%;
+    --accent: 220 16% 22%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
+    --destructive: 0 70% 40%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 224 76% 48%;
-    --chart-1: 217 91% 60%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 48 96% 53%;
-    --chart-4: 283 39% 57%;
-    --chart-5: 0 84% 60%;
+    --border: 220 20% 30%;
+    --input: 220 18% 25%;
+    --ring: 210 100% 50%;
+    --chart-1: 210 100% 50%;
+    --chart-2: 150 70% 40%;
+    --chart-3: 40 100% 50%;
+    --chart-4: 280 60% 55%;
+    --chart-5: 0 80% 55%;
     --radius: 0.5rem;
   }
 }
