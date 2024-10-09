@@ -19,7 +19,7 @@ export default function AdminLogin() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // console.log("관리자 로그인 시도:", email + "@gachon.ac.kr", password);
+    // console.log("운영진 로그인 시도:", email + "@gachon.ac.kr", password);
     // setError("이메일 또는 비밀번호가 올바르지 않습니다.");
   };
 
@@ -30,8 +30,8 @@ export default function AdminLogin() {
           <div className="mb-4 flex justify-center">
             <Shield className="h-12 w-12 text-blue-400" />
           </div>
-          <CardTitle className="text-center text-2xl font-bold text-white">관리자 로그인</CardTitle>
-          <CardDescription className="text-center text-gray-400">관리자 계정으로 로그인하세요</CardDescription>
+          <CardTitle className="text-center text-2xl font-bold text-white">운영진 로그인</CardTitle>
+          <CardDescription className="text-center text-gray-400">GACHDONG에 오신 것을 환영합니다</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

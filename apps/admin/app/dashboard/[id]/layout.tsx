@@ -13,12 +13,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [selectedClubId, setSelectedClubId] = useState('1');
 
   const selectedClub = CLUBS.find(club => String(club.id) === selectedClubId)!;
-
   return (
     <div className="flex h-screen bg-gray-950 text-gray-100">
       <Sidebar selectedClub={selectedClub} onClubChange={setSelectedClubId} />
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Header clubName={selectedClub.name} />
+        <Header />
         <main className="flex-1 overflow-y-auto overflow-x-hidden bg-gray-950 p-6">{children}</main>
       </div>
     </div>

@@ -17,7 +17,7 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
   const menuItems = [
     {
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-      label: '대시보드',
+      label: '홈',
       href: '/',
     },
     {
@@ -31,24 +31,14 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
       href: '/statistics',
     },
     {
-      icon: <Settings className="mr-2 h-4 w-4" />,
-      label: '동아리 정보 수정',
-      href: '/club-info',
-    },
-    {
-      icon: <FileText className="mr-2 h-4 w-4" />,
-      label: '템플릿 관리',
-      href: '/templates',
-    },
-    {
       icon: <UserCog className="mr-2 h-4 w-4" />,
       label: '운영진 관리',
       href: '/admin-management',
     },
     {
-      icon: <Users className="mr-2 h-4 w-4" />,
-      label: '프로필 설정',
-      href: '/profile',
+      icon: <Settings className="mr-2 h-4 w-4" />,
+      label: '동아리 설정',
+      href: '/settings',
     },
   ];
 

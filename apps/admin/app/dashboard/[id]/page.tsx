@@ -1,9 +1,13 @@
+'use client';
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, FileText, UserPlus, Bell } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface ClubInfo {
   name: string;
@@ -17,6 +21,7 @@ interface ClubInfo {
 }
 
 export default function Dashboard() {
+  const pathname = usePathname();
   const clubInfo: ClubInfo = {
     name: 'GDG On Campus Gachon University',
     description: 'GDG On Campus Gachon University는 구글 개발자 기술에 관심이 있는 대학생 커뮤니티 그룹입니다.',
@@ -56,7 +61,9 @@ export default function Dashboard() {
             >
               동아리 정보 수정
             </Button>
-            <Button className="w-full bg-blue-600 text-white hover:bg-blue-700 sm:w-auto">모집 공고 생성</Button>
+            <Link href={`${pathname}/recruitment/new`}>
+              <Button className="w-full bg-blue-600 text-white hover:bg-blue-700 sm:w-auto">모집 공고 생성</Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
