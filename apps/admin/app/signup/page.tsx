@@ -53,8 +53,8 @@ export default function AdminSignup() {
           <div className="mb-4 flex justify-center">
             <Shield className="h-12 w-12 text-blue-400" />
           </div>
-          <CardTitle className="text-center text-2xl font-bold text-white">관리자 회원가입</CardTitle>
-          <CardDescription className="text-center text-gray-400">GACHDONG 관리자 계정을 생성하세요</CardDescription>
+          <CardTitle className="text-center text-2xl font-bold text-white">운영진 회원가입</CardTitle>
+          <CardDescription className="text-center text-gray-400">GACHDONG 운영진 계정을 생성하세요</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -279,7 +279,12 @@ export default function RecruitmentPostCreation() {
               <div className="mt-4 space-y-6">
                 {questions.map((question, index) => (
                   <div key={index} className="space-y-2">
-                    <h3 className="text-lg font-semibold">{question.title}</h3>
+                    <div className="flex items-center space-x-2">
+                      <h3 className="text-lg font-semibold">{question.title}</h3>
+                      <span className="text-gray-400">
+                        {question.required && <span className="text-red-500">*</span>}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-400">{question.description}</p>
                     {renderQuestionPreview(question)}
                   </div>

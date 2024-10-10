@@ -126,7 +126,7 @@ export default function ClubInfoEdit() {
 
         <div className="space-y-2">
           <Label className="text-gray-200">이미지 미리보기</Label>
-          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-600">
+          <div className="relative h-32 w-32 overflow-hidden rounded-full border border-gray-600 bg-gray-700">
             {imageError ? (
               <div className="flex h-full items-center justify-center bg-gray-700 text-gray-400">
                 <ImageIcon className="h-12 w-12" />

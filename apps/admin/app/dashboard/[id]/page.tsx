@@ -59,19 +59,23 @@ export default function Dashboard() {
     },
   ]);
 
-  const [newActivity, setNewActivity] = useState<Omit<Activity, 'id'>>({
-    title: '',
-    date: '',
-    description: '',
-  });
-
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const handleAddActivity = () => {
-    if (newActivity.title && newActivity.date && newActivity.description) {
-      setActivities([...activities, { ...newActivity, id: activities.length + 1 }]);
-      setNewActivity({ title: '', date: '', description: '' });
+    if (editingActivity && editingActivity.title && editingActivity.date && editingActivity.description) {
+      setActivities([...activities, { ...editingActivity, id: activities.length + 1 }]);
+      setEditingActivity(null);
       setIsAddDialogOpen(false);
+    }
+  };
+
+  const handleEditActivity = () => {
+    if (editingActivity) {
+      setActivities(activities.map(activity => (activity.id === editingActivity.id ? editingActivity : activity)));
+      setEditingActivity(null);
+      setIsEditDialogOpen(false);
     }
   };
 
@@ -130,8 +134,8 @@ export default function Dashboard() {
                   </Label>
                   <Input
                     id="title"
-                    value={newActivity.title}
-                    onChange={e => setNewActivity({ ...newActivity, title: e.target.value })}
+                    value={editingActivity?.title || ''}
+                    onChange={e => setEditingActivity(prev => ({ ...prev!, title: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -142,8 +146,8 @@ export default function Dashboard() {
                   <Input
                     id="date"
                     type="date"
-                    value={newActivity.date}
-                    onChange={e => setNewActivity({ ...newActivity, date: e.target.value })}
+                    value={editingActivity?.date || ''}
+                    onChange={e => setEditingActivity(prev => ({ ...prev!, date: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -153,8 +157,8 @@ export default function Dashboard() {
                   </Label>
                   <Textarea
                     id="description"
-                    value={newActivity.description}
-                    onChange={e => setNewActivity({ ...newActivity, description: e.target.value })}
+                    value={editingActivity?.description || ''}
+                    onChange={e => setEditingActivity(prev => ({ ...prev!, description: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -182,9 +186,65 @@ export default function Dashboard() {
                   <TableCell>{activity.date}</TableCell>
                   <TableCell>{activity.description}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                    <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-primary hover:text-primary/80"
+                          onClick={() => setEditingActivity(activity)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="bg-background border-border">
+                        <DialogHeader>
+                          <DialogTitle>활동 수정</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="edit-title" className="text-right">
+                              제목
+                            </Label>
+                            <Input
+                              id="edit-title"
+                              value={editingActivity?.title || ''}
+                              onChange={e => setEditingActivity(prev => ({ ...prev!, title: e.target.value }))}
+                              className="col-span-3"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="edit-date" className="text-right">
+                              날짜
+                            </Label>
+                            <Input
+                              id="edit-date"
+                              type="date"
+                              value={editingActivity?.date || ''}
+                              onChange={e => setEditingActivity(prev => ({ ...prev!, date: e.target.value }))}
+                              className="col-span-3"
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="edit-description" className="text-right">
+                              설명
+                            </Label>
+                            <Textarea
+                              id="edit-description"
+                              value={editingActivity?.description || ''}
+                              onChange={e => setEditingActivity(prev => ({ ...prev!, description: e.target.value }))}
+                              className="col-span-3"
+                            />
+                          </div>
+                        </div>
+                        <Button
+                          onClick={handleEditActivity}
+                          className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        >
+                          수정
+                        </Button>
+                      </DialogContent>
+                    </Dialog>
                     <Button
                       variant="ghost"
                       size="sm"
