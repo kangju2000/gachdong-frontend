@@ -1,14 +1,10 @@
 import { redirect } from 'next/navigation';
-// import { getServerSession } from 'next-auth/next';
-// import { authOptions } from '@/lib/auth';
-
 async function getRecentClub(userId: string): Promise<{ id: string } | null> {
   // TODO: 데이터베이스에서 사용자의 최근 접속 동아리를 조회하는 로직 구현
   return Math.random() > 0.5 ? { id: '1' } : null;
 }
 
 export default async function Home() {
-  // const session = await getServerSession(authOptions);
   const session = Math.random() > 0.5 ? { user: { id: '1' } } : null;
 
   if (!session) {

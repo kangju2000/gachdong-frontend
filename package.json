@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@gachdong/workspace",
   "private": true,
   "scripts": {
     "build": "turbo build",

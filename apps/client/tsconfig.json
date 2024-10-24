@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@gachdong/typescript-config/nextjs.json",
   "compilerOptions": {
     "plugins": [
       {
@@ -11,13 +11,18 @@
       "@/*": ["./*"]
     }
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
 
   "include": [
     "next-env.d.ts",
     "next.config.mjs",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts", "scripts/generate-api.ts",
   ],
   "exclude": ["node_modules"]
 }
