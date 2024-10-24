@@ -13,11 +13,11 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Users, Activity, ArrowLeft } from 'lucide-react';
 import { CLUBS, RECRUIT_LIST } from '@/constants/data';
-import { Club, Recruit } from '@/types';
+import { Club, Recruitment } from '@/types';
 
 export default function ClubDetailPage({ params }: { params: { id: string } }) {
   const [club, setClub] = useState<Club | null>(null);
-  const [clubRecruits, setClubRecruits] = useState<Recruit[]>([]);
+  const [clubRecruits, setClubRecruits] = useState<Recruitment[]>([]);
 
   useEffect(() => {
     const foundClub = CLUBS.find(c => c.id === Number(params.id));

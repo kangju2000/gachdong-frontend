@@ -10,16 +10,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronRight, LogOut, User } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+
   const breadcrumbs = pathname
     .split('/')
-    .filter(isNaN)
+    .filter(v => isNaN(Number(v)))
     .map((path, index, paths) => {
       const href = paths.slice(0, index + 1).join('/');
+      console.log({ href, index, paths });
       return {
         label: path,
         href: index === paths.length - 1 ? undefined : href,
@@ -30,16 +33,6 @@ export function Header() {
     <header className="border-b border-gray-800 bg-gray-900 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 text-sm">
-          {/* <Link href="/dashboard" className="text-gray-400 hover:text-gray-100">
-            대시보드
-          </Link>
-          <ChevronRight className="h-4 w-4 text-gray-400" />
-          {breadcrumbs.length === 0 && (
-            <Link href={pathname} className="text-gray-100">
-              홈
-            </Link>
-          )} */}
-
           {breadcrumbs.map((item, index) => (
             <React.Fragment key={index}>
               {index > 0 && <ChevronRight className="h-4 w-4 text-gray-400" />}
@@ -81,11 +74,9 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem className="hover:bg-gray-700">
-              <Link href="/settings" className="flex items-center">
-                <User className="mr-2 h-4 w-4" />
-                <span>설정</span>
-              </Link>
+            <DropdownMenuItem className="hover:bg-gray-700" onSelect={() => router.push(`/settings`)}>
+              <User className="mr-2 h-4 w-4" />
+              <span>설정</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-gray-700">
               <LogOut className="mr-2 h-4 w-4" />

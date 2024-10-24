@@ -10,7 +10,7 @@ export type Club = {
   activities: string[];
 };
 
-export type Recruit = {
+export type Recruitment = {
   id: number;
   title: string;
   club: string;

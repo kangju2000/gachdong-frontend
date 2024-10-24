@@ -12,10 +12,10 @@ import { Eye, ArrowLeft, Calendar, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RECRUIT_LIST } from '@/constants/data';
-import { Recruit } from '@/types';
+import { Recruitment } from '@/types';
 
 export default function RecruitmentDetailPage({ params }: { params: { id: string } }) {
-  const [announcement, setAnnouncement] = useState<Recruit | null>(null);
+  const [announcement, setAnnouncement] = useState<Recruitment | null>(null);
 
   useEffect(() => {
     const foundAnnouncement = RECRUIT_LIST.find(a => a.id === Number(params.id));

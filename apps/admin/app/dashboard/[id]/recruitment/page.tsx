@@ -52,12 +52,12 @@ export default function RecruitmentManagement() {
           <TabsTrigger value="posts" className="data-[state=active]:bg-gray-700 data-[state=active]:text-gray-100">
             공고 목록
           </TabsTrigger>
-          {/* <TabsTrigger
+          <TabsTrigger
             value="notifications"
             className="data-[state=active]:bg-gray-700 data-[state=active]:text-gray-100"
           >
             알림 설정
-          </TabsTrigger> */}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="posts" className="space-y-6">

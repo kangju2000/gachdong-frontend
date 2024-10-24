@@ -1,6 +1,6 @@
-import { Announcement, Club, Recruit } from '@/types';
+import { Announcement, Club, Recruitment } from '@/types';
 
-export const RECRUIT_LIST: Recruit[] = [
+export const RECRUIT_LIST: Recruitment[] = [
   {
     id: 1,
     title: 'GDSC Gachon 24-25 Member 모집',
