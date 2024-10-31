@@ -9,7 +9,45 @@
  * ---------------------------------------------------------------
  */
 
+export interface CreateClubRequest {
+  /**
+   * 동아리 이름
+   * @example "가츠동"
+   */
+  name: string;
+  /**
+   * 동아리 카테고리
+   * @example "SPORTS"
+   */
+  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  /**
+   * 동아리 한줄 설명
+   * @example "가츠동은 최고의 동아리입니다."
+   */
+  shortDescription: string;
+  /**
+   * 동아리 소개
+   * @example "<h1>가츠동</h1> <p>최고의 동아리입니다</p>"
+   */
+  introduction?: string;
+  /**
+   * 동아리 이미지 URL
+   * @example "http://example.com/image.png"
+   */
+  clubImageUrl?: string;
+  /**
+   * 동아리 설립일
+   * @format date-time
+   */
+  establishedAt?: string;
+}
+
 export interface ClubResponse {
+  /**
+   * 동아리 ID
+   * @example "ansier-enicsei-1233na-bndknar"
+   */
+  clubId?: string;
   /**
    * 동아리 이름
    * @example "가츠동"
@@ -39,7 +77,7 @@ export interface ClubResponse {
    * 동아리 설명
    * @example "가츠동은 다양한 활동을 하는 동아리입니다."
    */
-  description?: string;
+  introduction?: string;
   /**
    * 설립일
    * @format date-time
@@ -50,6 +88,46 @@ export interface ClubResponse {
    * @format date-time
    */
   updatedAt?: string;
+}
+
+export interface ArrayResponseClubContactInfoResponse {
+  results?: ClubContactInfoResponse[];
+}
+
+export interface ClubContactInfoResponse {
+  /**
+   * 연락 수단 (예: gmail, phone)
+   * @example "gmail"
+   */
+  contactMethod?: string;
+  /**
+   * 연락처 정보
+   * @example "gachdong@gmail.com"
+   */
+  contactValue?: string;
+}
+
+export interface ArrayResponseClubActivityResponse {
+  results?: ClubActivityResponse[];
+}
+
+export interface ClubActivityResponse {
+  /**
+   * 활동 제목
+   * @example "2024년 봄 캠프"
+   */
+  title?: string;
+  /**
+   * 활동 날짜
+   * @format date
+   * @example "2024-04-12"
+   */
+  date?: string;
+  /**
+   * 활동 설명
+   * @example "봄 캠프에서 다양한 활동을 했습니다."
+   */
+  description?: string;
 }
 
 export interface ArrayResponseClubSummaryResponse {
@@ -86,20 +164,36 @@ export interface ClubSummaryResponse {
 
 export namespace 동아리Api {
   /**
+   * @description 동아리 정보를 입력받아 동아리를 생성합니다.
+   * @tags 동아리 API
+   * @name CreateClub
+   * @summary 동아리 생성
+   * @request POST:/api/v1/create
+   * @response `200` `ClubResponse` OK
+   */
+  export namespace CreateClub {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = CreateClubRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = ClubResponse;
+  }
+
+  /**
    * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
    * @tags 동아리 API
    * @name GetClub
    * @summary 동아리 조회
-   * @request GET:/{clubName}
+   * @request GET:/api/v1/{clubId}
    * @response `200` `ClubResponse` OK
    */
   export namespace GetClub {
     export type RequestParams = {
       /**
-       * 동아리 이름
-       * @example "GDSC"
+       * 동아리 ID
+       * @example "ansier-enicsei-1233na-bndknar"
        */
-      clubName: string;
+      clubId: string;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -108,11 +202,55 @@ export namespace 동아리Api {
   }
 
   /**
+   * @description 동아리 연락처 정보를 조회합니다.
+   * @tags 동아리 API
+   * @name GetClubContactInfo
+   * @summary 동아리 연락처 정보 조회
+   * @request GET:/api/v1/{clubId}/contact-info
+   * @response `200` `ArrayResponseClubContactInfoResponse` OK
+   */
+  export namespace GetClubContactInfo {
+    export type RequestParams = {
+      /**
+       * 동아리 ID
+       * @example "ansier-enicsei-1233na-bndknar"
+       */
+      clubId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseClubContactInfoResponse;
+  }
+
+  /**
+   * @description 동아리 활동 내역을 조회합니다.
+   * @tags 동아리 API
+   * @name GetClubActivities
+   * @summary 동아리 활동 내역 조회
+   * @request GET:/api/v1/{clubId}/activities
+   * @response `200` `ArrayResponseClubActivityResponse` OK
+   */
+  export namespace GetClubActivities {
+    export type RequestParams = {
+      /**
+       * 동아리 ID
+       * @example "ansier-enicsei-1233na-bndknar"
+       */
+      clubId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseClubActivityResponse;
+  }
+
+  /**
    * @description 모든 동아리 정보를 조회합니다.
    * @tags 동아리 API
    * @name GetClubs
    * @summary 동아리 목록 조회
-   * @request GET:/
+   * @request GET:/api/v1/
    * @response `200` `ArrayResponseClubSummaryResponse` OK
    */
   export namespace GetClubs {
@@ -344,17 +482,67 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   동아리Api = {
     /**
+     * @description 동아리 정보를 입력받아 동아리를 생성합니다.
+     *
+     * @tags 동아리 API
+     * @name CreateClub
+     * @summary 동아리 생성
+     * @request POST:/api/v1/create
+     * @response `200` `ClubResponse` OK
+     */
+    createClub: (data: CreateClubRequest, params: RequestParams = {}) =>
+      this.request<ClubResponse, any>({
+        path: `/api/v1/create`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
      *
      * @tags 동아리 API
      * @name GetClub
      * @summary 동아리 조회
-     * @request GET:/{clubName}
+     * @request GET:/api/v1/{clubId}
      * @response `200` `ClubResponse` OK
      */
-    getClub: (clubName: string, params: RequestParams = {}) =>
+    getClub: (clubId: string, params: RequestParams = {}) =>
       this.request<ClubResponse, any>({
-        path: `/${clubName}`,
+        path: `/api/v1/${clubId}`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 연락처 정보를 조회합니다.
+     *
+     * @tags 동아리 API
+     * @name GetClubContactInfo
+     * @summary 동아리 연락처 정보 조회
+     * @request GET:/api/v1/{clubId}/contact-info
+     * @response `200` `ArrayResponseClubContactInfoResponse` OK
+     */
+    getClubContactInfo: (clubId: string, params: RequestParams = {}) =>
+      this.request<ArrayResponseClubContactInfoResponse, any>({
+        path: `/api/v1/${clubId}/contact-info`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 활동 내역을 조회합니다.
+     *
+     * @tags 동아리 API
+     * @name GetClubActivities
+     * @summary 동아리 활동 내역 조회
+     * @request GET:/api/v1/{clubId}/activities
+     * @response `200` `ArrayResponseClubActivityResponse` OK
+     */
+    getClubActivities: (clubId: string, params: RequestParams = {}) =>
+      this.request<ArrayResponseClubActivityResponse, any>({
+        path: `/api/v1/${clubId}/activities`,
         method: 'GET',
         ...params,
       }),
@@ -365,12 +553,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 동아리 API
      * @name GetClubs
      * @summary 동아리 목록 조회
-     * @request GET:/
+     * @request GET:/api/v1/
      * @response `200` `ArrayResponseClubSummaryResponse` OK
      */
     getClubs: (params: RequestParams = {}) =>
       this.request<ArrayResponseClubSummaryResponse, any>({
-        path: `/`,
+        path: `/api/v1/`,
         method: 'GET',
         ...params,
       }),

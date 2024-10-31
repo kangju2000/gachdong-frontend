@@ -18,9 +18,23 @@ export const _useClubs = () => {
   });
 };
 
-export const useClub = (clubName: string) => {
+export const useClub = (clubId: string) => {
   return useSuspenseQuery({
-    queryKey: keys.detail(clubName),
-    queryFn: () => clubApi.동아리Api.getClub(clubName),
+    queryKey: keys.detail(clubId),
+    queryFn: () => clubApi.동아리Api.getClub(clubId),
+  });
+};
+
+export const useClubContactInfo = (clubId: string) => {
+  return useSuspenseQuery({
+    queryKey: keys.contactInfo(clubId),
+    queryFn: () => clubApi.동아리Api.getClubContactInfo(clubId),
+  });
+};
+
+export const useClubActivities = (clubId: string) => {
+  return useSuspenseQuery({
+    queryKey: keys.activities(clubId),
+    queryFn: () => clubApi.동아리Api.getClubActivities(clubId),
   });
 };

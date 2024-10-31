@@ -22,7 +22,8 @@ export const useCreateApplication = () => {
 
 export const useChangeApplicationForm = () => {
   return useMutation({
-    mutationFn: ({ data }: { data: ToCreateApplicationFormDTO }) => applicationApi.지원Api.changeApplicationForm(data),
+    mutationFn: ({ formId, data }: { formId: number; data: ToCreateApplicationFormDTO }) =>
+      applicationApi.지원Api.changeApplicationForm(formId, data),
   });
 };
 
@@ -34,7 +35,7 @@ export const useCreateApplicationForm = () => {
 
 export const useDeleteForm = () => {
   return useMutation({
-    mutationFn: (formId: number) => applicationApi.지원Api.deleteForm(formId),
+    mutationFn: (formId: number) => applicationApi.지원Api.deleteApplicationForm(formId),
   });
 };
 

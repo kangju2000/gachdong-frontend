@@ -16,9 +16,9 @@ export const useFormInfoUser = (formId: number) => {
   });
 };
 
-export const useFormInfoUserList = () => {
+export const useApplicationHistory = () => {
   return useSuspenseQuery({
     queryKey: keys.lists(),
-    queryFn: () => applicationApi.지원Api.getFormInfoUser1,
+    queryFn: () => applicationApi.지원Api.getaApplicationHistory(),
   });
 };
