@@ -13,7 +13,7 @@ import { CookieManager } from '@/lib/auth/cookies';
 export const useLogin = () => {
   const router = useRouter();
   return useMutation({
-    mutationFn: (data: LoginDto) => authApi.인증인가Api.login(data, { format: 'json' }),
+    mutationFn: (data: LoginDto) => authApi.public인증인가Api.login(data, { format: 'json' }),
     onSuccess: response => {
       // TODO: toast로 변경
       alert('로그인이 완료되었습니다');
@@ -32,7 +32,7 @@ export const useLogout = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => authApi.인증인가Api.logout(),
+    mutationFn: () => authApi.public인증인가Api.logout(),
     onSettled: () => {
       CookieManager.removeToken();
       router.replace('/');
@@ -44,7 +44,7 @@ export const useRegister = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (data: RegistrationDto) => authApi.인증인가Api.completeRegistration(data),
+    mutationFn: (data: RegistrationDto) => authApi.public인증인가Api.completeRegistration(data),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('회원가입이 완료되었습니다.');
@@ -59,7 +59,7 @@ export const useRegister = () => {
 
 export const useSendVerificationCode = () => {
   return useMutation({
-    mutationFn: (query: SendVerificationCodeParams) => authApi.인증인가Api.sendVerificationCode(query),
+    mutationFn: (query: SendVerificationCodeParams) => authApi.public인증인가Api.sendVerificationCode(query),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('인증 코드가 전송되었습니다.');
@@ -73,7 +73,7 @@ export const useSendVerificationCode = () => {
 
 export const useResetPassword = () => {
   return useMutation({
-    mutationFn: (query: ResetPasswordParams) => authApi.인증인가Api.resetPassword(query),
+    mutationFn: (query: ResetPasswordParams) => authApi.public인증인가Api.resetPassword(query),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('비밀번호 재설정이 완료되었습니다.');
@@ -87,7 +87,7 @@ export const useResetPassword = () => {
 
 export const useChangePassword = () => {
   return useMutation({
-    mutationFn: (data: ChangePasswordDto) => authApi.인증인가Api.changePassword(data),
+    mutationFn: (data: ChangePasswordDto) => authApi.public인증인가Api.changePassword(data),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('비밀번호 변경이 완료되었습니다.');
@@ -101,7 +101,7 @@ export const useChangePassword = () => {
 
 export const useDeleteAccount = () => {
   return useMutation({
-    mutationFn: () => authApi.인증인가Api.deleteAccount(),
+    mutationFn: () => authApi.public인증인가Api.deleteAccount(),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('회원탈퇴가 완료되었습니다.');

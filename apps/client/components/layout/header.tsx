@@ -17,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CookieManager } from '@/lib/auth/cookies';
 import { useEffect, useState } from 'react';
 import { useLogout } from '@/apis/auth';
+import Image from 'next/image';
 
 export function Header() {
   const [isLogin] = useState(CookieManager.getToken() ? true : false);
@@ -50,7 +51,7 @@ export function Header() {
       <div className="mx-auto flex min-h-[68px] max-w-[980px] items-center justify-between px-4 py-4">
         <div className="flex items-center space-x-6">
           <Link href="/" className="text-2xl font-bold">
-            GACHDONG
+            <Image src="/text-logo.svg" alt="GACHDONG" width={100} height={30} />
           </Link>
           <nav className="hidden items-center space-x-4 sm:flex">
             {navItems.map(item => {

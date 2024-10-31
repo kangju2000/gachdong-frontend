@@ -61,10 +61,10 @@ export interface ResetPasswordParams {
   code: string;
 }
 
-export namespace 인증인가Api {
+export namespace Public인증인가Api {
   /**
    * @description 사용자의 계정을 삭제합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name DeleteAccount
    * @summary 회원탈퇴
    * @request POST:/api/v1/unregister
@@ -83,7 +83,7 @@ export namespace 인증인가Api {
 
   /**
    * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name SendVerificationCode
    * @summary 이메일 인증 코드 발송
    * @request POST:/api/v1/send_verification_code
@@ -102,7 +102,7 @@ export namespace 인증인가Api {
 
   /**
    * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name ResetPassword
    * @summary 비밀번호 재발급
    * @request POST:/api/v1/reset_password
@@ -122,8 +122,8 @@ export namespace 인증인가Api {
   }
 
   /**
-   * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인 고정) - code: 6자리의 이메일 인증 코드 - password: 사용자 비밀번호 (8~16자, 영문, 숫자, 특수문자 포함) - name: 사용자 이름 - role: 사용자 역할 (USER, ADMIN)
-   * @tags 인증/인가 API
+   * @description 회원가입을 완료합니다.
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name CompleteRegistration
    * @summary 회원가입
    * @request POST:/api/v1/register
@@ -139,7 +139,7 @@ export namespace 인증인가Api {
 
   /**
    * @description 사용자를 로그아웃합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name Logout
    * @summary 로그아웃
    * @request POST:/api/v1/logout
@@ -158,7 +158,7 @@ export namespace 인증인가Api {
 
   /**
    * @description 사용자가 로그인합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name Login
    * @summary 사용자 로그인
    * @request POST:/api/v1/login
@@ -174,7 +174,7 @@ export namespace 인증인가Api {
 
   /**
    * @description 기존 비밀번호를 변경합니다.
-   * @tags 인증/인가 API
+   * @tags Public 인증/인가 API, 인증/인가 API
    * @name ChangePassword
    * @summary 비밀번호 변경
    * @request POST:/api/v1/change_password
@@ -410,11 +410,11 @@ export class HttpClient<SecurityDataType = unknown> {
  * 인증/인가 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  인증인가Api = {
+  public인증인가Api = {
     /**
      * @description 사용자의 계정을 삭제합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name DeleteAccount
      * @summary 회원탈퇴
      * @request POST:/api/v1/unregister
@@ -430,7 +430,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name SendVerificationCode
      * @summary 이메일 인증 코드 발송
      * @request POST:/api/v1/send_verification_code
@@ -447,7 +447,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name ResetPassword
      * @summary 비밀번호 재발급
      * @request POST:/api/v1/reset_password
@@ -462,9 +462,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인 고정) - code: 6자리의 이메일 인증 코드 - password: 사용자 비밀번호 (8~16자, 영문, 숫자, 특수문자 포함) - name: 사용자 이름 - role: 사용자 역할 (USER, ADMIN)
+     * @description 회원가입을 완료합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name CompleteRegistration
      * @summary 회원가입
      * @request POST:/api/v1/register
@@ -482,7 +482,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 사용자를 로그아웃합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name Logout
      * @summary 로그아웃
      * @request POST:/api/v1/logout
@@ -498,7 +498,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 사용자가 로그인합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name Login
      * @summary 사용자 로그인
      * @request POST:/api/v1/login
@@ -516,7 +516,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 기존 비밀번호를 변경합니다.
      *
-     * @tags 인증/인가 API
+     * @tags Public 인증/인가 API, 인증/인가 API
      * @name ChangePassword
      * @summary 비밀번호 변경
      * @request POST:/api/v1/change_password

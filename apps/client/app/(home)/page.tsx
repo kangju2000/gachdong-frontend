@@ -4,7 +4,7 @@ import { ClubList } from './components/club-list';
 import { RecentRecruitments } from './components/recent-recruitments';
 import { Suspense } from 'react';
 
-function Home() {
+export default function Home() {
   return (
     <div className="bg-background text-foreground min-h-screen font-sans">
       <Header />
@@ -21,5 +21,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;
