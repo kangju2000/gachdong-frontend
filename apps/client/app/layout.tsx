@@ -21,6 +21,20 @@ export const metadata: Metadata = {
   icons: {
     icon: '/logo.svg',
   },
+  openGraph: {
+    title: 'GACHDONG',
+    description: '가츠동',
+    locale: 'ko-KR',
+    type: 'website',
+    siteName: 'GACHDONG',
+    images: [
+      {
+        url: '/text-logo.svg',
+        width: 100,
+        height: 30,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

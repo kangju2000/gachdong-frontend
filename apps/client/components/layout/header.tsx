@@ -24,10 +24,6 @@ export function Header() {
   const [isMounted, setIsMounted] = useState(false);
   const { mutate: logout } = useLogout();
 
-  const handleLogout = () => {
-    logout();
-  };
-
   const notifications = [
     { id: 1, message: '새로운 동아리 지원이 있습니다.' },
     { id: 2, message: '프로필 업데이트를 완료해주세요.' },
@@ -122,7 +118,7 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
+                    <DropdownMenuItem className="text-red-600" onClick={() => logout()}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>로그아웃</span>
                     </DropdownMenuItem>
