@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,56 +36,52 @@ export default function MyPage() {
   ]);
 
   return (
-    <div className="bg-background min-h-screen font-sans">
-      <Header />
-
-      <main className="mx-auto max-w-[980px] px-4 py-6">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">내 프로필</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center space-x-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>{user.name[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-xl font-semibold">{user.name}</h2>
-                  <p className="text-muted-foreground">
-                    {user.major} · {user.year}
-                  </p>
-                </div>
+    <main className="mx-auto max-w-[980px] px-4 py-6">
+      <div className="flex flex-col gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">내 프로필</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-20 w-20">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h2 className="text-xl font-semibold">{user.name}</h2>
+                <p className="text-muted-foreground">
+                  {user.major} · {user.year}
+                </p>
               </div>
-              <Button asChild className="mt-4">
-                <Link href="/settings">프로필 설정</Link>
-              </Button>
-            </CardContent>
-          </Card>
+            </div>
+            <Button asChild className="mt-4">
+              <Link href="/settings">프로필 설정</Link>
+            </Button>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">지원 현황</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {applications.map(app => (
-                  <li key={app.id} className="bg-muted flex items-center justify-between rounded-lg p-3">
-                    <div>
-                      <h3 className="font-semibold">{app.club}</h3>
-                      <p className="text-muted-foreground text-sm">지원일: {app.date}</p>
-                    </div>
-                    <span className="bg-primary/10 text-primary rounded-full px-2 py-1 text-sm font-medium">
-                      {app.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-    </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">지원 현황</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-4">
+              {applications.map(app => (
+                <li key={app.id} className="bg-muted flex items-center justify-between rounded-lg p-3">
+                  <div>
+                    <h3 className="font-semibold">{app.club}</h3>
+                    <p className="text-muted-foreground text-sm">지원일: {app.date}</p>
+                  </div>
+                  <span className="bg-primary/10 text-primary rounded-full px-2 py-1 text-sm font-medium">
+                    {app.status}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
   );
 }
