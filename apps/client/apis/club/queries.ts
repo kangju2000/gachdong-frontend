@@ -1,12 +1,6 @@
-import { CLUBS, RECRUIT_LIST } from '@/constants/data';
+import { RECRUIT_LIST } from '@/constants/data';
 import { keys } from './keys';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { clubApi } from '../config/instance';
-import { ArrayResponseClubSummaryResponse, ClubResponse } from '../__generated__/club/swagger';
-
-// export function useClubs() {
-//   return { data: CLUBS };
-// }
 
 export function useRecruitments() {
   return useSuspenseQuery({

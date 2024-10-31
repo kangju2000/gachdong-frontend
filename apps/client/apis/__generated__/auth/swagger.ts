@@ -9,266 +9,186 @@
  * ---------------------------------------------------------------
  */
 
-export interface CreateClubRequest {
+/** 회원가입 정보 */
+export interface RegistrationDto {
   /**
-   * 동아리 이름
-   * @example "가츠동"
+   * @minLength 0
+   * @maxLength 255
+   * @pattern ^[a-zA-Z0-9._%+-]+@gachon\.ac\.kr$
+   */
+  email: string;
+  /**
+   * @minLength 6
+   * @maxLength 6
+   */
+  code: string;
+  /** @pattern (?=.*[0-9])(?=.*[a-zA-Z])(?=.*\W)(?=\S+$).{8,16} */
+  password: string;
+  /**
+   * @minLength 0
+   * @maxLength 100
    */
   name: string;
-  /**
-   * 동아리 카테고리
-   * @example "SPORTS"
-   */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
-  /**
-   * 동아리 한줄 설명
-   * @example "가츠동은 최고의 동아리입니다."
-   */
-  shortDescription: string;
-  /**
-   * 동아리 소개
-   * @example "<h1>가츠동</h1> <p>최고의 동아리입니다</p>"
-   */
-  introduction?: string;
-  /**
-   * 동아리 이미지 URL
-   * @example "http://example.com/image.png"
-   */
-  clubImageUrl?: string;
-  /**
-   * 동아리 설립일
-   * @format date-time
-   */
-  establishedAt?: string;
+  role: 'USER' | 'ADMIN';
 }
 
-export interface ClubResponse {
-  /**
-   * 동아리 ID
-   * @format int64
-   * @example 1
-   */
-  clubId: number;
-  /**
-   * 동아리 이름
-   * @example "가츠동"
-   */
-  clubName: string;
-  /**
-   * 동아리 카테고리
-   * @example "SPORTS"
-   */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
-  /**
-   * 한줄 소개
-   * @example "가츠동은 최고의 동아리입니다."
-   */
-  shortDescription: string;
-  /**
-   * 이미지 URL
-   * @example "http://example.com/image.jpg"
-   */
-  clubImageUrl: string;
-  /**
-   * 모집 여부
-   * @example true
-   */
-  recruitingStatus: boolean;
-  /**
-   * 동아리 설명
-   * @example "가츠동은 다양한 활동을 하는 동아리입니다."
-   */
-  introduction: string;
-  /**
-   * 설립일
-   * @format date-time
-   */
-  establishedAt: string;
-  /**
-   * 업데이트일
-   * @format date-time
-   */
-  updatedAt: string;
+/** 로그인 정보 */
+export interface LoginDto {
+  email?: string;
+  password?: string;
 }
 
-export interface ArrayResponseClubContactInfoResponse {
-  results?: ClubContactInfoResponse[];
+export interface AuthResponse {
+  token?: string;
+  message?: string;
 }
 
-export interface ClubContactInfoResponse {
-  /**
-   * 연락 수단 (예: gmail, phone)
-   * @example "gmail"
-   */
-  contactMethod: string;
-  /**
-   * 연락처 정보
-   * @example "gachdong@gmail.com"
-   */
-  contactValue: string;
+/** 비밀번호 변경 정보 */
+export interface ChangePasswordDto {
+  currentPassword?: string;
+  newPassword?: string;
 }
 
-export interface ArrayResponseClubActivityResponse {
-  results?: ClubActivityResponse[];
+export interface SendVerificationCodeParams {
+  /** 사용자의 이메일 주소 */
+  email: string;
 }
 
-export interface ClubActivityResponse {
-  /**
-   * 활동 제목
-   * @example "2024년 봄 캠프"
-   */
-  title: string;
-  /**
-   * 활동 날짜
-   * @format date
-   * @example "2024-04-12"
-   */
-  date: string;
-  /**
-   * 활동 설명
-   * @example "봄 캠프에서 다양한 활동을 했습니다."
-   */
-  description: string;
+export interface ResetPasswordParams {
+  /** 사용자의 이메일 주소 */
+  email: string;
+  /** 인증 코드 */
+  code: string;
 }
 
-export interface ArrayResponseClubSummaryResponse {
-  results?: ClubSummaryResponse[];
-}
-
-export interface ClubSummaryResponse {
+export namespace 인증인가Api {
   /**
-   * 동아리 id
-   * @format int64
-   * @example 1
+   * @description 사용자의 계정을 삭제합니다.
+   * @tags 인증/인가 API
+   * @name DeleteAccount
+   * @summary 회원탈퇴
+   * @request POST:/api/v1/unregister
+   * @response `200` `string` OK
    */
-  clubId: number;
-  /**
-   * 동아리 이름
-   * @example "가츠동"
-   */
-  clubName: string;
-  /**
-   * 동아리 카테고리
-   * @example "SPORTS"
-   */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
-  /**
-   * 한줄 소개
-   * @example "가츠동은 최고의 동아리입니다."
-   */
-  shortDescription: string;
-  /**
-   * 이미지 URL
-   * @example "http://example.com/image.jpg"
-   */
-  clubImageUrl: string;
-  /**
-   * 모집 여부
-   * @example true
-   */
-  recruitingStatus: boolean;
-}
-
-export namespace 동아리Api {
-  /**
-   * @description 동아리 정보를 입력받아 동아리를 생성합니다.
-   * @tags 동아리 API
-   * @name CreateClub
-   * @summary 동아리 생성
-   * @request POST:/api/v1/create
-   * @secure
-   * @response `200` `ClubResponse` OK
-   */
-  export namespace CreateClub {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = CreateClubRequest;
-    export type RequestHeaders = {};
-    export type ResponseBody = ClubResponse;
-  }
-}
-
-export namespace Public동아리Api {
-  /**
-   * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
-   * @tags Public 동아리 API
-   * @name GetClub
-   * @summary 동아리 조회
-   * @request GET:/public/api/v1/{clubId}
-   * @response `200` `ClubResponse` OK
-   */
-  export namespace GetClub {
-    export type RequestParams = {
-      /**
-       * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
-       */
-      clubId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ClubResponse;
-  }
-
-  /**
-   * @description 동아리 연락처 정보를 조회합니다.
-   * @tags Public 동아리 API
-   * @name GetClubContactInfo
-   * @summary 동아리 연락처 정보 조회
-   * @request GET:/public/api/v1/{clubId}/contact-info
-   * @response `200` `ArrayResponseClubContactInfoResponse` OK
-   */
-  export namespace GetClubContactInfo {
-    export type RequestParams = {
-      /**
-       * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
-       */
-      clubId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ArrayResponseClubContactInfoResponse;
-  }
-
-  /**
-   * @description 동아리 활동 내역을 조회합니다.
-   * @tags Public 동아리 API
-   * @name GetClubActivities
-   * @summary 동아리 활동 내역 조회
-   * @request GET:/public/api/v1/{clubId}/activities
-   * @response `200` `ArrayResponseClubActivityResponse` OK
-   */
-  export namespace GetClubActivities {
-    export type RequestParams = {
-      /**
-       * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
-       */
-      clubId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ArrayResponseClubActivityResponse;
-  }
-
-  /**
-   * @description 모든 동아리 정보를 조회합니다.
-   * @tags Public 동아리 API
-   * @name GetClubs
-   * @summary 동아리 목록 조회
-   * @request GET:/public/api/v1/
-   * @response `200` `ArrayResponseClubSummaryResponse` OK
-   */
-  export namespace GetClubs {
+  export namespace DeleteAccount {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+   * @tags 인증/인가 API
+   * @name SendVerificationCode
+   * @summary 이메일 인증 코드 발송
+   * @request POST:/api/v1/send_verification_code
+   * @response `200` `string` OK
+   */
+  export namespace SendVerificationCode {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 사용자의 이메일 주소 */
+      email: string;
+    };
+    export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ArrayResponseClubSummaryResponse;
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
+   * @tags 인증/인가 API
+   * @name ResetPassword
+   * @summary 비밀번호 재발급
+   * @request POST:/api/v1/reset_password
+   * @response `200` `string` OK
+   */
+  export namespace ResetPassword {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 사용자의 이메일 주소 */
+      email: string;
+      /** 인증 코드 */
+      code: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인 고정) - code: 6자리의 이메일 인증 코드 - password: 사용자 비밀번호 (8~16자, 영문, 숫자, 특수문자 포함) - name: 사용자 이름 - role: 사용자 역할 (USER, ADMIN)
+   * @tags 인증/인가 API
+   * @name CompleteRegistration
+   * @summary 회원가입
+   * @request POST:/api/v1/register
+   * @response `200` `string` OK
+   */
+  export namespace CompleteRegistration {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = RegistrationDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 사용자를 로그아웃합니다.
+   * @tags 인증/인가 API
+   * @name Logout
+   * @summary 로그아웃
+   * @request POST:/api/v1/logout
+   * @response `200` `string` OK
+   */
+  export namespace Logout {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 사용자가 로그인합니다.
+   * @tags 인증/인가 API
+   * @name Login
+   * @summary 사용자 로그인
+   * @request POST:/api/v1/login
+   * @response `200` `AuthResponse` OK
+   */
+  export namespace Login {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = LoginDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = AuthResponse;
+  }
+
+  /**
+   * @description 기존 비밀번호를 변경합니다.
+   * @tags 인증/인가 API
+   * @name ChangePassword
+   * @summary 비밀번호 변경
+   * @request POST:/api/v1/change_password
+   * @response `200` `string` OK
+   */
+  export namespace ChangePassword {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ChangePasswordDto;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
   }
 }
 
@@ -318,7 +238,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://gateway-dev.gachdong.club/club/';
+  public baseUrl: string = 'http://gateway-dev.gachdong.club/auth/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -483,96 +403,131 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title 가츠동 API 명세 - 동아리 서비스
+ * @title 가츠동 API 명세 - 인증/인가 서비스
  * @version v1
- * @baseUrl http://gateway-dev.gachdong.club/club/
+ * @baseUrl http://gateway-dev.gachdong.club/auth/
  *
- * 동아리 서비스에 대한 API 명세입니다.
+ * 인증/인가 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  동아리Api = {
+  인증인가Api = {
     /**
-     * @description 동아리 정보를 입력받아 동아리를 생성합니다.
+     * @description 사용자의 계정을 삭제합니다.
      *
-     * @tags 동아리 API
-     * @name CreateClub
-     * @summary 동아리 생성
-     * @request POST:/api/v1/create
-     * @secure
-     * @response `200` `ClubResponse` OK
+     * @tags 인증/인가 API
+     * @name DeleteAccount
+     * @summary 회원탈퇴
+     * @request POST:/api/v1/unregister
+     * @response `200` `string` OK
      */
-    createClub: (data: CreateClubRequest, params: RequestParams = {}) =>
-      this.request<ClubResponse, any>({
-        path: `/api/v1/create`,
+    deleteAccount: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/unregister`,
+        method: 'POST',
+        ...params,
+      }),
+
+    /**
+     * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+     *
+     * @tags 인증/인가 API
+     * @name SendVerificationCode
+     * @summary 이메일 인증 코드 발송
+     * @request POST:/api/v1/send_verification_code
+     * @response `200` `string` OK
+     */
+    sendVerificationCode: (query: SendVerificationCodeParams, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/send_verification_code`,
+        method: 'POST',
+        query: query,
+        ...params,
+      }),
+
+    /**
+     * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
+     *
+     * @tags 인증/인가 API
+     * @name ResetPassword
+     * @summary 비밀번호 재발급
+     * @request POST:/api/v1/reset_password
+     * @response `200` `string` OK
+     */
+    resetPassword: (query: ResetPasswordParams, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/reset_password`,
+        method: 'POST',
+        query: query,
+        ...params,
+      }),
+
+    /**
+     * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인 고정) - code: 6자리의 이메일 인증 코드 - password: 사용자 비밀번호 (8~16자, 영문, 숫자, 특수문자 포함) - name: 사용자 이름 - role: 사용자 역할 (USER, ADMIN)
+     *
+     * @tags 인증/인가 API
+     * @name CompleteRegistration
+     * @summary 회원가입
+     * @request POST:/api/v1/register
+     * @response `200` `string` OK
+     */
+    completeRegistration: (data: RegistrationDto, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/register`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.Json,
         ...params,
       }),
-  };
-  public동아리Api = {
+
     /**
-     * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
+     * @description 사용자를 로그아웃합니다.
      *
-     * @tags Public 동아리 API
-     * @name GetClub
-     * @summary 동아리 조회
-     * @request GET:/public/api/v1/{clubId}
-     * @response `200` `ClubResponse` OK
+     * @tags 인증/인가 API
+     * @name Logout
+     * @summary 로그아웃
+     * @request POST:/api/v1/logout
+     * @response `200` `string` OK
      */
-    getClub: (clubId: string, params: RequestParams = {}) =>
-      this.request<ClubResponse, any>({
-        path: `/public/api/v1/${clubId}`,
-        method: 'GET',
+    logout: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/logout`,
+        method: 'POST',
         ...params,
       }),
 
     /**
-     * @description 동아리 연락처 정보를 조회합니다.
+     * @description 사용자가 로그인합니다.
      *
-     * @tags Public 동아리 API
-     * @name GetClubContactInfo
-     * @summary 동아리 연락처 정보 조회
-     * @request GET:/public/api/v1/{clubId}/contact-info
-     * @response `200` `ArrayResponseClubContactInfoResponse` OK
+     * @tags 인증/인가 API
+     * @name Login
+     * @summary 사용자 로그인
+     * @request POST:/api/v1/login
+     * @response `200` `AuthResponse` OK
      */
-    getClubContactInfo: (clubId: string, params: RequestParams = {}) =>
-      this.request<ArrayResponseClubContactInfoResponse, any>({
-        path: `/public/api/v1/${clubId}/contact-info`,
-        method: 'GET',
+    login: (data: LoginDto, params: RequestParams = {}) =>
+      this.request<AuthResponse, any>({
+        path: `/api/v1/login`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
 
     /**
-     * @description 동아리 활동 내역을 조회합니다.
+     * @description 기존 비밀번호를 변경합니다.
      *
-     * @tags Public 동아리 API
-     * @name GetClubActivities
-     * @summary 동아리 활동 내역 조회
-     * @request GET:/public/api/v1/{clubId}/activities
-     * @response `200` `ArrayResponseClubActivityResponse` OK
+     * @tags 인증/인가 API
+     * @name ChangePassword
+     * @summary 비밀번호 변경
+     * @request POST:/api/v1/change_password
+     * @response `200` `string` OK
      */
-    getClubActivities: (clubId: string, params: RequestParams = {}) =>
-      this.request<ArrayResponseClubActivityResponse, any>({
-        path: `/public/api/v1/${clubId}/activities`,
-        method: 'GET',
-        ...params,
-      }),
-
-    /**
-     * @description 모든 동아리 정보를 조회합니다.
-     *
-     * @tags Public 동아리 API
-     * @name GetClubs
-     * @summary 동아리 목록 조회
-     * @request GET:/public/api/v1/
-     * @response `200` `ArrayResponseClubSummaryResponse` OK
-     */
-    getClubs: (params: RequestParams = {}) =>
-      this.request<ArrayResponseClubSummaryResponse, any>({
-        path: `/public/api/v1/`,
-        method: 'GET',
+    changePassword: (data: ChangePasswordDto, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/change_password`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
   };

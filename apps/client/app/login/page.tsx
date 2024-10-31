@@ -9,18 +9,19 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
+import { useLogin } from '@/apis/auth';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  const { mutate: login } = useLogin();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const email = `${username}@gachon.ac.kr`;
-    // Here you would typically handle the login logic
-    console.log('Login attempt', { email, password, rememberMe });
+    login({ email: `${email}@gachon.ac.kr`, password });
   };
 
   return (
@@ -42,8 +43,8 @@ export default function LoginPage() {
                     id="username"
                     type="text"
                     placeholder="아이디"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                     required
                     className="rounded-r-none"
                   />

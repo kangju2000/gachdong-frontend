@@ -21,6 +21,10 @@ const apis = [
     url: `${PREFIX_URL}/application/v3/api-docs`,
     output: 'apis/__generated__/application',
   },
+  {
+    url: `${PREFIX_URL}/auth/v3/api-docs`,
+    output: 'apis/__generated__/auth',
+  },
 ];
 
 // Prettier 설정 로드
@@ -48,6 +52,7 @@ async function generateApiClient(api: (typeof apis)[0]) {
       unwrapResponseData: true,
       extractRequestParams: true,
       extractRequestBody: true,
+      httpClientType: 'fetch',
       prettier: {
         ...prettierConfig,
         parser: 'typescript',

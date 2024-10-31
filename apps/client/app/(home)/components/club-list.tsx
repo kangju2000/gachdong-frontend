@@ -12,21 +12,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Search, Filter } from 'lucide-react';
 import { ClubCard } from './club-card';
-import { Club } from '@/types';
+import { useClubs } from '@/apis/club';
+import { useRouter } from 'next/navigation';
 
-interface ClubListProps {
-  clubs: {
-    clubId: number;
-    clubName: string;
-    category: string;
-    shortDescription: string;
-    clubImageUrl: string;
-    recruitingStatus: boolean;
-  }[];
-  onClubSelect?: (clubId: number) => void;
-}
+export function ClubList() {
+  const {
+    data: { results: clubs },
+  } = useClubs();
+  const router = useRouter();
 
-export function ClubList({ clubs, onClubSelect }: ClubListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [showRecruitingOnly, setShowRecruitingOnly] = useState(false);
@@ -41,9 +35,7 @@ export function ClubList({ clubs, onClubSelect }: ClubListProps) {
   }, [clubs, searchTerm, selectedCategory, showRecruitingOnly]);
 
   const handleClubClick = (clubId: number) => {
-    if (onClubSelect) {
-      onClubSelect(clubId);
-    }
+    router.push(`/clubs/${clubId}`);
   };
 
   return (

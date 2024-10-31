@@ -6,48 +6,50 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useRegister, useSendVerificationCode } from '@/apis/auth';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  // const [agreeTerms, setAgreeTerms] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
+
+  const { mutate: sendVerificationCode } = useSendVerificationCode();
+  const { mutateAsync: registerAsync } = useRegister();
+  const router = useRouter();
 
   const handleSendVerification = () => {
-    // Here you would typically send the verification code to the user's email
-    console.log('Sending verification code to:', `${username}@gachon.ac.kr`);
+    sendVerificationCode({ email: `${email}@gachon.ac.kr` });
+    // TODO: 실패 처리?
     setIsVerificationSent(true);
   };
 
-  const handleVerify = () => {
-    // Here you would typically verify the code entered by the user
-    console.log('Verifying code:', verificationCode);
-    setIsVerified(true);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isVerified) {
+    if (!isVerificationSent) {
       alert('이메일 인증을 완료해주세요.');
       return;
     }
-    // Here you would typically handle the signup logic
-    console.log('Signup attempt', {
+    const result = await registerAsync({
       name,
-      username: `${username}@gachon.ac.kr`,
+      email: `${email}@gachon.ac.kr`,
       password,
-      agreeTerms,
+      code: verificationCode,
+      role: 'USER',
     });
+    if (result) {
+      // TODO: toast로 변경
+      alert('회원가입이 완료되었습니다.');
+      router.replace('/login');
+    }
   };
 
   return (
@@ -76,20 +78,38 @@ export default function SignupPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="username">아이디</Label>
+                <Label htmlFor="email">이메일</Label>
                 <div className="flex">
                   <Input
-                    id="username"
+                    id="email"
                     type="text"
-                    placeholder="username"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
+                    placeholder="이메일"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                     required
                     className="rounded-r-none"
                   />
                   <span className="border-input bg-muted text-muted-foreground inline-flex items-center rounded-r-md border border-l-0 px-3 text-sm">
                     @gachon.ac.kr
                   </span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="verification">이메일 인증</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="verification"
+                    type="text"
+                    placeholder="인증 코드"
+                    value={verificationCode}
+                    onChange={e => setVerificationCode(e.target.value)}
+                    disabled={!isVerificationSent}
+                  />
+                  {!isVerificationSent ? (
+                    <Button type="button" onClick={handleSendVerification} disabled={!email}>
+                      인증 코드 전송
+                    </Button>
+                  ) : null}
                 </div>
               </div>
               <div className="space-y-2">
@@ -130,34 +150,8 @@ export default function SignupPage() {
                   </button>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="verification">이메일 인증</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    id="verification"
-                    type="text"
-                    placeholder="인증 코드"
-                    value={verificationCode}
-                    onChange={e => setVerificationCode(e.target.value)}
-                    disabled={!isVerificationSent || isVerified}
-                  />
-                  {!isVerified ? (
-                    <Button type="button" onClick={isVerificationSent ? handleVerify : handleSendVerification}>
-                      {isVerificationSent ? '인증하기' : '인증 코드 전송'}
-                    </Button>
-                  ) : (
-                    <Button type="button" disabled>
-                      인증 완료
-                    </Button>
-                  )}
-                </div>
-              </div>
-              {isVerified && (
-                <Alert>
-                  <AlertDescription>이메일 인증이 완료되었습니다.</AlertDescription>
-                </Alert>
-              )}
-              <div className="flex items-center space-x-2">
+
+              {/* <div className="flex items-center space-x-2">
                 <Checkbox
                   id="terms"
                   checked={agreeTerms}
@@ -173,8 +167,8 @@ export default function SignupPage() {
                     (보기)
                   </Link>
                 </Label>
-              </div>
-              <Button type="submit" className="w-full" disabled={!agreeTerms || !isVerified}>
+              </div> */}
+              <Button type="submit" className="w-full" disabled={!verificationCode || !password || !confirmPassword}>
                 회원가입
               </Button>
             </form>

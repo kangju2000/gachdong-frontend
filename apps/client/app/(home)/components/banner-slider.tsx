@@ -6,19 +6,11 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { RECRUIT_LIST } from '@/constants/data';
 
-interface BannerItem {
-  id: number;
-  title: string;
-  image: string;
-}
-
-interface BannerSliderProps {
-  bannerItems: BannerItem[];
-}
-
-export function BannerSlider({ bannerItems }: BannerSliderProps) {
+export function BannerSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const bannerItems = RECRUIT_LIST;
 
   useEffect(() => {
     const timer = setInterval(() => {

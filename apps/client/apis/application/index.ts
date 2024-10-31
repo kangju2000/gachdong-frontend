@@ -1,2 +1,3 @@
 export * from './queries';
-export { keys as meKeys } from './keys';
+export * from './mutations';
+export { keys as applicationKeys } from './keys';
