@@ -38,7 +38,7 @@ export default function ClubsPage() {
 
   return (
     <main className="mx-auto max-w-[980px] px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">동아리 목록</h1>
+      <h1 className="mb-6 text-3xl font-bold leading-tight sm:text-4xl">동아리 목록</h1>
 
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="relative w-full sm:w-64">

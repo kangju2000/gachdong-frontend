@@ -40,8 +40,8 @@ export function ClubList() {
 
   return (
     <section className="flex-grow">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">동아리 목록</h2>
+      <div className="mb-4 flex items-center justify-end sm:justify-between">
+        <h2 className="hidden text-2xl font-semibold sm:block">동아리 목록</h2>
         <div className="flex items-center space-x-2">
           <div className="relative">
             <Search className="text-muted-foreground absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />

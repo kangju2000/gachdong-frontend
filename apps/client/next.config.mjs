@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['images.unsplash.com', 'placehold.co'],
+    remotePatterns: [{ hostname: 'images.unsplash.com' }, { hostname: 'placehold.co' }],
   },
   typescript: {
     ignoreBuildErrors: true,
