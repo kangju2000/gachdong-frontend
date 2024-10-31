@@ -15,19 +15,23 @@ import {
 import { ChevronDown, Search, Filter } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CLUBS } from '@/constants/data';
+import { useClubs } from '@/apis/club';
 
 export default function ClubsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [showRecruiting, setShowRecruiting] = useState(false);
 
-  const filteredClubs = CLUBS.filter(club => {
+  const {
+    data: { results: clubs },
+  } = useClubs();
+
+  const filteredClubs = clubs.filter(club => {
     const matchesSearch =
-      club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      club.description.toLowerCase().includes(searchTerm.toLowerCase());
+      club.clubName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      club.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
-    const matchesRecruiting = !showRecruiting || club.recruiting;
+    const matchesRecruiting = !showRecruiting || club.recruitingStatus;
 
     return matchesSearch && matchesCategory && matchesRecruiting;
   });
@@ -80,33 +84,33 @@ export default function ClubsPage() {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {filteredClubs.map(club => (
-            <Link href={`/clubs/${club.id}`} key={club.id}>
+            <Link href={`/clubs/${club.clubId}`} key={club.clubId}>
               <Card className="overflow-hidden transition-shadow hover:shadow-md">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-4">
-                    <div className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
+                    <div className="bg-muted relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
                       <Image
-                        src={club.image}
-                        alt={`${club.name} logo`}
-                        width={64}
-                        height={64}
-                        className="rounded-full object-cover"
+                        src={club.clubImageUrl}
+                        alt={`${club.clubName} logo`}
+                        className="object-cover"
+                        fill
+                        sizes="100%"
                       />
                     </div>
                     <div className="flex-grow">
-                      <h3 className="text-lg font-semibold">{club.name}</h3>
+                      <h3 className="text-lg font-semibold">{club.clubName}</h3>
                       <p className="text-muted-foreground text-sm">{club.category}</p>
                       <div className="mt-2 flex items-center">
                         <span
-                          className={`h-2 w-2 rounded-full ${club.recruiting ? 'bg-green-500' : 'bg-red-500'} mr-2`}
+                          className={`h-2 w-2 rounded-full ${club.recruitingStatus ? 'bg-green-500' : 'bg-red-500'} mr-2`}
                         ></span>
-                        <span className={`text-sm ${club.recruiting ? 'text-green-600' : 'text-red-600'}`}>
-                          {club.recruiting ? '모집중' : '모집 마감'}
+                        <span className={`text-sm ${club.recruitingStatus ? 'text-green-600' : 'text-red-600'}`}>
+                          {club.recruitingStatus ? '모집중' : '모집 마감'}
                         </span>
                       </div>
                     </div>
                   </div>
-                  <p className="mt-2 line-clamp-2 text-sm">{club.description}</p>
+                  <p className="mt-2 line-clamp-2 text-sm">{club.shortDescription}</p>
                 </CardContent>
               </Card>
             </Link>

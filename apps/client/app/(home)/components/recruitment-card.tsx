@@ -15,7 +15,13 @@ export function RecruitmentCard({ recruitment, onClick }: RecruitmentCardProps) 
       <CardContent className="p-3">
         <div className="flex items-center space-x-3">
           <div className="bg-muted relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
-            <Image src={recruitment.image} alt={`${recruitment.club} logo`} className="object-cover" fill />
+            <Image
+              src={recruitment.image}
+              alt={`${recruitment.club} logo`}
+              className="object-cover"
+              fill
+              sizes="100%"
+            />
           </div>
           <div className="min-w-0 flex-grow">
             <h3 className="truncate text-sm font-semibold">{recruitment.title}</h3>

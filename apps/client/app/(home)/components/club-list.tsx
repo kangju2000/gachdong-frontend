@@ -15,7 +15,14 @@ import { ClubCard } from './club-card';
 import { Club } from '@/types';
 
 interface ClubListProps {
-  clubs: Club[];
+  clubs: {
+    clubId: number;
+    clubName: string;
+    category: string;
+    shortDescription: string;
+    clubImageUrl: string;
+    recruitingStatus: boolean;
+  }[];
   onClubSelect?: (clubId: number) => void;
 }
 
@@ -26,9 +33,9 @@ export function ClubList({ clubs, onClubSelect }: ClubListProps) {
 
   const filteredClubs = useMemo(() => {
     return clubs.filter(club => {
-      const matchesSearch = club.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = club.clubName.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
-      const matchesRecruiting = !showRecruitingOnly || club.recruiting;
+      const matchesRecruiting = !showRecruitingOnly || club.recruitingStatus;
       return matchesSearch && matchesCategory && matchesRecruiting;
     });
   }, [clubs, searchTerm, selectedCategory, showRecruitingOnly]);
@@ -81,7 +88,7 @@ export function ClubList({ clubs, onClubSelect }: ClubListProps) {
       </Tabs>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {filteredClubs.map(club => (
-          <div key={club.id} onClick={() => handleClubClick(club.id)}>
+          <div key={club.clubId} onClick={() => handleClubClick(club.clubId)}>
             <ClubCard club={club} />
           </div>
         ))}

@@ -10,8 +10,12 @@ import { RECRUIT_LIST } from '@/constants/data';
 
 export default function Home() {
   const router = useRouter();
-  const { data: clubs } = useClubs();
-  const { data: recruitments } = useRecruitments();
+  const {
+    data: { results: clubs },
+  } = useClubs();
+  const {
+    data: { results: recruitments },
+  } = useRecruitments();
 
   const handleClubSelect = (clubId: number) => {
     router.push(`/clubs/${clubId}`);

@@ -46,7 +46,7 @@ export function BannerSlider({ bannerItems }: BannerSliderProps) {
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <Image src={item.image} alt={item.title} layout="fill" objectFit="cover" />
+              <Image src={item.image} alt={item.title} className="object-cover" fill sizes="100%" />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 p-8 text-white">
                 <div className="text-center">
                   <h2 className="mb-2 text-2xl font-bold">{item.title}</h2>

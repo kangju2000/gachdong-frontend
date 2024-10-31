@@ -4,21 +4,21 @@ import { keys } from './keys';
 
 export const useFormInfoAdmin = (formId: number) => {
   return useSuspenseQuery({
-    queryKey: keys.detail(formId),
+    queryKey: keys.formInfoAdmin(formId),
     queryFn: () => applicationApi.지원Api.getFormInfoAdmin(formId),
   });
 };
 
 export const useFormInfoUser = (formId: number) => {
   return useSuspenseQuery({
-    queryKey: keys.detail(formId),
+    queryKey: keys.formInfoUser(formId),
     queryFn: () => applicationApi.지원Api.getFormInfoUser(formId),
   });
 };
 
 export const useApplicationHistory = () => {
   return useSuspenseQuery({
-    queryKey: keys.lists(),
+    queryKey: keys.formHistory(),
     queryFn: () => applicationApi.지원Api.getaApplicationHistory(),
   });
 };

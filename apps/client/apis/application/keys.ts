@@ -1,5 +1,6 @@
 export const keys = {
   all: ['application'],
-  lists: () => [...keys.all, 'list'] as const,
-  detail: (formId: number) => [...keys.all, 'detail', formId] as const,
+  formInfoAdmin: (formId: number) => [...keys.all, 'formInfoAdmin', formId] as const,
+  formInfoUser: (formId: number) => [...keys.all, 'formInfoUser', formId] as const,
+  formHistory: () => [...keys.all, 'formHistory'] as const,
 } as const;
