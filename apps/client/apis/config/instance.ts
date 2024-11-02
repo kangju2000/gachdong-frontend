@@ -24,14 +24,23 @@ const instance = ky.create({
 const clubApi = new ClubApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/club',
+  baseApiParams: {
+    format: 'json',
+  },
 });
 const applicationApi = new ApplicationApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/application',
+  baseApiParams: {
+    format: 'json',
+  },
 });
 const authApi = new AuthApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/auth',
+  baseApiParams: {
+    format: 'json',
+  },
 });
 
 export { clubApi, applicationApi, authApi };

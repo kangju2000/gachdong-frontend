@@ -26,7 +26,7 @@ export function ClubList() {
   const [showRecruitingOnly, setShowRecruitingOnly] = useState(false);
 
   const filteredClubs = useMemo(() => {
-    return clubs.filter(club => {
+    return clubs?.filter(club => {
       const matchesSearch = club.clubName.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
       const matchesRecruiting = !showRecruitingOnly || club.recruitingStatus;
@@ -79,7 +79,7 @@ export function ClubList() {
         </TabsList>
       </Tabs>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {filteredClubs.map(club => (
+        {filteredClubs?.map(club => (
           <div key={club.clubId} onClick={() => handleClubClick(club.clubId)}>
             <ClubCard club={club} />
           </div>

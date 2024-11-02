@@ -1,13 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../config/instance';
 import { useRouter } from 'next/navigation';
 import { CookieManager } from '@/lib/auth/cookies';
+import { keys } from './keys';
 
 const { login, completeRegistration, sendVerificationCode, resetPassword, verifyCode } = authApi.public인증인가Api;
 const { logout, changePassword, deleteAccount } = authApi.인증인가Api;
 
 export const useLogin = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: login,
     onSuccess: response => {
@@ -15,6 +18,7 @@ export const useLogin = () => {
       alert('로그인이 완료되었습니다');
 
       CookieManager.setToken({ accessToken: response.token ?? '' });
+      queryClient.invalidateQueries({ queryKey: keys.profile() });
       router.replace('/');
     },
     onError: () => {
@@ -25,13 +29,14 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: logout,
+    mutationFn: () => logout(),
     onSettled: () => {
       CookieManager.removeToken();
-      router.replace('/');
+      queryClient.invalidateQueries({ queryKey: keys.all });
+      queryClient.resetQueries({ queryKey: keys.profile() });
     },
   });
 };

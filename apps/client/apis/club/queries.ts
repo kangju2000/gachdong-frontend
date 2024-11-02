@@ -18,7 +18,7 @@ export const useClubs = () => {
   return useSuspenseQuery({
     queryKey: keys.lists(),
     queryFn: () => {
-      // clubApi.동아리Api.getClubs();
+      // return clubApi.public동아리Api.getClubs();
       const result = {
         results: [
           {

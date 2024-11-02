@@ -41,7 +41,6 @@ export default function SignupPage() {
       name,
       email: `${email}@gachon.ac.kr`,
       password,
-      code: verificationCode,
       role: 'USER',
     });
     if (result) {
