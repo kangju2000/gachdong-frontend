@@ -9,11 +9,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AlertCircle, Camera, Eye, EyeOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useProfile } from '@/apis/auth/queries';
-import { useChangePassword } from '@/apis/auth';
+import { useChangePassword, useDeleteAccount } from '@/apis/auth';
 
 export default function Settings() {
   const { data: user } = useProfile();
   const { mutateAsync: changePassword } = useChangePassword();
+  const { mutateAsync: deleteAccount } = useDeleteAccount();
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -48,6 +49,10 @@ export default function Settings() {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
+  };
+
+  const handleDeleteAccount = async () => {
+    await deleteAccount();
   };
 
   if (!user) {
@@ -171,7 +176,7 @@ export default function Settings() {
                 </Button>
               </form>
             )}
-            <Button variant="destructive" className="w-full">
+            <Button variant="destructive" className="w-full" onClick={handleDeleteAccount}>
               계정 삭제하기
             </Button>
           </CardContent>

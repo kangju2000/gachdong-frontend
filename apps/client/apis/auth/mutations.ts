@@ -104,11 +104,18 @@ export const useChangePassword = () => {
 };
 
 export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
-    mutationFn: deleteAccount,
+    mutationFn: () => deleteAccount(),
     onSuccess: () => {
       // TODO: toast로 변경
       alert('회원탈퇴가 완료되었습니다.');
+
+      CookieManager.removeToken();
+      queryClient.invalidateQueries({ queryKey: keys.all });
+      queryClient.resetQueries({ queryKey: keys.profile() });
+      router.replace('/login');
     },
     onError: () => {
       // TODO: toast로 변경
