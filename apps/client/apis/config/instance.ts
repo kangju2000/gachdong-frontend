@@ -11,8 +11,9 @@ const instance = ky.create({
   },
   hooks: {
     beforeRequest: [
-      request => {
-        const token = CookieManager.getToken();
+      async request => {
+        const token = typeof window !== 'undefined' ? CookieManager.getToken() : await CookieManager.getServerToken();
+
         if (token) {
           request.headers.set('Authorization', `Bearer ${token}`);
         }
