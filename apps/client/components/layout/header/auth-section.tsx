@@ -75,7 +75,7 @@ function UserDropdown({ profile }: { profile: UserProfileResponse }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 cursor-pointer">
-          <AvatarImage src="/placeholder.svg" alt="User" />
+          {/* <AvatarImage src={profile.avatar} alt="User" /> */}
           <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
