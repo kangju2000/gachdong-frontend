@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { Users, Megaphone, Newspaper } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +20,7 @@ export function NavigationSection() {
       <Link href="/" className="text-2xl font-bold">
         <Image src="/text-logo.svg" alt="GACHDONG" width={100} height={30} />
       </Link>
-      <nav className="hidden items-center space-x-4 sm:flex">
+      <nav className="flex items-center space-x-2 sm:space-x-4">
         {navItems.map(item => (
           <NavItem key={item.href} item={item} isActive={pathname === item.href} />
         ))}
@@ -33,14 +34,13 @@ function NavItem({ item, isActive }: { item: (typeof navItems)[number]; isActive
   return (
     <Link
       href={item.href}
-      className={`flex items-center space-x-1 rounded-md px-3 py-2 text-sm font-medium ${
-        isActive
-          ? 'bg-primary text-primary-foreground'
-          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-      }`}
+      className={cn('flex items-center space-x-1 rounded-md px-3 py-2 text-sm font-medium', {
+        'text-muted-foreground hover:bg-accent hover:text-accent-foreground': !isActive,
+        'bg-primary text-primary-foreground': isActive,
+      })}
     >
       <Icon className="h-4 w-4" />
-      <span>{item.label}</span>
+      <span className="hidden sm:block">{item.label}</span>
     </Link>
   );
 }

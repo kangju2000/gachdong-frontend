@@ -201,9 +201,10 @@ export namespace Public동아리Api {
     export type RequestParams = {
       /**
        * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
+       * @format int64
+       * @example 1
        */
-      clubId: string;
+      clubId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -223,9 +224,10 @@ export namespace Public동아리Api {
     export type RequestParams = {
       /**
        * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
+       * @format int64
+       * @example 1
        */
-      clubId: string;
+      clubId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -245,9 +247,10 @@ export namespace Public동아리Api {
     export type RequestParams = {
       /**
        * 동아리 ID
-       * @example "ansier-enicsei-1233na-bndknar"
+       * @format int64
+       * @example 1
        */
-      clubId: string;
+      clubId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -521,7 +524,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/public/api/v1/{clubId}
      * @response `200` `ClubResponse` OK
      */
-    getClub: (clubId: string, params: RequestParams = {}) =>
+    getClub: (clubId: number, params: RequestParams = {}) =>
       this.request<ClubResponse, any>({
         path: `/public/api/v1/${clubId}`,
         method: 'GET',
@@ -537,7 +540,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/public/api/v1/{clubId}/contact-info
      * @response `200` `ArrayResponseClubContactInfoResponse` OK
      */
-    getClubContactInfo: (clubId: string, params: RequestParams = {}) =>
+    getClubContactInfo: (clubId: number, params: RequestParams = {}) =>
       this.request<ArrayResponseClubContactInfoResponse, any>({
         path: `/public/api/v1/${clubId}/contact-info`,
         method: 'GET',
@@ -553,7 +556,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/public/api/v1/{clubId}/activities
      * @response `200` `ArrayResponseClubActivityResponse` OK
      */
-    getClubActivities: (clubId: string, params: RequestParams = {}) =>
+    getClubActivities: (clubId: number, params: RequestParams = {}) =>
       this.request<ArrayResponseClubActivityResponse, any>({
         path: `/public/api/v1/${clubId}/activities`,
         method: 'GET',

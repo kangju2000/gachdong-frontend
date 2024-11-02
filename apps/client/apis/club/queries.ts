@@ -1,6 +1,7 @@
 import { RECRUIT_LIST } from '@/constants/data';
 import { keys } from './keys';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubApi } from '../config/instance';
 
 export function useRecruitments() {
   return useSuspenseQuery({
@@ -18,7 +19,7 @@ export const useClubs = () => {
   return useSuspenseQuery({
     queryKey: keys.lists(),
     queryFn: () => {
-      // return clubApi.public동아리Api.getClubs();
+      return clubApi.public동아리Api.getClubs();
       const result = {
         results: [
           {
@@ -51,7 +52,7 @@ export const useClubs = () => {
         ],
       };
 
-      return new Promise<typeof result>(resolve => resolve(result));
+      // return new Promise<typeof result>(resolve => resolve(result));
     },
   });
 };
