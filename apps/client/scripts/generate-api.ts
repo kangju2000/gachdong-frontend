@@ -14,20 +14,22 @@ if (!PREFIX_URL) {
 
 const apis = [
   {
+    name: 'club',
     url: `${PREFIX_URL}/club/v3/api-docs`,
     output: 'apis/__generated__/club',
   },
   {
+    name: 'application',
     url: `${PREFIX_URL}/application/v3/api-docs`,
     output: 'apis/__generated__/application',
   },
   {
+    name: 'auth',
     url: `${PREFIX_URL}/auth/v3/api-docs`,
     output: 'apis/__generated__/auth',
   },
 ];
 
-// Prettier 설정 로드
 async function getPrettierConfig() {
   try {
     const prettierConfig = await prettier.resolveConfig(process.cwd());
@@ -71,36 +73,46 @@ async function generateApiClient(api: (typeof apis)[0]) {
 
 const generatedDir = path.resolve('apis/__generated__');
 
-// 기존 생성된 파일들 삭제
-if (fs.existsSync(generatedDir)) {
-  fs.rmSync(generatedDir, { recursive: true, force: true });
-  console.log(`Cleaned up directory: ${generatedDir}`);
+async function cleanupDirectories() {
+  const targetApis = process.argv.slice(2);
+
+  if (targetApis.length === 0) {
+    if (fs.existsSync(generatedDir)) {
+      fs.rmSync(generatedDir, { recursive: true, force: true });
+      console.log(`전체 generated 디렉토리 삭제 완료: ${generatedDir}`);
+    }
+    return;
+  }
+
+  const apisToClean = apis.filter(api => targetApis.includes(api.name));
+  apisToClean.forEach(api => {
+    const apiDir = path.resolve(api.output);
+    if (fs.existsSync(apiDir)) {
+      fs.rmSync(apiDir, { recursive: true, force: true });
+      console.log(`${api.name} API 디렉토리 삭제 완료: ${apiDir}`);
+    }
+  });
 }
 
-// 모든 API 생성 실행
 async function generateAllApis() {
   try {
-    await Promise.all(apis.map(generateApiClient));
-    console.log('All API clients generated successfully');
+    await cleanupDirectories();
 
-    // // 인덱스 파일 생성
-    // const indexContent = apis
-    //   .map(api => {
-    //     const moduleName = path.basename(api.output);
-    //     return `export * from './${moduleName}/swagger';`;
-    //   })
-    //   .join('\n');
+    const targetApis = process.argv.slice(2);
+    let apisToGenerate = apis;
 
-    // const prettierConfig = await getPrettierConfig();
-    // const formattedIndexContent = await prettier.format(indexContent, {
-    //   ...prettierConfig,
-    //   parser: 'typescript',
-    // });
+    if (targetApis.length > 0) {
+      apisToGenerate = apis.filter(api => targetApis.includes(api.name));
+      if (apisToGenerate.length === 0) {
+        console.error('지정된 API를 찾을 수 없습니다.');
+        process.exit(1);
+      }
+    }
 
-    // const indexPath = path.join(generatedDir, 'index.ts');
-    // fs.writeFileSync(indexPath, formattedIndexContent);
+    await Promise.all(apisToGenerate.map(generateApiClient));
+    console.log('API 클라이언트 생성이 완료되었습니다.');
   } catch (error) {
-    console.error('Failed to generate API clients:', error);
+    console.error('API 클라이언트 생성 실패:', error);
     process.exit(1);
   }
 }

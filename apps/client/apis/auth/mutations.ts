@@ -1,19 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from '../config/instance';
-import {
-  ChangePasswordDto,
-  LoginDto,
-  RegistrationDto,
-  ResetPasswordParams,
-  SendVerificationCodeParams,
-} from '../__generated__/auth/swagger';
 import { useRouter } from 'next/navigation';
 import { CookieManager } from '@/lib/auth/cookies';
+
+const { login, completeRegistration, sendVerificationCode, resetPassword, verifyCode } = authApi.public인증인가Api;
+const { logout, changePassword, deleteAccount } = authApi.인증인가Api;
 
 export const useLogin = () => {
   const router = useRouter();
   return useMutation({
-    mutationFn: (data: LoginDto) => authApi.public인증인가Api.login(data, { format: 'json' }),
+    mutationFn: login,
     onSuccess: response => {
       // TODO: toast로 변경
       alert('로그인이 완료되었습니다');
@@ -32,7 +28,7 @@ export const useLogout = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => authApi.public인증인가Api.logout(),
+    mutationFn: logout,
     onSettled: () => {
       CookieManager.removeToken();
       router.replace('/');
@@ -44,7 +40,7 @@ export const useRegister = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (data: RegistrationDto) => authApi.public인증인가Api.completeRegistration(data),
+    mutationFn: completeRegistration,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('회원가입이 완료되었습니다.');
@@ -59,7 +55,7 @@ export const useRegister = () => {
 
 export const useSendVerificationCode = () => {
   return useMutation({
-    mutationFn: (query: SendVerificationCodeParams) => authApi.public인증인가Api.sendVerificationCode(query),
+    mutationFn: sendVerificationCode,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('인증 코드가 전송되었습니다.');
@@ -73,7 +69,7 @@ export const useSendVerificationCode = () => {
 
 export const useResetPassword = () => {
   return useMutation({
-    mutationFn: (query: ResetPasswordParams) => authApi.public인증인가Api.resetPassword(query),
+    mutationFn: resetPassword,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('비밀번호 재설정이 완료되었습니다.');
@@ -87,7 +83,7 @@ export const useResetPassword = () => {
 
 export const useChangePassword = () => {
   return useMutation({
-    mutationFn: (data: ChangePasswordDto) => authApi.public인증인가Api.changePassword(data),
+    mutationFn: changePassword,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('비밀번호 변경이 완료되었습니다.');
@@ -101,7 +97,7 @@ export const useChangePassword = () => {
 
 export const useDeleteAccount = () => {
   return useMutation({
-    mutationFn: () => authApi.public인증인가Api.deleteAccount(),
+    mutationFn: deleteAccount,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('회원탈퇴가 완료되었습니다.');
@@ -110,5 +106,11 @@ export const useDeleteAccount = () => {
       // TODO: toast로 변경
       alert('회원탈퇴에 실패하였습니다.');
     },
+  });
+};
+
+export const useVerifyCode = () => {
+  return useMutation({
+    mutationFn: verifyCode,
   });
 };
