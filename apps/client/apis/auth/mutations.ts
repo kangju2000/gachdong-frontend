@@ -15,10 +15,10 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: response => {
       // TODO: toast로 변경
-      alert('로그인이 완료되었습니다');
+      alert('로그인이 완료되었습니다.');
 
       CookieManager.setToken({ accessToken: response.token ?? '' });
-      queryClient.invalidateQueries({ queryKey: keys.profile() });
+      queryClient.invalidateQueries({ queryKey: keys.all });
       router.replace('/');
     },
     onError: () => {
@@ -73,11 +73,14 @@ export const useSendVerificationCode = () => {
 };
 
 export const useResetPassword = () => {
+  const router = useRouter();
+
   return useMutation({
     mutationFn: resetPassword,
     onSuccess: () => {
       // TODO: toast로 변경
       alert('비밀번호 재설정이 완료되었습니다.');
+      router.replace('/login');
     },
     onError: () => {
       // TODO: toast로 변경
@@ -117,5 +120,13 @@ export const useDeleteAccount = () => {
 export const useVerifyCode = () => {
   return useMutation({
     mutationFn: verifyCode,
+    onSuccess: () => {
+      // TODO: toast로 변경
+      alert('인증이 완료되었습니다.');
+    },
+    onError: () => {
+      // TODO: toast로 변경
+      alert('인증에 실패하였습니다.');
+    },
   });
 };

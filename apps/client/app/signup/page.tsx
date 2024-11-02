@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
-import { useRegister, useSendVerificationCode } from '@/apis/auth';
+import { useRegister, useSendVerificationCode, useVerifyCode } from '@/apis/auth';
 import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
@@ -20,15 +20,22 @@ export default function SignupPage() {
   // const [agreeTerms, setAgreeTerms] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
-
+  const [isVerificationSuccess, setIsVerificationSuccess] = useState(false);
   const { mutate: sendVerificationCode } = useSendVerificationCode();
   const { mutateAsync: registerAsync } = useRegister();
+  const { mutateAsync: verifyCode } = useVerifyCode();
   const router = useRouter();
 
   const handleSendVerification = () => {
     sendVerificationCode({ email: `${email}@gachon.ac.kr` });
     // TODO: 실패 처리?
     setIsVerificationSent(true);
+  };
+
+  const handleVerifyCode = () => {
+    verifyCode({ code: verificationCode, email: `${email}@gachon.ac.kr` }).then(() => {
+      setIsVerificationSuccess(true);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,6 +90,7 @@ export default function SignupPage() {
                   onChange={e => setEmail(e.target.value)}
                   required
                   className="rounded-r-none"
+                  disabled={isVerificationSent || isVerificationSuccess}
                 />
                 <span className="border-input bg-muted text-muted-foreground inline-flex items-center rounded-r-md border border-l-0 px-3 text-sm">
                   @gachon.ac.kr
@@ -95,16 +103,21 @@ export default function SignupPage() {
                 <Input
                   id="verification"
                   type="text"
-                  placeholder="인증 코드"
+                  placeholder="인증 코드를 입력하세요"
                   value={verificationCode}
                   onChange={e => setVerificationCode(e.target.value)}
-                  disabled={!isVerificationSent}
+                  disabled={!isVerificationSent || isVerificationSuccess}
                 />
-                {!isVerificationSent ? (
+                {!isVerificationSent && (
                   <Button type="button" onClick={handleSendVerification} disabled={!email}>
                     인증 코드 전송
                   </Button>
-                ) : null}
+                )}
+                {isVerificationSent && !isVerificationSuccess && (
+                  <Button type="button" onClick={handleVerifyCode}>
+                    인증하기
+                  </Button>
+                )}
               </div>
             </div>
             <div className="space-y-2">
@@ -163,7 +176,11 @@ export default function SignupPage() {
                   </Link>
                 </Label>
               </div> */}
-            <Button type="submit" className="w-full" disabled={!verificationCode || !password || !confirmPassword}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={!verificationCode || !password || !confirmPassword || !isVerificationSuccess || !email}
+            >
               회원가입
             </Button>
           </form>

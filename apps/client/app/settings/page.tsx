@@ -8,14 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AlertCircle, Camera, Eye, EyeOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useProfile } from '@/apis/auth/queries';
+import { useChangePassword } from '@/apis/auth';
 
 export default function Settings() {
-  const [user, setUser] = useState({
-    name: '강주혁',
-    email: 'kangju2000@gachon.ac.kr',
-    birthdate: '2000-11-10',
-    avatar: '/placeholder.svg?height=100&width=100',
-  });
+  const { data: user } = useProfile();
+  const { mutateAsync: changePassword } = useChangePassword();
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -29,33 +27,32 @@ export default function Settings() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the settings update logic
-    console.log('Settings update attempt', user);
     setIsSuccess(true);
     setTimeout(() => setIsSuccess(false), 3000);
   };
 
   const handleAvatarChange = () => {
-    // Here you would typically handle the avatar change logic
-    console.log('Avatar change attempted');
+    // TODO: 아바타 변경 로직 구현
   };
 
-  const handlePasswordChange = (e: React.FormEvent) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       setError('새 비밀번호가 일치하지 않습니다.');
       return;
     }
-    // Here you would typically handle the password change logic
-    console.log('Password change attempt', { currentPassword, newPassword });
+    await changePassword({ currentPassword, newPassword });
     setIsSuccess(true);
     setError('');
     setIsChangingPassword(false);
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
-    setTimeout(() => setIsSuccess(false), 3000);
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <main className="mx-auto max-w-[980px] px-4 py-6">
@@ -71,8 +68,8 @@ export default function Settings() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative mx-auto mb-4 h-20 w-20">
                 <Avatar className="h-full w-full">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>{user.name[0]}</AvatarFallback>
+                  {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
+                  <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
                 </Avatar>
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100">
                   <Button type="button" variant="ghost" size="icon" onClick={handleAvatarChange} className="text-white">
@@ -82,22 +79,7 @@ export default function Settings() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="name">이름</Label>
-                <Input
-                  id="name"
-                  value={user.name}
-                  onChange={e => setUser({ ...user, name: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="birthdate">생년월일</Label>
-                <Input
-                  id="birthdate"
-                  type="date"
-                  value={user.birthdate}
-                  onChange={e => setUser({ ...user, birthdate: e.target.value })}
-                  required
-                />
+                <Input id="name" defaultValue={user.name} required />
               </div>
               <Button type="submit">변경사항 저장</Button>
             </form>
@@ -112,7 +94,7 @@ export default function Settings() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">로그인 계정</Label>
-              <Input id="email" value={user.email} disabled />
+              <Input id="email" value={user?.email} disabled />
             </div>
             {!isChangingPassword ? (
               <Button variant="outline" className="w-full" onClick={() => setIsChangingPassword(true)}>
@@ -121,6 +103,25 @@ export default function Settings() {
             ) : (
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div className="space-y-2">
+                  <Label htmlFor="currentPassword">현재 비밀번호</Label>
+                  <div className="relative">
+                    <Input
+                      id="currentPassword"
+                      type={showCurrentPassword ? 'text' : 'password'}
+                      value={currentPassword}
+                      onChange={e => setCurrentPassword(e.target.value)}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-full"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    >
+                      {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
                   <Label htmlFor="newPassword">새 비밀번호</Label>
                   <div className="relative">
                     <Input

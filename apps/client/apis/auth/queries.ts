@@ -1,15 +1,15 @@
 import { authApi } from '../config/instance';
-import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { keys } from './keys';
 
 const { getProfile } = authApi.인증인가Api;
 
-export const authQueries: Record<Exclude<keyof typeof keys, 'all'>, { queryKey: QueryKey; queryFn: QueryFunction }> = {
+export const authQueries = {
   profile: {
     queryKey: keys.profile(),
     queryFn: getProfile,
   },
-};
+} as const;
 
 export const useProfile = () => {
   return useQuery({
