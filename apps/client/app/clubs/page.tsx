@@ -16,9 +16,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useClubs } from '@/apis/club';
 import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
-
-// 상수 정의
-const CATEGORIES = ['전체', 'IT · 프로그래밍', '학술 · 사회', '문화 · 예술', '체육 · 건강'];
+import { Category, CATEGORY_MAP } from '@/constants/categories';
 
 // 컴포넌트 분리
 const SearchBar = ({
@@ -55,14 +53,18 @@ const CategoryTabs = ({
   selectedCategory,
   onCategoryChange,
 }: {
-  selectedCategory: string;
-  onCategoryChange: (value: string) => void;
+  selectedCategory: Category;
+  onCategoryChange: (value: Category) => void;
 }) => (
-  <Tabs defaultValue={selectedCategory} className="mb-6 w-full" onValueChange={onCategoryChange}>
+  <Tabs
+    defaultValue={selectedCategory}
+    className="mb-6 w-full"
+    onValueChange={value => onCategoryChange(value as Category)}
+  >
     <TabsList>
-      {CATEGORIES.map(category => (
-        <TabsTrigger key={category} value={category} className="whitespace-nowrap px-3 py-1.5 text-sm">
-          {category}
+      {Object.entries(CATEGORY_MAP).map(([key, value]) => (
+        <TabsTrigger key={key} value={key} className="whitespace-nowrap px-3 py-1.5 text-sm">
+          {value}
         </TabsTrigger>
       ))}
     </TabsList>
@@ -100,7 +102,7 @@ const EmptyState = ({
   showRecruitingOnly,
 }: {
   searchTerm: string;
-  selectedCategory: string;
+  selectedCategory: Category;
   showRecruitingOnly: boolean;
 }) => {
   const getMessage = () => {
@@ -110,9 +112,9 @@ const EmptyState = ({
         description: '다른 검색어로 시도해보세요.',
       };
     }
-    if (selectedCategory !== '전체') {
+    if (selectedCategory !== 'ALL') {
       return {
-        title: `${selectedCategory} 카테고리에 동아리가 없습니다.`,
+        title: `${CATEGORY_MAP[selectedCategory]} 카테고리에 동아리가 없습니다.`,
         description: '다른 카테고리를 선택해보세요.',
       };
     }
@@ -140,7 +142,7 @@ const EmptyState = ({
 };
 export default function ClubsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState<Category>('ALL');
   const [showRecruiting, setShowRecruiting] = useState(false);
 
   const { data: { results: clubs = [] } = {} } = useClubs();
@@ -149,7 +151,7 @@ export default function ClubsPage() {
     const matchesSearch =
       club.clubName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       club.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'ALL' || club.category === selectedCategory;
     const matchesRecruiting = !showRecruiting || club.recruitingStatus;
 
     console.log(filteredClubs);

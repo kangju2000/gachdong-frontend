@@ -1,5 +1,3 @@
-'use client';
-
 import { CreateClubRequest } from '@/apis/__generated__/club/swagger';
 import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';

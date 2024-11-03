@@ -15,8 +15,7 @@ import { ClubCard } from './club-card';
 import { useClubs } from '@/apis/club';
 import { useRouter } from 'next/navigation';
 import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
-
-const CATEGORIES = ['전체', 'IT · 프로그래밍', '학술 · 사회', '문화 · 예술', '체육 · 건강'] as const;
+import { Category, CATEGORY_MAP } from '@/constants/categories';
 
 const EmptyState = ({
   searchTerm,
@@ -24,7 +23,7 @@ const EmptyState = ({
   showRecruitingOnly,
 }: {
   searchTerm: string;
-  selectedCategory: string;
+  selectedCategory: Category;
   showRecruitingOnly: boolean;
 }) => {
   const getMessage = () => {
@@ -34,9 +33,9 @@ const EmptyState = ({
         description: '다른 검색어로 시도해보세요.',
       };
     }
-    if (selectedCategory !== '전체') {
+    if (selectedCategory !== 'ALL') {
       return {
-        title: `${selectedCategory} 카테고리에 동아리가 없습니다.`,
+        title: `${CATEGORY_MAP[selectedCategory]} 카테고리에 동아리가 없습니다.`,
         description: '다른 카테고리를 선택해보세요.',
       };
     }
@@ -121,14 +120,18 @@ const CategoryTabs = ({
   selectedCategory,
   onCategoryChange,
 }: {
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
+  selectedCategory: Category;
+  onCategoryChange: (category: Category) => void;
 }) => (
-  <Tabs defaultValue={selectedCategory} className="mb-4 w-full" onValueChange={onCategoryChange}>
+  <Tabs
+    defaultValue={selectedCategory}
+    className="mb-4 w-full"
+    onValueChange={value => onCategoryChange(value as Category)}
+  >
     <TabsList>
-      {CATEGORIES.map(category => (
-        <TabsTrigger key={category} value={category} className="whitespace-nowrap px-3 py-1.5 text-sm">
-          {category}
+      {Object.entries(CATEGORY_MAP).map(([key, value]) => (
+        <TabsTrigger key={key} value={key} className="whitespace-nowrap px-3 py-1.5 text-sm">
+          {value}
         </TabsTrigger>
       ))}
     </TabsList>
@@ -146,7 +149,7 @@ const ClubGrid = ({
   clubs: ClubSummaryResponse[];
   onClubClick: (clubId: number) => void;
   searchTerm: string;
-  selectedCategory: string;
+  selectedCategory: Category;
   showRecruitingOnly: boolean;
 }) => {
   if (!clubs?.length) {
@@ -173,13 +176,13 @@ export function ClubList() {
   } = useClubs();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState<Category>('ALL');
   const [showRecruitingOnly, setShowRecruitingOnly] = useState(false);
 
   const filteredClubs = useMemo(() => {
     return clubs?.filter(club => {
       const matchesSearch = club.clubName.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === '전체' || club.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'ALL' || club.category === selectedCategory;
       const matchesRecruiting = !showRecruitingOnly || club.recruitingStatus;
 
       return matchesSearch && matchesCategory && matchesRecruiting;
