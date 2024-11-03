@@ -13,19 +13,17 @@ type Props = {
   queries: Query | Query[];
 };
 
-const PrefetchHydration = async ({ queries, children }: PropsWithChildren<Props>) => {
+export async function PrefetchHydration({ queries, children }: PropsWithChildren<Props>) {
   const getQueryClient = cache(() => new QueryClient());
   const queryClient = getQueryClient();
 
   const queryList = Array.isArray(queries) ? queries : [queries];
 
   for (const { queryKey, queryFn } of queryList) {
-    queryClient.prefetchQuery({ queryKey, queryFn });
+    await queryClient.prefetchQuery({ queryKey, queryFn });
   }
 
   const dehydratedState = dehydrate(queryClient);
 
   return <HydrateOnClient state={dehydratedState}>{children}</HydrateOnClient>;
-};
-
-export { PrefetchHydration };
+}
