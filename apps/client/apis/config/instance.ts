@@ -8,6 +8,7 @@ const instance = ky.create({
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
   hooks: {
     beforeRequest: [
