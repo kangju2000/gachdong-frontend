@@ -18,7 +18,7 @@ export default function AdminSignup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  // const [agreeTerms, setAgreeTerms] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -28,27 +28,26 @@ export default function AdminSignup() {
   const { mutateAsync: completeRegistration } = useRegister();
 
   const handleSendVerification = () => {
-    console.log('Sending verification code to:', `${username}@gachon.ac.kr`);
-    setIsVerificationSent(true);
+    sendVerificationCode({ email: `${username}@gachon.ac.kr` }).then(() => {
+      setIsVerificationSent(true);
+    });
   };
 
   const handleVerify = () => {
-    console.log('Verifying code:', verificationCode);
-    setIsVerified(true);
+    verifyCode({ email: `${username}@gachon.ac.kr`, code: verificationCode }).then(() => {
+      setIsVerified(true);
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isVerified) {
-      alert('이메일 인증을 완료해주세요.');
+
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    console.log('Signup attempt', {
-      name,
-      username: `${username}@gachon.ac.kr`,
-      password,
-      agreeTerms,
-    });
+
+    completeRegistration({ name, email: `${username}@gachon.ac.kr`, password, role: 'ADMIN' });
   };
 
   return (
@@ -115,6 +114,7 @@ export default function AdminSignup() {
                     type="button"
                     onClick={isVerificationSent ? handleVerify : handleSendVerification}
                     className="bg-blue-500 text-white hover:bg-blue-600"
+                    disabled={username === ''}
                   >
                     {isVerificationSent ? '인증하기' : '인증 코드 전송'}
                   </Button>
@@ -174,28 +174,10 @@ export default function AdminSignup() {
                 </button>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="terms"
-                checked={agreeTerms}
-                onCheckedChange={checked => setAgreeTerms(checked as boolean)}
-                required
-                className="border-gray-600 text-blue-400"
-              />
-              <Label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none text-gray-300 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                <span>이용약관 및 개인정보 처리방침에 동의합니다</span>
-                <Link href="/terms" className="ml-1 text-blue-400 hover:underline">
-                  (보기)
-                </Link>
-              </Label>
-            </div>
             <Button
               type="submit"
               className="w-full bg-blue-500 text-white hover:bg-blue-600"
-              disabled={!agreeTerms || !isVerified}
+              disabled={!isVerified || name === '' || username === '' || password === '' || confirmPassword === ''}
             >
               회원가입
             </Button>

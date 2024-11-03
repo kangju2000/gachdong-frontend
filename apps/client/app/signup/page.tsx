@@ -40,10 +40,12 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isVerificationSent) {
-      alert('이메일 인증을 완료해주세요.');
+
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
+
     const result = await registerAsync({
       name,
       email: `${email}@gachon.ac.kr`,
@@ -179,7 +181,14 @@ export default function SignupPage() {
             <Button
               type="submit"
               className="w-full"
-              disabled={!verificationCode || !password || !confirmPassword || !isVerificationSuccess || !email}
+              disabled={
+                verificationCode === '' ||
+                password === '' ||
+                confirmPassword === '' ||
+                !isVerificationSuccess ||
+                email === '' ||
+                name === ''
+              }
             >
               회원가입
             </Button>

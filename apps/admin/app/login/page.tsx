@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AlertCircle, Shield } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import { useLogin } from '@/apis/auth';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -16,8 +17,12 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const { mutate: login } = useLogin();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    login({ email: `${email}@gachon.ac.kr`, password });
 
     // console.log("운영진 로그인 시도:", email + "@gachon.ac.kr", password);
     // setError("이메일 또는 비밀번호가 올바르지 않습니다.");
@@ -80,9 +85,9 @@ export default function AdminLogin() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button
-              // type="submit"
+              type="submit"
               className="w-full bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => router.push('/dashboard')}
+              disabled={email === '' || password === ''}
             >
               로그인
             </Button>
