@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useRegister, useSendVerificationCode, useVerifyCode } from '@/apis/auth';
 
 export default function AdminSignup() {
   const [name, setName] = useState('');
@@ -21,6 +22,10 @@ export default function AdminSignup() {
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+
+  const { mutateAsync: sendVerificationCode } = useSendVerificationCode();
+  const { mutateAsync: verifyCode } = useVerifyCode();
+  const { mutateAsync: completeRegistration } = useRegister();
 
   const handleSendVerification = () => {
     console.log('Sending verification code to:', `${username}@gachon.ac.kr`);
@@ -92,6 +97,40 @@ export default function AdminSignup() {
               </div>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="verification" className="text-gray-200">
+                이메일 인증
+              </Label>
+              <div className="flex space-x-2">
+                <Input
+                  id="verification"
+                  type="text"
+                  placeholder="인증 코드"
+                  value={verificationCode}
+                  onChange={e => setVerificationCode(e.target.value)}
+                  disabled={!isVerificationSent || isVerified}
+                  className="border-gray-600 bg-gray-700 text-white placeholder-gray-400"
+                />
+                {!isVerified ? (
+                  <Button
+                    type="button"
+                    onClick={isVerificationSent ? handleVerify : handleSendVerification}
+                    className="bg-blue-500 text-white hover:bg-blue-600"
+                  >
+                    {isVerificationSent ? '인증하기' : '인증 코드 전송'}
+                  </Button>
+                ) : (
+                  <Button type="button" disabled className="bg-gray-600 text-gray-400">
+                    인증 완료
+                  </Button>
+                )}
+              </div>
+            </div>
+            {isVerified && (
+              <Alert className="border-green-700 bg-green-800 text-green-100">
+                <AlertDescription>이메일 인증이 완료되었습니다.</AlertDescription>
+              </Alert>
+            )}
+            <div className="space-y-2">
               <Label htmlFor="password" className="text-gray-200">
                 비밀번호
               </Label>
@@ -135,40 +174,6 @@ export default function AdminSignup() {
                 </button>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="verification" className="text-gray-200">
-                이메일 인증
-              </Label>
-              <div className="flex space-x-2">
-                <Input
-                  id="verification"
-                  type="text"
-                  placeholder="인증 코드"
-                  value={verificationCode}
-                  onChange={e => setVerificationCode(e.target.value)}
-                  disabled={!isVerificationSent || isVerified}
-                  className="border-gray-600 bg-gray-700 text-white placeholder-gray-400"
-                />
-                {!isVerified ? (
-                  <Button
-                    type="button"
-                    onClick={isVerificationSent ? handleVerify : handleSendVerification}
-                    className="bg-blue-500 text-white hover:bg-blue-600"
-                  >
-                    {isVerificationSent ? '인증하기' : '인증 코드 전송'}
-                  </Button>
-                ) : (
-                  <Button type="button" disabled className="bg-gray-600 text-gray-400">
-                    인증 완료
-                  </Button>
-                )}
-              </div>
-            </div>
-            {isVerified && (
-              <Alert className="border-green-700 bg-green-800 text-green-100">
-                <AlertDescription>이메일 인증이 완료되었습니다.</AlertDescription>
-              </Alert>
-            )}
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="terms"

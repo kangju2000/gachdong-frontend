@@ -16,6 +16,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://gachdong.club'),
   title: {
     default: 'GACHDONG',
     template: '%s | GACHDONG',
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
     icon: '/logo.svg',
   },
   openGraph: {
+    url: 'https://gachdong.club',
     title: 'GACHDONG',
     description: '가츠동',
     locale: 'ko-KR',
