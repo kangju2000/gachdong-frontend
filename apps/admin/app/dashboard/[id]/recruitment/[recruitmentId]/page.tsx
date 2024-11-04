@@ -80,13 +80,15 @@ export default function RecruitmentPostDetail() {
     const destStatus = destination.droppableId;
 
     if (sourceStatus !== destStatus) {
-      const sourceApplicants = [...groupedApplicants[sourceStatus]];
-      const destApplicants = [...groupedApplicants[destStatus]];
+      const sourceApplicants = [...(groupedApplicants[sourceStatus] ?? [])];
+      const destApplicants = [...(groupedApplicants[destStatus] ?? [])];
       const [movedApplicant] = sourceApplicants.splice(source.index, 1);
-      movedApplicant.status = destStatus;
-      destApplicants.splice(destination.index, 0, movedApplicant);
+      if (movedApplicant) {
+        movedApplicant.status = destStatus;
+        destApplicants.splice(destination.index, 0, movedApplicant);
+      }
 
-      setApplicants(applicants.map(a => (a.id === movedApplicant.id ? movedApplicant : a)));
+      setApplicants(applicants.map(a => (a.id === movedApplicant?.id ? movedApplicant : a)));
     }
   };
 
