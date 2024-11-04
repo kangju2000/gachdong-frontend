@@ -154,8 +154,6 @@ export default function ClubsPage() {
     const matchesCategory = selectedCategory === 'ALL' || club.category === selectedCategory;
     const matchesRecruiting = !showRecruiting || club.recruitingStatus;
 
-    console.log(filteredClubs);
-
     return matchesSearch && matchesCategory && matchesRecruiting;
   });
 
