@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Activity, ArrowLeft } from 'lucide-react';
 import { useClub, useClubActivities, useClubContactInfo, useRecruitments } from '@/apis/club';
+import { CATEGORY_MAP } from '@/constants/categories';
 
 export default function ClubDetailPage({ params }: { params: { id: string } }) {
   const { data: club } = useClub(Number(params.id));
@@ -35,7 +36,7 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
             </div>
             <div className="flex-grow">
               <h1 className="mb-2 text-3xl font-bold">{club.clubName}</h1>
-              <p className="text-muted-foreground mb-2">{club.category}</p>
+              <p className="text-muted-foreground mb-2">{CATEGORY_MAP[club.category]}</p>
               <p className="text-muted-foreground mb-4 text-sm">{club.shortDescription}</p>
               <div className="text-muted-foreground flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center">

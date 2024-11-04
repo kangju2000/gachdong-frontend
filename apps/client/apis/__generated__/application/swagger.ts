@@ -351,7 +351,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://gateway-dev.gachdong.club/application/';
+  public baseUrl: string = 'https://gateway-dev.gachdong.club/application/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -518,7 +518,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title 가츠동 API 명세 - 지원 서비스
  * @version v1
- * @baseUrl http://gateway-dev.gachdong.club/application/
+ * @baseUrl https://gateway-dev.gachdong.club/application/
  *
  * 지원 서비스에 대한 API 명세입니다.
  */

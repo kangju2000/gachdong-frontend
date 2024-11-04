@@ -1,17 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { Club } from '@/types';
+import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
+import { CATEGORY_MAP } from '@/constants/categories';
 
 interface ClubCardProps {
-  club: {
-    clubId: number;
-    clubName: string;
-    category: string;
-    shortDescription: string;
-    clubImageUrl: string;
-    recruitingStatus: boolean;
-  };
+  club: ClubSummaryResponse;
 }
 
 export function ClubCard({ club }: ClubCardProps) {
@@ -26,7 +20,7 @@ export function ClubCard({ club }: ClubCardProps) {
             <div className="flex h-full flex-grow flex-col justify-between overflow-hidden py-1">
               <div>
                 <h3 className="truncate text-lg font-semibold leading-tight">{club.clubName}</h3>
-                <p className="text-muted-foreground truncate text-sm">{club.category}</p>
+                <p className="text-muted-foreground truncate text-sm">{CATEGORY_MAP[club.category]}</p>
               </div>
               <div className="mt-1 flex items-center">
                 <span

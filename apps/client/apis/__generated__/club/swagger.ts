@@ -19,7 +19,7 @@ export interface CreateClubRequest {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 동아리 한줄 설명
    * @example "가츠동은 최고의 동아리입니다."
@@ -58,7 +58,7 @@ export interface ClubResponse {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 한줄 소개
    * @example "가츠동은 최고의 동아리입니다."
@@ -151,7 +151,7 @@ export interface ClubSummaryResponse {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 한줄 소개
    * @example "가츠동은 최고의 동아리입니다."
@@ -259,6 +259,21 @@ export namespace Public동아리Api {
   }
 
   /**
+   * No description
+   * @tags Public 동아리 API
+   * @name GetClubTest
+   * @request GET:/public/api/v1/test
+   * @response `200` `(string)[]` OK
+   */
+  export namespace GetClubTest {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string[];
+  }
+
+  /**
    * @description 모든 동아리 정보를 조회합니다.
    * @tags Public 동아리 API
    * @name GetClubs
@@ -321,7 +336,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://gateway-dev.gachdong.club/club/';
+  public baseUrl: string = 'https://gateway-dev.gachdong.club/club/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -488,7 +503,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title 가츠동 API 명세 - 동아리 서비스
  * @version v1
- * @baseUrl http://gateway-dev.gachdong.club/club/
+ * @baseUrl https://gateway-dev.gachdong.club/club/
  *
  * 동아리 서비스에 대한 API 명세입니다.
  */
@@ -559,6 +574,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getClubActivities: (clubId: number, params: RequestParams = {}) =>
       this.request<ArrayResponseClubActivityResponse, any>({
         path: `/public/api/v1/${clubId}/activities`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Public 동아리 API
+     * @name GetClubTest
+     * @request GET:/public/api/v1/test
+     * @response `200` `(string)[]` OK
+     */
+    getClubTest: (params: RequestParams = {}) =>
+      this.request<string[], any>({
+        path: `/public/api/v1/test`,
         method: 'GET',
         ...params,
       }),

@@ -18,64 +18,14 @@ export function useRecruitments() {
 export const useClubs = () => {
   return useSuspenseQuery({
     queryKey: keys.lists(),
-    queryFn: () => {
-      return clubApi.public동아리Api.getClubs();
-      const result = {
-        results: [
-          {
-            clubId: 1,
-            clubName: '가츠동',
-            category: 'SPORTS',
-            shortDescription: '가츠동은 최고의 동아리입니다.',
-            clubImageUrl:
-              'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-            recruitingStatus: true,
-          },
-          {
-            clubId: 2,
-            clubName: '가츠동2',
-            category: 'SPORTS',
-            shortDescription: '가츠동2는 최고의 동아리입니다.',
-            clubImageUrl:
-              'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-            recruitingStatus: false,
-          },
-          {
-            clubId: 3,
-            clubName: '가츠동3',
-            category: 'SPORTS',
-            shortDescription: '가츠동3는 최고의 동아리입니다.',
-            clubImageUrl:
-              'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-            recruitingStatus: true,
-          },
-        ],
-      };
-
-      // return new Promise<typeof result>(resolve => resolve(result));
-    },
+    queryFn: clubApi.public동아리Api.getClubs,
   });
 };
 
 export const useClub = (clubId: number) => {
   return useSuspenseQuery({
     queryKey: keys.detail(clubId),
-    queryFn: () => {
-      // clubApi.동아리Api.getClub(clubId);
-      const result = {
-        clubId: 1,
-        clubName: '가츠동',
-        category: 'SPORTS',
-        shortDescription: '가츠동은 최고의 동아리입니다.',
-        clubImageUrl:
-          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-        recruitingStatus: true,
-        introduction: '가츠동은 다양한 활동을 하는 동아리입니다.',
-        establishedAt: '2024-10-31T03:24:28.735Z',
-        updatedAt: '2024-10-31T03:24:28.735Z',
-      };
-      return new Promise<typeof result>(resolve => resolve(result));
-    },
+    queryFn: () => clubApi.public동아리Api.getClub(clubId),
   });
 };
 
