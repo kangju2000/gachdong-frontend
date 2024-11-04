@@ -10,14 +10,29 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Activity, ArrowLeft } from 'lucide-react';
-import { useClub, useClubActivities, useClubContactInfo, useRecruitments } from '@/apis/club';
 import { CATEGORY_MAP } from '@/constants/categories';
-
+import { clubQueries } from '@/apis/club';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 export default function ClubDetailPage({ params }: { params: { id: string } }) {
-  const { data: club } = useClub(Number(params.id));
-  const { data: clubActivities } = useClubActivities(Number(params.id));
-  const { data: clubRecruits } = useRecruitments();
-  const { data: clubContactInfo } = useClubContactInfo(Number(params.id));
+  const [
+    { data: club },
+    {
+      data: { results: clubActivities = [] },
+    },
+    {
+      data: { results: clubRecruits = [] },
+    },
+    {
+      data: { results: clubContactInfo = [] },
+    },
+  ] = useSuspenseQueries({
+    queries: [
+      clubQueries.club(Number(params.id)),
+      clubQueries.activities(Number(params.id)),
+      clubQueries.recruitments(),
+      clubQueries.contactInfo(Number(params.id)),
+    ],
+  });
 
   return (
     <main className="mx-auto max-w-[980px] px-4 py-6">
@@ -110,9 +125,9 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
               <CardTitle>모집 공고</CardTitle>
             </CardHeader>
             <CardContent>
-              {clubRecruits.results.length > 0 ? (
+              {clubRecruits.length > 0 ? (
                 <ul className="space-y-4">
-                  {clubRecruits.results.map(recruit => (
+                  {clubRecruits.map(recruit => (
                     <li key={recruit.id}>
                       <Link
                         href={`/recruits/${recruit.id}`}

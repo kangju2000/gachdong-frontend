@@ -8,11 +8,12 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AlertCircle, Camera, Eye, EyeOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useProfile } from '@/apis/auth/queries';
+import { useQuery } from '@tanstack/react-query';
+import { authQueries } from '@/apis/auth';
 import { useChangePassword, useDeleteAccount } from '@/apis/auth';
 
 export default function Settings() {
-  const { data: user } = useProfile();
+  const { data: user } = useQuery(authQueries.profile());
   const { mutateAsync: changePassword } = useChangePassword();
   const { mutateAsync: deleteAccount } = useDeleteAccount();
 

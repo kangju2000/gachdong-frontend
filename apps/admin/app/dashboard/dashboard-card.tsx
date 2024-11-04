@@ -5,15 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Key } from 'lucide-react';
 import Link from 'next/link';
-import { useProfile } from '@/apis/auth/queries';
+import { useQuery } from '@tanstack/react-query';
 import { useCreateClub } from '@/apis/club';
 import { CreateClubRequest } from '@/apis/__generated__/club/swagger';
 import { InviteCodeModal } from './components/invite-code-modal';
 import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';
+import { authQueries } from '@/apis/auth/queries';
 
 export default function DashboardCard() {
-  const { data: profile } = useProfile();
+  const { data: profile } = useQuery(authQueries.profile);
   const { mutate: createClub } = useCreateClub();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);

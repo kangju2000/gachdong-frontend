@@ -12,10 +12,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Search, Filter, UsersRound } from 'lucide-react';
 import { ClubCard } from './club-card';
-import { useClubs } from '@/apis/club';
+import { clubQueries } from '@/apis/club';
 import { useRouter } from 'next/navigation';
 import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
 import { Category, CATEGORY_MAP } from '@/constants/categories';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 const EmptyState = ({
   searchTerm,
@@ -152,7 +153,7 @@ const ClubGrid = ({
   selectedCategory: Category;
   showRecruitingOnly: boolean;
 }) => {
-  if (!clubs?.length) {
+  if (clubs.length === 0) {
     return (
       <EmptyState searchTerm={searchTerm} selectedCategory={selectedCategory} showRecruitingOnly={showRecruitingOnly} />
     );
@@ -173,14 +174,14 @@ export function ClubList() {
   const router = useRouter();
   const {
     data: { results: clubs = [] },
-  } = useClubs();
+  } = useSuspenseQuery(clubQueries.clubs());
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category>('ALL');
   const [showRecruitingOnly, setShowRecruitingOnly] = useState(false);
 
   const filteredClubs = useMemo(() => {
-    return clubs?.filter(club => {
+    return clubs.filter(club => {
       const matchesSearch = club.clubName.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'ALL' || club.category === selectedCategory;
       const matchesRecruiting = !showRecruitingOnly || club.recruitingStatus;
@@ -188,10 +189,6 @@ export function ClubList() {
       return matchesSearch && matchesCategory && matchesRecruiting;
     });
   }, [clubs, searchTerm, selectedCategory, showRecruitingOnly]);
-
-  const handleClubClick = (clubId: number) => {
-    router.push(`/clubs/${clubId}`);
-  };
 
   return (
     <section className="flex-grow">
@@ -206,7 +203,7 @@ export function ClubList() {
 
       <ClubGrid
         clubs={filteredClubs}
-        onClubClick={handleClubClick}
+        onClubClick={clubId => router.push(`/clubs/${clubId}`)}
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
         showRecruitingOnly={showRecruitingOnly}

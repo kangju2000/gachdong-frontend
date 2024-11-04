@@ -1,29 +1,31 @@
 import { QueryClient } from '@tanstack/react-query';
-import type { QueryFunction, QueryKey } from '@tanstack/react-query';
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
 import { dehydrate } from '@tanstack/react-query';
-import { cache, type PropsWithChildren } from 'react';
+import { cache, Suspense, type PropsWithChildren } from 'react';
 import { HydrateOnClient } from './hydrate-on-client';
 
-type Query = {
-  queryKey: QueryKey;
-  queryFn: QueryFunction;
+type Props<TQueryFnData = unknown, TError = unknown, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey> = {
+  queries: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>[];
 };
 
-type Props = {
-  queries: Query | Query[];
-};
-
-export async function PrefetchHydration({ queries, children }: PropsWithChildren<Props>) {
+export async function PrefetchHydration<
+  TQueryFnData = unknown,
+  TError = unknown,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>({ queries, children }: PropsWithChildren<Props<TQueryFnData, TError, TData, TQueryKey>>) {
   const getQueryClient = cache(() => new QueryClient());
   const queryClient = getQueryClient();
 
-  const queryList = Array.isArray(queries) ? queries : [queries];
-
-  for (const { queryKey, queryFn } of queryList) {
-    await queryClient.prefetchQuery({ queryKey, queryFn });
+  for (const query of queries) {
+    await queryClient.prefetchQuery(query);
   }
 
   const dehydratedState = dehydrate(queryClient);
 
-  return <HydrateOnClient state={dehydratedState}>{children}</HydrateOnClient>;
+  return (
+    <HydrateOnClient state={dehydratedState}>
+      <Suspense>{children}</Suspense>
+    </HydrateOnClient>
+  );
 }

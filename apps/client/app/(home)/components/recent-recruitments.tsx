@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { RecruitmentCard } from './recruitment-card';
-import { useRecruitments } from '@/apis/club';
+
 import { useRouter } from 'next/navigation';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from '@/apis/club';
 
 export function RecentRecruitments() {
   const {
-    data: { results: recruitments },
-  } = useRecruitments();
+    data: { results: recruitments = [] },
+  } = useSuspenseQuery(clubQueries.recruitments());
 
   const router = useRouter();
 

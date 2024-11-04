@@ -14,7 +14,8 @@ import {
 import { ChevronDown, Search, Filter, UsersRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useClubs } from '@/apis/club';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from '@/apis/club';
 import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
 import { Category, CATEGORY_MAP } from '@/constants/categories';
 
@@ -145,7 +146,7 @@ export default function ClubsPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category>('ALL');
   const [showRecruiting, setShowRecruiting] = useState(false);
 
-  const { data: { results: clubs = [] } = {} } = useClubs();
+  const { data: { results: clubs = [] } = {} } = useSuspenseQuery(clubQueries.clubs());
 
   const filteredClubs = clubs.filter(club => {
     const matchesSearch =

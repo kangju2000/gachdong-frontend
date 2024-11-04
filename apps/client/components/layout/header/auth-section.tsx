@@ -1,6 +1,7 @@
 'use client';
 
-import { useProfile } from '@/apis/auth/queries';
+import { useQuery } from '@tanstack/react-query';
+import { authQueries } from '@/apis/auth';
 import { useLogout } from '@/apis/auth/mutations';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -18,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProfileResponse } from '@/apis/__generated__/auth/swagger';
 
 export function AuthSection() {
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile, isLoading } = useQuery(authQueries.profile());
 
   if (isLoading) {
     return null;

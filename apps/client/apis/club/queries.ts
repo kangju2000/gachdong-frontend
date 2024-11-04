@@ -1,32 +1,41 @@
 import { RECRUIT_LIST } from '@/constants/data';
 import { keys } from './keys';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { clubApi } from '../config/instance';
 
-export function useRecruitments() {
-  return useSuspenseQuery({
-    queryKey: keys.recruitments(),
-    queryFn: () => {
-      const result = {
-        results: RECRUIT_LIST.slice(0, 3),
-      };
-      return new Promise<typeof result>(resolve => resolve(result));
-    },
-  });
-}
+const { getClubs, getClub, getClubContactInfo, getClubActivities } = clubApi.public동아리Api;
 
-export const useClubs = () => {
-  return useSuspenseQuery({
-    queryKey: keys.lists(),
-    queryFn: clubApi.public동아리Api.getClubs,
-  });
-};
-
-export const useClub = (clubId: number) => {
-  return useSuspenseQuery({
-    queryKey: keys.detail(clubId),
-    queryFn: () => clubApi.public동아리Api.getClub(clubId),
-  });
+export const queries = {
+  clubs: () =>
+    queryOptions({
+      queryKey: keys.clubs(),
+      queryFn: getClubs,
+    }),
+  club: (clubId: number) =>
+    queryOptions({
+      queryKey: keys.club(clubId),
+      queryFn: () => getClub(clubId),
+    }),
+  contactInfo: (clubId: number) =>
+    queryOptions({
+      queryKey: keys.contactInfo(clubId),
+      queryFn: () => getClubContactInfo(clubId),
+    }),
+  recruitments: () =>
+    queryOptions({
+      queryKey: keys.recruitments(),
+      queryFn: () => {
+        const result = {
+          results: RECRUIT_LIST.slice(0, 3),
+        };
+        return new Promise<typeof result>(resolve => resolve(result));
+      },
+    }),
+  activities: (clubId: number) =>
+    queryOptions({
+      queryKey: keys.activities(clubId),
+      queryFn: () => getClubActivities(clubId),
+    }),
 };
 
 export const useClubContactInfo = (clubId: number) => {

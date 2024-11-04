@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import { useProfile } from '@/apis/auth/queries';
+import { useQuery } from '@tanstack/react-query';
+import { authQueries } from '@/apis/auth';
 import { useApplicationHistory } from '@/apis/application';
 
 export default function MyPage() {
-  const { data: user } = useProfile();
+  const { data: user } = useQuery(authQueries.profile());
 
   const {
     data: { result: applications },
