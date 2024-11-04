@@ -18,7 +18,7 @@ export function NavigationSection() {
   return (
     <div className="flex items-center space-x-6">
       <Link href="/" className="text-2xl font-bold">
-        <Image src="/text-logo.svg" alt="GACHDONG" width={100} height={30} />
+        <Image src="/text-logo.svg" alt="GACHDONG" width={100} height={30} style={{ width: '100px', height: '30px' }} />
       </Link>
       <nav className="flex items-center space-x-2 sm:space-x-4">
         {navItems.map(item => (

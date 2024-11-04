@@ -41,6 +41,7 @@ export default function LoginPage() {
                   placeholder="아이디"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
+                  autoComplete="username"
                   required
                   className="rounded-r-none"
                 />
@@ -58,6 +59,7 @@ export default function LoginPage() {
                   placeholder="비밀번호"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
                   required
                 />
                 <button

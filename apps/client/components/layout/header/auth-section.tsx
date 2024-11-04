@@ -18,7 +18,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProfileResponse } from '@/apis/__generated__/auth/swagger';
 
 export function AuthSection() {
-  const { data: profile } = useProfile();
+  const { data: profile, isLoading } = useProfile();
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!profile) {
     return (

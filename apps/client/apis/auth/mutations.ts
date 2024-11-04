@@ -30,13 +30,14 @@ export const useLogin = () => {
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
-
+  const router = useRouter();
   return useMutation({
     mutationFn: () => logout(),
     onSettled: () => {
       CookieManager.removeToken();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
+      router.replace('/');
     },
   });
 };
