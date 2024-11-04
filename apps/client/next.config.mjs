@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    remotePatterns: [{ hostname: 'images.unsplash.com' }, { hostname: 'placehold.co' }],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,

@@ -54,7 +54,7 @@ export default function RootLayout({
           <ErrorBoundary>
             <Suspense>
               <Header />
-              {children}
+              <ErrorBoundary>{children}</ErrorBoundary>
             </Suspense>
           </ErrorBoundary>
         </Providers>
