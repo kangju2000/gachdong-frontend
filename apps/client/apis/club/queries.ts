@@ -19,7 +19,14 @@ export const queries = {
   contactInfo: (clubId: number) =>
     queryOptions({
       queryKey: keys.contactInfo(clubId),
-      queryFn: () => getClubContactInfo(clubId),
+      // queryFn: () => getClubContactInfo(clubId),
+      queryFn: () => {
+        const result = {
+          contactMethod: 'gmail',
+          contactValue: 'gachdong@gmail.com',
+        };
+        return new Promise<typeof result>(resolve => resolve(result));
+      },
     }),
   recruitments: () =>
     queryOptions({
