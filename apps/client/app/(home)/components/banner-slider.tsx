@@ -6,11 +6,19 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { RECRUIT_LIST } from '@/constants/data';
+import { clubQueries } from '@/apis/club';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export function BannerSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const bannerItems = RECRUIT_LIST;
+
+  const {
+    data: { results: bannerItems = [] },
+  } = useSuspenseQuery(clubQueries.recruitments());
+
+  const {
+    data: { results: clubList = [] },
+  } = useSuspenseQuery(clubQueries.clubs());
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -38,11 +46,17 @@ export function BannerSlider() {
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <Image src={item.image} alt={item.title} className="object-cover" fill sizes="100%" />
+              <Image
+                src={clubList.find(club => club.clubId === item.clubId)?.clubImageUrl ?? ''}
+                alt={item.title}
+                className="object-cover"
+                fill
+                sizes="100%"
+              />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 p-8 text-white">
                 <div className="text-center">
                   <h2 className="mb-2 text-2xl font-bold">{item.title}</h2>
-                  <Link href={`/announcements/${item.id}`}>
+                  <Link href={`/announcements/${item.clubId}`}>
                     <Button
                       variant="outline"
                       className="border-white bg-white text-black hover:bg-gray-200 hover:text-black"

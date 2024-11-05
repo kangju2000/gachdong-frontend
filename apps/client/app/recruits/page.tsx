@@ -23,7 +23,7 @@ import { CATEGORY_MAP } from '@/constants/categories';
 
 export default function recruitmentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
 
   const {
     data: { results: recruitments = [] },
@@ -31,7 +31,7 @@ export default function recruitmentsPage() {
 
   const filteredRecruitList = recruitments.filter(
     recruitment =>
-      (selectedCategory === '전체' || recruitment.category === selectedCategory) &&
+      (selectedCategory === 'ALL' || recruitment.category === selectedCategory) &&
       (recruitment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         recruitment.clubName.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -41,11 +41,11 @@ export default function recruitmentsPage() {
       <h1 className="mb-6 text-3xl font-bold">동아리 공고</h1>
 
       <div className="mb-6 flex flex-col items-start justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
-        <Tabs defaultValue="전체" className="w-full sm:w-auto" onValueChange={setSelectedCategory}>
+        <Tabs defaultValue="ALL" className="w-full sm:w-auto" onValueChange={setSelectedCategory}>
           <TabsList>
-            {['전체', 'IT · 프로그래밍', '학술 · 사회', '문화 · 예술', '체육 · 건강'].map(category => (
-              <TabsTrigger key={category} value={category} className="whitespace-nowrap px-3 py-1.5 text-sm">
-                {category}
+            {Object.entries(CATEGORY_MAP).map(([key, value]) => (
+              <TabsTrigger key={key} value={key} className="whitespace-nowrap px-3 py-1.5 text-sm">
+                {value}
               </TabsTrigger>
             ))}
           </TabsList>

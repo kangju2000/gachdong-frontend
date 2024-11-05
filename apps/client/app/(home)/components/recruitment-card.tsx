@@ -4,7 +4,7 @@ import { Calendar, Eye } from 'lucide-react';
 import { ClubRecruitmentResponse } from '@/apis/__generated__/club/swagger';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from '@/apis/club';
-import { formatDistance, ko } from '@/lib/date';
+import { format, formatDistance, ko } from '@/lib/date';
 
 interface RecruitmentCardProps {
   recruitment: ClubRecruitmentResponse;
@@ -27,7 +27,7 @@ export function RecruitmentCard({ recruitment, onClick }: RecruitmentCardProps) 
             <div className="text-muted-foreground mt-1 flex items-center space-x-2 text-xs">
               <span className="flex items-center">
                 <Calendar className="mr-1 h-3 w-3" />
-                {recruitment.endDate}
+                {format(recruitment.endDate, 'yyyy.MM.dd')}
               </span>
               <span className="flex items-center">
                 <Eye className="mr-1 h-3 w-3" />
