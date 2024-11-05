@@ -24,7 +24,7 @@ export function RecentRecruitments() {
       <h2 className="mb-4 text-2xl font-semibold">최근 올라온 공고</h2>
       <div className="flex flex-col space-y-3">
         {recruitments.map(recruitment => (
-          <RecruitmentCard key={recruitment.id} recruitment={recruitment} onClick={handleRecruitmentSelect} />
+          <RecruitmentCard key={recruitment.clubId} recruitment={recruitment} onClick={handleRecruitmentSelect} />
         ))}
       </div>
       <div className="mt-4 text-center">

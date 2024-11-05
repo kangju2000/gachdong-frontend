@@ -1,5 +1,6 @@
 'use client';
 
+import { SuspenseQuery } from '@suspensive/react-query';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,17 +15,25 @@ import {
 import { ChevronDown, Search, Filter, Calendar, Eye } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RECRUIT_LIST } from '@/constants/data';
+import { clubQueries } from '@/apis/club';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { formatDistance } from 'date-fns/formatDistance';
+import { format, ko } from '@/lib/date';
+import { CATEGORY_MAP } from '@/constants/categories';
 
 export default function recruitmentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
-  const filteredRecruitList = RECRUIT_LIST.filter(
-    announcement =>
-      (selectedCategory === '전체' || announcement.category === selectedCategory) &&
-      (announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        announcement.club.toLowerCase().includes(searchTerm.toLowerCase()))
+  const {
+    data: { results: recruitments = [] },
+  } = useSuspenseQuery(clubQueries.recruitments());
+
+  const filteredRecruitList = recruitments.filter(
+    recruitment =>
+      (selectedCategory === '전체' || recruitment.category === selectedCategory) &&
+      (recruitment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recruitment.clubName.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -70,38 +79,46 @@ export default function recruitmentsPage() {
       </div>
 
       <div className="flex flex-col space-y-4">
-        {filteredRecruitList.map(announcement => (
-          <Link href={`/recruits/${announcement.id}`} key={announcement.id}>
-            <Card className="transition-shadow hover:shadow-md">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-muted relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
-                    <Image src={announcement.image} alt={`${announcement.club} logo`} className="object-cover" fill />
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold">{announcement.title}</h3>
-                    <p className="text-muted-foreground text-sm">{announcement.club}</p>
-                    <div className="text-muted-foreground mt-1 flex items-center space-x-4 text-sm">
-                      <span className="flex items-center">
-                        <Calendar className="mr-1 h-4 w-4" />
-                        {announcement.startDate} - {announcement.endDate}
-                      </span>
-                      <span className="flex items-center">
-                        <Eye className="mr-1 h-4 w-4" />
-                        {announcement.views}
-                      </span>
+        {filteredRecruitList.map(recruitment => (
+          <SuspenseQuery key={recruitment.clubId} {...clubQueries.club(recruitment.clubId)}>
+            {({ data: club }) => (
+              <Link href={`/recruits/${recruitment.clubId}`} key={recruitment.clubId}>
+                <Card className="transition-shadow hover:shadow-md">
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-muted relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
+                        <Image src={club.clubImageUrl} alt={`${club.clubName} logo`} className="object-cover" fill />
+                      </div>
+                      <div className="flex-grow">
+                        <h3 className="text-lg font-semibold">{recruitment.title}</h3>
+                        <p className="text-muted-foreground text-sm">{club.clubName}</p>
+                        <div className="text-muted-foreground mt-1 flex items-center space-x-4 text-sm">
+                          <span className="flex items-center">
+                            <Calendar className="mr-1 h-4 w-4" />
+                            {format(new Date(recruitment.startDate), 'yyyy.MM.dd')} -{' '}
+                            {format(new Date(recruitment.endDate), 'yyyy.MM.dd')}
+                          </span>
+                          <span className="flex items-center">
+                            <Eye className="mr-1 h-4 w-4" />
+                            {/* {recruitment.views} */}
+                            {/* TODO: 조회수 추가 */}
+                            32
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="bg-primary/10 text-primary inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                          {formatDistance(new Date(recruitment.startDate), new Date(), { locale: ko, addSuffix: true })}{' '}
+                          마감
+                        </span>
+                        <p className="text-muted-foreground mt-1 text-sm">{CATEGORY_MAP[recruitment.category]}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="bg-primary/10 text-primary inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold">
-                      D-{announcement.daysLeft}
-                    </span>
-                    <p className="text-muted-foreground mt-1 text-sm">{announcement.category}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+          </SuspenseQuery>
         ))}
       </div>
 

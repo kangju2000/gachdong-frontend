@@ -1,6 +1,6 @@
 'use client';
 
-import { format } from '@/lib/date';
+import { format, formatDate, formatDistance, ko } from '@/lib/date';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
@@ -12,26 +12,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Activity, ArrowLeft } from 'lucide-react';
 import { CATEGORY_MAP } from '@/constants/categories';
 import { clubQueries } from '@/apis/club';
-import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
+import { SuspenseQuery } from '@suspensive/react-query';
+
 export default function ClubDetailPage({ params }: { params: { id: string } }) {
   const [
     { data: club },
     {
       data: { results: clubActivities = [] },
     },
-    {
-      data: { results: clubRecruits = [] },
-    },
-    {
-      data: { results: clubContactInfo = [] },
-    },
   ] = useSuspenseQueries({
-    queries: [
-      clubQueries.club(Number(params.id)),
-      clubQueries.activities(Number(params.id)),
-      clubQueries.recruitments(),
-      clubQueries.contactInfo(Number(params.id)),
-    ],
+    queries: [clubQueries.club(Number(params.id)), clubQueries.activities(Number(params.id))],
   });
 
   return (
@@ -125,26 +116,39 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
               <CardTitle>모집 공고</CardTitle>
             </CardHeader>
             <CardContent>
-              {clubRecruits.length > 0 ? (
-                <ul className="space-y-4">
-                  {clubRecruits.map(recruit => (
-                    <li key={recruit.id}>
-                      <Link
-                        href={`/recruits/${recruit.id}`}
-                        className="hover:bg-accent block rounded-lg p-3 transition-colors"
-                      >
-                        <h3 className="mb-1 font-semibold">{recruit.title}</h3>
-                        <p className="text-muted-foreground mb-2 text-sm">
-                          {recruit.startDate} - {recruit.endDate}
-                        </p>
-                        <Badge variant="outline">D-{recruit.daysLeft}</Badge>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-muted-foreground">현재 진행 중인 모집 공고가 없습니다.</p>
-              )}
+              <SuspenseQuery {...clubQueries.recruitmentByClub(Number(params.id))}>
+                {({ data: { results: clubRecruits = [] } }) => {
+                  if (clubRecruits.length === 0) {
+                    return <p className="text-muted-foreground">현재 진행 중인 모집 공고가 없습니다.</p>;
+                  }
+
+                  return (
+                    <ul className="space-y-4">
+                      {clubRecruits.map(recruit => (
+                        <li key={recruit.clubId}>
+                          <Link
+                            href={`/recruits/${recruit.clubId}`}
+                            className="hover:bg-accent block rounded-lg p-3 transition-colors"
+                          >
+                            <h3 className="mb-1 font-semibold">{recruit.title}</h3>
+                            <p className="text-muted-foreground mb-2 text-sm">
+                              {formatDate(new Date(recruit.startDate ?? ''), 'yyyy년 MM월 dd일')} -{' '}
+                              {formatDate(new Date(recruit.endDate ?? ''), 'yyyy년 MM월 dd일')}
+                            </p>
+                            <Badge variant="outline">
+                              {formatDistance(new Date(recruit.endDate ?? ''), new Date(), {
+                                locale: ko,
+                                addSuffix: true,
+                              })}
+                              마감
+                            </Badge>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                }}
+              </SuspenseQuery>
             </CardContent>
           </Card>
 
@@ -157,11 +161,15 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
                 동아리에 대해 궁금한 점이 있으신가요? 아래 연락처로 문의해주세요.
               </p>
               <div className="space-y-2 text-sm">
-                {clubContactInfo.map((contact, index) => (
-                  <p key={index}>
-                    {contact.contactMethod}: {contact.contactValue}
-                  </p>
-                ))}
+                <SuspenseQuery {...clubQueries.contactInfo(Number(params.id))}>
+                  {({ data: { results: clubContactInfo = [] } }) =>
+                    clubContactInfo.map((contact, index) => (
+                      <p key={index}>
+                        {contact.contactMethod}: {contact.contactValue}
+                      </p>
+                    ))
+                  }
+                </SuspenseQuery>
               </div>
             </CardContent>
           </Card>

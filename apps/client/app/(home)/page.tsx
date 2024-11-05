@@ -13,7 +13,6 @@ export default function Home() {
           <ClubList />
           <RecentRecruitments />
         </div>
-        ㅜ
       </main>
     </PrefetchHydration>
   );
