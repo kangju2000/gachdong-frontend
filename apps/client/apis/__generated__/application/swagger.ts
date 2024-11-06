@@ -11,20 +11,30 @@
 
 /** 동아리 지원에 필요한 요청 데이터 */
 export interface ToApplyClubDTO {
-  /** @format int64 */
+  /**
+   * 지원 ID
+   * @format int64
+   * @example 3
+   */
   applicationFormId: number;
   /**
-   * @minLength 0
-   * @maxLength 30000
+   * 지원서 상태(임시저장/저장/수정 가능)
+   * @pattern TEMPORARY_SAVED|SAVED|SAVED_CHANGEABLE
+   * @example "SAVED"
    */
-  formBody?: string;
-  /** @pattern TEMPORARY_SAVED|SAVED|SAVED_CHANGEABLE */
   status: string;
   /**
+   * 지원할 동아리 이름
    * @minLength 0
    * @maxLength 80
+   * @example "가츠동"
    */
   clubName: string;
+  /**
+   * 지원서 답변 본문, Json 형식으로 넣어주세요.
+   * @example {"name":"가츠동","age":25,"education":{"university":"가천대학교","major":"컴퓨터공학"}}
+   */
+  formBody: Record<string, object>;
 }
 
 export interface ResFormToCreateApplicationDTO {
@@ -32,88 +42,34 @@ export interface ResFormToCreateApplicationDTO {
   time?: string;
   code?: string;
   message?: string;
+  /** 동아리 지원 결과 반환 DTO */
   result?: ToCreateApplicationDTO;
 }
 
+/** 동아리 지원 결과 반환 DTO */
 export interface ToCreateApplicationDTO {
-  /** @format int64 */
-  applyId?: number;
-}
-
-export interface ToCreateApplicationFormDTO {
-  /** @format int64 */
+  /**
+   * 접수된 지원 ID
+   * @format int64
+   */
   applyId: number;
-  /** @pattern TEMPORARY_SAVED|SAVED */
+}
+
+/** 동아리 지원자 상태 수정 요청 DTO */
+export interface ToChangeApplicationStatus {
+  /**
+   * 변경할 지원 ID
+   * @format int64
+   * @example 2
+   */
+  applicationId: number;
+  /**
+   * 변경할 지원 상태
+   * @minLength 0
+   * @maxLength 80
+   * @example "서류 합격"
+   */
   status: string;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   */
-  formName: string;
-  /**
-   * @minLength 0
-   * @maxLength 2000
-   */
-  formBody: string;
-}
-
-export interface ResFormToCreateApplicationFormDTO {
-  /** @format date-time */
-  time?: string;
-  code?: string;
-  message?: string;
-  result?: ToCreateApplicationFormDTO;
-}
-
-export interface ResFormToGetFormInfoUserDTO {
-  /** @format date-time */
-  time?: string;
-  code?: string;
-  message?: string;
-  result?: ToGetFormInfoUserDTO;
-}
-
-export interface ToGetFormInfoUserDTO {
-  /** @format int64 */
-  formId?: number;
-  formName?: string;
-  formBody?: string;
-}
-
-export interface ResFormToGetApplicationHistoryListDTO {
-  /** @format date-time */
-  time?: string;
-  code?: string;
-  message?: string;
-  result?: ToGetApplicationHistoryListDTO;
-}
-
-export interface ToGetApplicationHistoryDTO {
-  /** @format int64 */
-  applicationId?: number;
-  clubName?: string;
-  status?: string;
-}
-
-export interface ToGetApplicationHistoryListDTO {
-  toGetApplicationHistoryDTO?: ToGetApplicationHistoryDTO[];
-}
-
-export interface ResFormToGetFormInfoAdminDTO {
-  /** @format date-time */
-  time?: string;
-  code?: string;
-  message?: string;
-  result?: ToGetFormInfoAdminDTO;
-}
-
-export interface ToGetFormInfoAdminDTO {
-  /** @format int64 */
-  formId?: number;
-  formName?: string;
-  formBody?: string;
-  formStatus?: string;
-  formSettings?: string;
 }
 
 export interface ResFormObject {
@@ -122,6 +78,154 @@ export interface ResFormObject {
   code?: string;
   message?: string;
   result?: object;
+}
+
+/** 지원서 양식 생성 요청 DTO */
+export interface ToCreateApplicationFormDTO {
+  /**
+   * 지원 ID
+   * @format int64
+   * @example 3
+   */
+  applyId: number;
+  /**
+   * 지원서 양식 상태(임시저장/저장)
+   * @pattern TEMPORARY_SAVED|SAVED
+   * @example "SAVED"
+   */
+  status: string;
+  /**
+   * 지원서 양식 ID
+   * @minLength 0
+   * @maxLength 50
+   * @example "가츠동 지원서 양식"
+   */
+  formName: string;
+  /**
+   * 지원서 양식 본문, Json 형식으로 넣어주세요.
+   * @example {"name":"이름을 넣어주세요","age":"나이를 넣어주세요","education":{"university":"출신 학교를 넣어주세요","major":"전공을 넣어주세요"}}
+   */
+  formBody: Record<string, object>;
+}
+
+export interface ResFormToCreateApplicationFormDTO {
+  /** @format date-time */
+  time?: string;
+  code?: string;
+  message?: string;
+  /** 지원서 양식 생성 요청 DTO */
+  result?: ToCreateApplicationFormDTO;
+}
+
+export interface ResFormToGetApplicationHistoryListDTO {
+  /** @format date-time */
+  time?: string;
+  code?: string;
+  message?: string;
+  /** 지원 내역 목록 조회 결과 반환 DTO */
+  result?: ToGetApplicationHistoryListDTO;
+}
+
+/** 지원 내역 상세 조회 결과 반환 DTO */
+export interface ToGetApplicationHistoryDTO {
+  /**
+   * 지원 ID
+   * @format int64
+   */
+  applicationId: number;
+  /** 지원한 동아리 이름 */
+  clubName: string;
+  /** 지원 상태(합격, 불합격, 서류 합격 등) */
+  status: string;
+  /**
+   * 지원한 날짜
+   * @format date-time
+   */
+  submitDate: string;
+}
+
+/** 지원 내역 목록 조회 결과 반환 DTO */
+export interface ToGetApplicationHistoryListDTO {
+  toGetApplicationHistoryDTO?: ToGetApplicationHistoryDTO[];
+}
+
+export interface ResFormToGetFormInfoUserDTO {
+  /** @format date-time */
+  time?: string;
+  code?: string;
+  message?: string;
+  /** 사용자용 양식 조회 결과 반환 DTO */
+  result?: ToGetFormInfoUserDTO;
+}
+
+/** 사용자용 양식 조회 결과 반환 DTO */
+export interface ToGetFormInfoUserDTO {
+  /**
+   * 지원서 양식 ID
+   * @format int64
+   */
+  formId: number;
+  /** 지원서 양식 이름 */
+  formName: string;
+  /** 지원서 양식 내용(Json) */
+  formBody: Record<string, object>;
+}
+
+export interface ResFormToGetApplicationListAdminDTO {
+  /** @format date-time */
+  time?: string;
+  code?: string;
+  message?: string;
+  /** 관리자용 동아리 지원 리스트 반환 DTO */
+  result?: ToGetApplicationListAdminDTO;
+}
+
+/** 관리자용 지원 내역 상세 조회 결과 반환 DTO */
+export interface ToGetApplicationDTO {
+  /**
+   * 지원 ID
+   * @format int64
+   */
+  applicationId: number;
+  /** 지원 상태(합격, 불합격, 서류 합격 등) */
+  status: string;
+  /**
+   * 지원한 날짜
+   * @format date-time
+   */
+  submitDate: string;
+  /** 답변 내용 */
+  applicationBody: Record<string, object>;
+}
+
+/** 관리자용 동아리 지원 리스트 반환 DTO */
+export interface ToGetApplicationListAdminDTO {
+  /** 접수된 지원 목록 ID */
+  toGetApplicationDTO: ToGetApplicationDTO[];
+}
+
+export interface ResFormToGetFormInfoAdminDTO {
+  /** @format date-time */
+  time?: string;
+  code?: string;
+  message?: string;
+  /** 관리자용 양식 조회 결과 반환 DTO */
+  result?: ToGetFormInfoAdminDTO;
+}
+
+/** 관리자용 양식 조회 결과 반환 DTO */
+export interface ToGetFormInfoAdminDTO {
+  /**
+   * 지원서 양식 ID
+   * @format int64
+   */
+  formId: number;
+  /** 지원서 양식 이름 */
+  formName: string;
+  /** 지원서 양식 내용(Json) */
+  formBody: Record<string, object>;
+  /** 지원서 양식 상태 (임시 저장인지, 삭제 가능한지 등) */
+  formStatus: string;
 }
 
 export interface ChangeApplicationPayload {
@@ -138,13 +242,14 @@ export interface CreateApplicationPayload {
   toApplyClub: ToApplyClubDTO;
 }
 
-export namespace 지원Api {
+export namespace 지원Api사용자 {
   /**
    * @description 동아리에 지원을 수정합니다.
-   * @tags 지원 API
+   * @tags 지원 API(사용자)
    * @name ChangeApplication
    * @summary 동아리 지원 수정 API
-   * @request PUT:/api/v1/application/{apply_id}
+   * @request PUT:/api/v1/{apply_id}
+   * @secure
    * @response `200` `ResFormToCreateApplicationDTO` OK
    */
   export namespace ChangeApplication {
@@ -159,30 +264,12 @@ export namespace 지원Api {
   }
 
   /**
-   * @description 동아리 지원서 양식을 수정합니다.
-   * @tags 지원 API
-   * @name ChangeApplicationForm
-   * @summary 동아리 지원서 양식 수정 요청 API
-   * @request PUT:/api/v1/application/admin/form/{form_id}
-   * @response `200` `ResFormToCreateApplicationFormDTO` OK
-   */
-  export namespace ChangeApplicationForm {
-    export type RequestParams = {
-      /** @format int64 */
-      formId: number;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = ToCreateApplicationFormDTO;
-    export type RequestHeaders = {};
-    export type ResponseBody = ResFormToCreateApplicationFormDTO;
-  }
-
-  /**
    * @description 동아리에 지원합니다.
-   * @tags 지원 API
+   * @tags 지원 API(사용자)
    * @name CreateApplication
    * @summary 동아리 지원 API
    * @request POST:/api/v1/{apply_id}
+   * @secure
    * @response `200` `ResFormToCreateApplicationDTO` OK
    */
   export namespace CreateApplication {
@@ -197,27 +284,29 @@ export namespace 지원Api {
   }
 
   /**
-   * @description 동아리 지원서 양식을 생성합니다.
-   * @tags 지원 API
-   * @name CreateApplicationForm
-   * @summary 동아리 지원서 양식 생성 요청 API
-   * @request POST:/api/v1/application/admin/form/create
-   * @response `200` `ResFormToCreateApplicationFormDTO` OK
+   * @description 지원 내역 목록을 조회합니다.
+   * @tags 지원 API(사용자)
+   * @name GetApplicationHistory
+   * @summary 사용자 지원 내역 목록 조회 API
+   * @request GET:/api/v1/list
+   * @secure
+   * @response `200` `ResFormToGetApplicationHistoryListDTO` OK
    */
-  export namespace CreateApplicationForm {
+  export namespace GetApplicationHistory {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ToCreateApplicationFormDTO;
+    export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ResFormToCreateApplicationFormDTO;
+    export type ResponseBody = ResFormToGetApplicationHistoryListDTO;
   }
 
   /**
    * @description 지원서 양식 ID를 이용해 양식을 조회합니다.
-   * @tags 지원 API
+   * @tags 지원 API(사용자)
    * @name GetFormInfoUser
    * @summary 사용자용 지원서 양식 조회 API
    * @request GET:/api/v1/form/{formId}
+   * @secure
    * @response `200` `ResFormToGetFormInfoUserDTO` OK
    */
   export namespace GetFormInfoUser {
@@ -232,27 +321,108 @@ export namespace 지원Api {
   }
 
   /**
-   * @description 지원 내역 목록을 조회합니다.
-   * @tags 지원 API
-   * @name GetaApplicationHistory
-   * @summary 사용자 지원 내역 목록 조회 API
-   * @request GET:/api/v1/application/list
-   * @response `200` `ResFormToGetApplicationHistoryListDTO` OK
+   * @description 지원 ID를 이용해 지원을 취소합니다.
+   * @tags 지원 API(사용자)
+   * @name DeleteApplication
+   * @summary 사용자 지원 취소 API
+   * @request DELETE:/api/v1/apply/{applyId}
+   * @secure
+   * @response `200` `ResFormObject` OK
    */
-  export namespace GetaApplicationHistory {
-    export type RequestParams = {};
+  export namespace DeleteApplication {
+    export type RequestParams = {
+      /** @format int64 */
+      applyId: number;
+    };
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ResFormToGetApplicationHistoryListDTO;
+    export type ResponseBody = ResFormObject;
+  }
+}
+
+export namespace 지원Api관리자 {
+  /**
+   * @description 지원 ID를 이용해 지원 상태를 변경합니다.
+   * @tags 지원 API(관리자)
+   * @name ChangeApplicationStatus
+   * @summary 사용자 지원 상태 변경 API
+   * @request PUT:/api/v1/admin/status
+   * @secure
+   * @response `200` `ResFormObject` OK
+   */
+  export namespace ChangeApplicationStatus {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ToChangeApplicationStatus;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormObject;
+  }
+
+  /**
+   * @description 동아리 지원서 양식을 수정합니다.
+   * @tags 지원 API(관리자)
+   * @name ChangeApplicationForm
+   * @summary 동아리 지원서 양식 수정 요청 API
+   * @request PUT:/api/v1/admin/form/{form_id}
+   * @secure
+   * @response `200` `ResFormToCreateApplicationFormDTO` OK
+   */
+  export namespace ChangeApplicationForm {
+    export type RequestParams = {
+      /** @format int64 */
+      formId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ToCreateApplicationFormDTO;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormToCreateApplicationFormDTO;
+  }
+
+  /**
+   * @description 동아리 지원서 양식을 생성합니다.
+   * @tags 지원 API(관리자)
+   * @name CreateApplicationForm
+   * @summary 동아리 지원서 양식 생성 요청 API
+   * @request POST:/api/v1/admin/form/create
+   * @secure
+   * @response `200` `ResFormToCreateApplicationFormDTO` OK
+   */
+  export namespace CreateApplicationForm {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ToCreateApplicationFormDTO;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormToCreateApplicationFormDTO;
+  }
+
+  /**
+   * @description 지원 ID를 이용해 지원 목록을 조회합니다.
+   * @tags 지원 API(관리자)
+   * @name GetClubApplicationList
+   * @summary 지원 목록 조회 API
+   * @request GET:/api/v1/admin/{applyId}
+   * @secure
+   * @response `200` `ResFormToGetApplicationListAdminDTO` OK
+   */
+  export namespace GetClubApplicationList {
+    export type RequestParams = {
+      /** @format int64 */
+      applyId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormToGetApplicationListAdminDTO;
   }
 
   /**
    * @description 지원서 양식 ID를 이용해 양식을 조회합니다.
-   * @tags 지원 API
+   * @tags 지원 API(관리자)
    * @name GetFormInfoAdmin
    * @summary 관리자용 지원서 양식 조회 API
    * @request GET:/api/v1/admin/form/{formId}
+   * @secure
    * @response `200` `ResFormToGetFormInfoAdminDTO` OK
    */
   export namespace GetFormInfoAdmin {
@@ -268,35 +438,17 @@ export namespace 지원Api {
 
   /**
    * @description 지원서 양식 ID를 이용해 양식을 삭제합니다.
-   * @tags 지원 API
+   * @tags 지원 API(관리자)
    * @name DeleteApplicationForm
    * @summary 지원 양식 삭제 API
    * @request DELETE:/api/v1/admin/form/{formId}
+   * @secure
    * @response `200` `ResFormObject` OK
    */
   export namespace DeleteApplicationForm {
     export type RequestParams = {
       /** @format int64 */
       formId: number;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ResFormObject;
-  }
-
-  /**
-   * @description 지원 ID를 이용해 지원을 취소합니다.
-   * @tags 지원 API
-   * @name DeleteApplication
-   * @summary 사용자 지원 취소 API
-   * @request DELETE:/api/v1/apply/{applyId}
-   * @response `200` `ResFormObject` OK
-   */
-  export namespace DeleteApplication {
-    export type RequestParams = {
-      /** @format int64 */
-      applyId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -523,50 +675,35 @@ export class HttpClient<SecurityDataType = unknown> {
  * 지원 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  지원Api = {
+  지원Api사용자 = {
     /**
      * @description 동아리에 지원을 수정합니다.
      *
-     * @tags 지원 API
+     * @tags 지원 API(사용자)
      * @name ChangeApplication
      * @summary 동아리 지원 수정 API
-     * @request PUT:/api/v1/application/{apply_id}
+     * @request PUT:/api/v1/{apply_id}
+     * @secure
      * @response `200` `ResFormToCreateApplicationDTO` OK
      */
     changeApplication: (applyId: number, data: ChangeApplicationPayload, params: RequestParams = {}) =>
       this.request<ResFormToCreateApplicationDTO, any>({
-        path: `/api/v1/application/${applyId} `,
+        path: `/api/v1/${applyId} `,
         method: 'PUT',
         body: data,
+        secure: true,
         type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * @description 동아리 지원서 양식을 수정합니다.
-     *
-     * @tags 지원 API
-     * @name ChangeApplicationForm
-     * @summary 동아리 지원서 양식 수정 요청 API
-     * @request PUT:/api/v1/application/admin/form/{form_id}
-     * @response `200` `ResFormToCreateApplicationFormDTO` OK
-     */
-    changeApplicationForm: (formId: number, data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
-      this.request<ResFormToCreateApplicationFormDTO, any>({
-        path: `/api/v1/application/admin/form/${formId}`,
-        method: 'PUT',
-        body: data,
-        type: ContentType.Json,
         ...params,
       }),
 
     /**
      * @description 동아리에 지원합니다.
      *
-     * @tags 지원 API
+     * @tags 지원 API(사용자)
      * @name CreateApplication
      * @summary 동아리 지원 API
      * @request POST:/api/v1/{apply_id}
+     * @secure
      * @response `200` `ResFormToCreateApplicationDTO` OK
      */
     createApplication: (applyId: number, data: CreateApplicationPayload, params: RequestParams = {}) =>
@@ -574,105 +711,177 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/${applyId}`,
         method: 'POST',
         body: data,
+        secure: true,
         type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * @description 동아리 지원서 양식을 생성합니다.
-     *
-     * @tags 지원 API
-     * @name CreateApplicationForm
-     * @summary 동아리 지원서 양식 생성 요청 API
-     * @request POST:/api/v1/application/admin/form/create
-     * @response `200` `ResFormToCreateApplicationFormDTO` OK
-     */
-    createApplicationForm: (data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
-      this.request<ResFormToCreateApplicationFormDTO, any>({
-        path: `/api/v1/application/admin/form/create`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description 지원서 양식 ID를 이용해 양식을 조회합니다.
-     *
-     * @tags 지원 API
-     * @name GetFormInfoUser
-     * @summary 사용자용 지원서 양식 조회 API
-     * @request GET:/api/v1/form/{formId}
-     * @response `200` `ResFormToGetFormInfoUserDTO` OK
-     */
-    getFormInfoUser: (formId: number, params: RequestParams = {}) =>
-      this.request<ResFormToGetFormInfoUserDTO, any>({
-        path: `/api/v1/form/${formId}`,
-        method: 'GET',
         ...params,
       }),
 
     /**
      * @description 지원 내역 목록을 조회합니다.
      *
-     * @tags 지원 API
-     * @name GetaApplicationHistory
+     * @tags 지원 API(사용자)
+     * @name GetApplicationHistory
      * @summary 사용자 지원 내역 목록 조회 API
-     * @request GET:/api/v1/application/list
+     * @request GET:/api/v1/list
+     * @secure
      * @response `200` `ResFormToGetApplicationHistoryListDTO` OK
      */
-    getaApplicationHistory: (params: RequestParams = {}) =>
+    getApplicationHistory: (params: RequestParams = {}) =>
       this.request<ResFormToGetApplicationHistoryListDTO, any>({
-        path: `/api/v1/application/list`,
+        path: `/api/v1/list`,
         method: 'GET',
+        secure: true,
         ...params,
       }),
 
     /**
      * @description 지원서 양식 ID를 이용해 양식을 조회합니다.
      *
-     * @tags 지원 API
-     * @name GetFormInfoAdmin
-     * @summary 관리자용 지원서 양식 조회 API
-     * @request GET:/api/v1/admin/form/{formId}
-     * @response `200` `ResFormToGetFormInfoAdminDTO` OK
+     * @tags 지원 API(사용자)
+     * @name GetFormInfoUser
+     * @summary 사용자용 지원서 양식 조회 API
+     * @request GET:/api/v1/form/{formId}
+     * @secure
+     * @response `200` `ResFormToGetFormInfoUserDTO` OK
      */
-    getFormInfoAdmin: (formId: number, params: RequestParams = {}) =>
-      this.request<ResFormToGetFormInfoAdminDTO, any>({
-        path: `/api/v1/admin/form/${formId}`,
+    getFormInfoUser: (formId: number, params: RequestParams = {}) =>
+      this.request<ResFormToGetFormInfoUserDTO, any>({
+        path: `/api/v1/form/${formId}`,
         method: 'GET',
-        ...params,
-      }),
-
-    /**
-     * @description 지원서 양식 ID를 이용해 양식을 삭제합니다.
-     *
-     * @tags 지원 API
-     * @name DeleteApplicationForm
-     * @summary 지원 양식 삭제 API
-     * @request DELETE:/api/v1/admin/form/{formId}
-     * @response `200` `ResFormObject` OK
-     */
-    deleteApplicationForm: (formId: number, params: RequestParams = {}) =>
-      this.request<ResFormObject, any>({
-        path: `/api/v1/admin/form/${formId}`,
-        method: 'DELETE',
+        secure: true,
         ...params,
       }),
 
     /**
      * @description 지원 ID를 이용해 지원을 취소합니다.
      *
-     * @tags 지원 API
+     * @tags 지원 API(사용자)
      * @name DeleteApplication
      * @summary 사용자 지원 취소 API
      * @request DELETE:/api/v1/apply/{applyId}
+     * @secure
      * @response `200` `ResFormObject` OK
      */
     deleteApplication: (applyId: number, params: RequestParams = {}) =>
       this.request<ResFormObject, any>({
         path: `/api/v1/apply/${applyId}`,
         method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+  };
+  지원Api관리자 = {
+    /**
+     * @description 지원 ID를 이용해 지원 상태를 변경합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name ChangeApplicationStatus
+     * @summary 사용자 지원 상태 변경 API
+     * @request PUT:/api/v1/admin/status
+     * @secure
+     * @response `200` `ResFormObject` OK
+     */
+    changeApplicationStatus: (data: ToChangeApplicationStatus, params: RequestParams = {}) =>
+      this.request<ResFormObject, any>({
+        path: `/api/v1/admin/status`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 지원서 양식을 수정합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name ChangeApplicationForm
+     * @summary 동아리 지원서 양식 수정 요청 API
+     * @request PUT:/api/v1/admin/form/{form_id}
+     * @secure
+     * @response `200` `ResFormToCreateApplicationFormDTO` OK
+     */
+    changeApplicationForm: (formId: number, data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
+      this.request<ResFormToCreateApplicationFormDTO, any>({
+        path: `/api/v1/admin/form/${formId}`,
+        method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 지원서 양식을 생성합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name CreateApplicationForm
+     * @summary 동아리 지원서 양식 생성 요청 API
+     * @request POST:/api/v1/admin/form/create
+     * @secure
+     * @response `200` `ResFormToCreateApplicationFormDTO` OK
+     */
+    createApplicationForm: (data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
+      this.request<ResFormToCreateApplicationFormDTO, any>({
+        path: `/api/v1/admin/form/create`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 지원 ID를 이용해 지원 목록을 조회합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name GetClubApplicationList
+     * @summary 지원 목록 조회 API
+     * @request GET:/api/v1/admin/{applyId}
+     * @secure
+     * @response `200` `ResFormToGetApplicationListAdminDTO` OK
+     */
+    getClubApplicationList: (applyId: number, params: RequestParams = {}) =>
+      this.request<ResFormToGetApplicationListAdminDTO, any>({
+        path: `/api/v1/admin/${applyId}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 지원서 양식 ID를 이용해 양식을 조회합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name GetFormInfoAdmin
+     * @summary 관리자용 지원서 양식 조회 API
+     * @request GET:/api/v1/admin/form/{formId}
+     * @secure
+     * @response `200` `ResFormToGetFormInfoAdminDTO` OK
+     */
+    getFormInfoAdmin: (formId: number, params: RequestParams = {}) =>
+      this.request<ResFormToGetFormInfoAdminDTO, any>({
+        path: `/api/v1/admin/form/${formId}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 지원서 양식 ID를 이용해 양식을 삭제합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name DeleteApplicationForm
+     * @summary 지원 양식 삭제 API
+     * @request DELETE:/api/v1/admin/form/{formId}
+     * @secure
+     * @response `200` `ResFormObject` OK
+     */
+    deleteApplicationForm: (formId: number, params: RequestParams = {}) =>
+      this.request<ResFormObject, any>({
+        path: `/api/v1/admin/form/${formId}`,
+        method: 'DELETE',
+        secure: true,
         ...params,
       }),
   };

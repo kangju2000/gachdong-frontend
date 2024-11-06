@@ -99,11 +99,21 @@ export interface SendVerificationCodeParams {
   email: string;
 }
 
+export interface SendRegistrationVerificationCodeParams {
+  /** 회원가입을 위한 이메일 주소 */
+  email: string;
+}
+
 export interface ResetPasswordParams {
   /** 사용자의 이메일 주소 */
   email: string;
   /** 인증 코드 */
   code: string;
+}
+
+export interface SendRegistrationVerificationCode1Params {
+  /** 회원가입을 위한 이메일 주소 */
+  email: string;
 }
 
 export interface ResetPassword1Params {
@@ -147,6 +157,25 @@ export namespace Public사용자인증인가Api {
     export type RequestParams = {};
     export type RequestQuery = {
       /** 사용자의 이메일 주소 */
+      email: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 이메일로 회원가입을 위한 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+   * @tags Public 사용자 인증/인가 API
+   * @name SendRegistrationVerificationCode
+   * @summary 회원가입용 인증 코드 발송
+   * @request POST:/public/api/v1/send-registration-verification-code
+   * @response `200` `string` OK
+   */
+  export namespace SendRegistrationVerificationCode {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 회원가입을 위한 이메일 주소 */
       email: string;
     };
     export type RequestBody = never;
@@ -209,6 +238,25 @@ export namespace Public사용자인증인가Api {
 }
 
 export namespace Public관리자인증인가Api {
+  /**
+   * @description 이메일로 회원가입을 위한 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+   * @tags Public 관리자 인증/인가 API
+   * @name SendRegistrationVerificationCode1
+   * @summary 회원가입용 인증 코드 발송
+   * @request POST:/public/admin/api/v1/send-registration-verification-code
+   * @response `200` `string` OK
+   */
+  export namespace SendRegistrationVerificationCode1 {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 회원가입을 위한 이메일 주소 */
+      email: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
   /**
    * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
    * @tags Public 관리자 인증/인가 API
@@ -673,6 +721,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description 이메일로 회원가입을 위한 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+     *
+     * @tags Public 사용자 인증/인가 API
+     * @name SendRegistrationVerificationCode
+     * @summary 회원가입용 인증 코드 발송
+     * @request POST:/public/api/v1/send-registration-verification-code
+     * @response `200` `string` OK
+     */
+    sendRegistrationVerificationCode: (query: SendRegistrationVerificationCodeParams, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/public/api/v1/send-registration-verification-code`,
+        method: 'POST',
+        query: query,
+        ...params,
+      }),
+
+    /**
      * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
      *
      * @tags Public 사용자 인증/인가 API
@@ -726,6 +791,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
   };
   public관리자인증인가Api = {
+    /**
+     * @description 이메일로 회원가입을 위한 유효시간 3분의 6자리의 인증 코드를 발송합니다.
+     *
+     * @tags Public 관리자 인증/인가 API
+     * @name SendRegistrationVerificationCode1
+     * @summary 회원가입용 인증 코드 발송
+     * @request POST:/public/admin/api/v1/send-registration-verification-code
+     * @response `200` `string` OK
+     */
+    sendRegistrationVerificationCode1: (query: SendRegistrationVerificationCode1Params, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/public/admin/api/v1/send-registration-verification-code`,
+        method: 'POST',
+        query: query,
+        ...params,
+      }),
+
     /**
      * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
      *

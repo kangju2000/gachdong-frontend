@@ -52,10 +52,10 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
+      router.replace('/login');
       CookieManager.removeToken();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
-      router.replace('/');
     },
   });
 };
