@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
                 <Input
                   id="username"
                   type="text"
-                  placeholder="username"
+                  placeholder="아이디 입력"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   required

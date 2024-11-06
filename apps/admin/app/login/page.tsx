@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { useLogin } from '@/apis/auth';
@@ -14,8 +13,6 @@ import { useLogin } from '@/apis/auth';
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
 
   const { mutate: login } = useLogin();
 
@@ -75,12 +72,6 @@ export default function AdminLogin() {
                 로그인 상태 유지
               </Label>
             </div>
-            {error && (
-              <div className="flex items-center space-x-2 text-red-400">
-                <AlertCircle size={20} />
-                <p className="text-sm">{error}</p>
-              </div>
-            )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button

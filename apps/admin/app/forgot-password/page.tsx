@@ -7,19 +7,35 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, ArrowLeft, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { useResetPassword, useSendVerificationCode } from '@/apis/auth';
 
 export default function AdminForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [code, setCode] = useState('');
+  const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { mutateAsync: sendResetPassword } = useResetPassword();
+  const { mutateAsync: sendVerificationCode } = useSendVerificationCode();
+
+  const handleSendVerificationCode = async () => {
+    try {
+      await sendVerificationCode({ email: `${username}@gachon.ac.kr` });
+      setIsVerificationSent(true);
+      setError('');
+    } catch (err) {
+      setError('인증 코드 전송에 실패했습니다.');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기에 비밀번호 재설정 로직을 구현하세요
-    console.log('비밀번호 재설정 링크 전송:', email + '@gachon.ac.kr');
-    // 예시: 성공 메시지 표시
-    setSuccess(true);
-    setError('');
+    try {
+      await sendResetPassword({ email: `${username}@gachon.ac.kr`, code });
+      setError('');
+    } catch (err) {
+      setError('비밀번호 재설정 요청에 실패했습니다.');
+    }
   };
 
   return (
@@ -37,20 +53,48 @@ export default function AdminForgotPassword() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-300">
+              <Label htmlFor="username" className="text-sm font-medium text-gray-300">
                 아이디
               </Label>
               <div className="flex">
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
                   placeholder="아이디 입력"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
                   required
-                  className="flex-1 border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 rounded-r-none border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  disabled={isVerificationSent}
                 />
                 <span className="flex items-center rounded-r-md bg-gray-600 px-3 text-gray-400">@gachon.ac.kr</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="code" className="text-sm font-medium text-gray-300">
+                이메일 인증
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="code"
+                  type="text"
+                  placeholder="인증 코드를 입력하세요"
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
+                  required
+                  className="flex-1 border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  disabled={username === ''}
+                />
+                {!isVerificationSent && (
+                  <Button
+                    type="button"
+                    onClick={handleSendVerificationCode}
+                    disabled={username === ''}
+                    className="bg-blue-500 text-white hover:bg-blue-600"
+                  >
+                    인증코드 전송
+                  </Button>
+                )}
               </div>
             </div>
             {error && (
@@ -59,10 +103,13 @@ export default function AdminForgotPassword() {
                 <p className="text-sm">{error}</p>
               </div>
             )}
-            {success && <div className="text-sm text-green-400">비밀번호 재설정 링크가 이메일로 전송되었습니다.</div>}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full bg-blue-500 text-white hover:bg-blue-600">
+            <Button
+              type="submit"
+              className="w-full bg-blue-500 text-white hover:bg-blue-600"
+              disabled={!isVerificationSent}
+            >
               비밀번호 재설정 링크 보내기
             </Button>
             <Link href="/login" className="flex items-center justify-center text-sm text-gray-400 hover:text-blue-400">
