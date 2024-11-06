@@ -12,12 +12,11 @@ import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  // const [agreeTerms, setAgreeTerms] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [isVerificationSuccess, setIsVerificationSuccess] = useState(false);
@@ -27,13 +26,13 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleSendVerification = () => {
-    sendVerificationCode({ email: `${email}@gachon.ac.kr` });
+    sendVerificationCode({ email: `${username}@gachon.ac.kr` });
     // TODO: 실패 처리?
     setIsVerificationSent(true);
   };
 
   const handleVerifyCode = () => {
-    verifyCode({ code: verificationCode, email: `${email}@gachon.ac.kr` }).then(() => {
+    verifyCode({ code: verificationCode, email: `${username}@gachon.ac.kr` }).then(() => {
       setIsVerificationSuccess(true);
     });
   };
@@ -48,7 +47,7 @@ export default function SignupPage() {
 
     const result = await registerAsync({
       name,
-      email: `${email}@gachon.ac.kr`,
+      email: `${username}@gachon.ac.kr`,
       password,
       role: 'USER',
     });
@@ -75,21 +74,21 @@ export default function SignupPage() {
               <Input
                 id="name"
                 type="text"
-                placeholder="홍길동"
+                placeholder="이름"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">이메일</Label>
+              <Label htmlFor="username">아이디</Label>
               <div className="flex">
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
-                  placeholder="이메일"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  placeholder="아이디"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
                   required
                   className="rounded-r-none"
                   disabled={isVerificationSent || isVerificationSuccess}
@@ -111,7 +110,7 @@ export default function SignupPage() {
                   disabled={!isVerificationSent || isVerificationSuccess}
                 />
                 {!isVerificationSent && (
-                  <Button type="button" onClick={handleSendVerification} disabled={!email}>
+                  <Button type="button" onClick={handleSendVerification} disabled={!username}>
                     인증 코드 전송
                   </Button>
                 )}
@@ -186,7 +185,7 @@ export default function SignupPage() {
                 password === '' ||
                 confirmPassword === '' ||
                 !isVerificationSuccess ||
-                email === '' ||
+                username === '' ||
                 name === ''
               }
             >

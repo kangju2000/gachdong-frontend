@@ -36,7 +36,7 @@ export default function AdminSignup() {
                 onChange={e => updateField('name', e.target.value)}
                 required
                 className="border-gray-600 bg-gray-700 text-white"
-                placeholder="홍길동"
+                placeholder="이름"
               />
             </div>
 
@@ -52,7 +52,7 @@ export default function AdminSignup() {
                   onChange={e => updateField('username', e.target.value)}
                   required
                   className="rounded-r-none border-gray-600 bg-gray-700 text-white"
-                  placeholder="username"
+                  placeholder="아이디"
                 />
                 <span className="inline-flex items-center rounded-r-md border border-l-0 border-gray-600 bg-gray-600 px-3 text-sm text-gray-400">
                   @gachon.ac.kr

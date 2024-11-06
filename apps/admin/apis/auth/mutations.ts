@@ -7,8 +7,15 @@ import { CookieManager } from '@/lib/auth/cookies';
 import { keys } from './keys';
 import { toast } from '@/hooks/use-toast';
 
-const { login, completeRegistration, sendVerificationCode, resetPassword, verifyCode } = authApi.public인증인가Api;
-const { logout, changePassword, deleteAccount } = authApi.인증인가Api;
+const {
+  login1: login,
+  completeRegistration1: completeRegistration,
+  resetPassword1: resetPassword,
+} = authApi.public관리자인증인가Api;
+
+const { logout1: logout, changePassword1: changePassword, deleteAccount1: deleteAccount } = authApi.관리자인증인가Api;
+
+const { sendVerificationCode, verifyCode } = authApi.public사용자인증인가Api;
 
 export const useLogin = () => {
   const router = useRouter();

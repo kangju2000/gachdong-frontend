@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield } from 'lucide-react';
+import { Shield, Eye, EyeOff } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { useLogin } from '@/apis/auth';
@@ -13,6 +13,7 @@ import { useLogin } from '@/apis/auth';
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: login } = useLogin();
 
@@ -46,7 +47,7 @@ export default function AdminLogin() {
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   required
-                  className="flex-1 border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 rounded-r-none border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                   autoComplete="username"
                 />
                 <span className="flex items-center rounded-r-md bg-gray-600 px-3 text-gray-400">@gachon.ac.kr</span>
@@ -56,15 +57,25 @@ export default function AdminLogin() {
               <Label htmlFor="password" className="text-sm font-medium text-gray-300">
                 비밀번호
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="w-full border-0 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  required
+                  className="w-full border-0 bg-gray-700 pr-10 text-white focus:ring-2 focus:ring-blue-500"
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="rememberMe" className="border-gray-500 text-blue-500" />
