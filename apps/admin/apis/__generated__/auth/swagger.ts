@@ -112,7 +112,7 @@ export namespace Public인증인가Api {
    * @tags Public 인증/인가 API
    * @name VerifyCode
    * @summary 인증 코드 검증
-   * @request POST:/public/api/v1/verify_code
+   * @request POST:/public/api/v1/verify-code
    * @response `200` `string` OK
    */
   export namespace VerifyCode {
@@ -133,7 +133,7 @@ export namespace Public인증인가Api {
    * @tags Public 인증/인가 API
    * @name SendVerificationCode
    * @summary 이메일 인증 코드 발송
-   * @request POST:/public/api/v1/send_verification_code
+   * @request POST:/public/api/v1/send-verification-code
    * @response `200` `string` OK
    */
   export namespace SendVerificationCode {
@@ -152,7 +152,7 @@ export namespace Public인증인가Api {
    * @tags Public 인증/인가 API
    * @name ResetPassword
    * @summary 비밀번호 재발급
-   * @request POST:/public/api/v1/reset_password
+   * @request POST:/public/api/v1/reset-password
    * @response `200` `string` OK
    */
   export namespace ResetPassword {
@@ -247,7 +247,7 @@ export namespace 인증인가Api {
    * @tags 인증/인가 API
    * @name ChangePassword
    * @summary 비밀번호 변경
-   * @request POST:/api/v1/change_password
+   * @request POST:/api/v1/change-password
    * @secure
    * @response `200` `string` OK
    */
@@ -328,7 +328,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://gateway-dev.gachdong.club/auth/';
+  public baseUrl: string = 'https://gateway-dev.gachdong.club/auth/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -495,7 +495,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title 가츠동 API 명세 - 인증/인가 서비스
  * @version v1
- * @baseUrl http://gateway-dev.gachdong.club/auth/
+ * @baseUrl https://gateway-dev.gachdong.club/auth/
  *
  * 인증/인가 서비스에 대한 API 명세입니다.
  */
@@ -507,12 +507,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Public 인증/인가 API
      * @name VerifyCode
      * @summary 인증 코드 검증
-     * @request POST:/public/api/v1/verify_code
+     * @request POST:/public/api/v1/verify-code
      * @response `200` `string` OK
      */
     verifyCode: (query: VerifyCodeParams, params: RequestParams = {}) =>
       this.request<string, any>({
-        path: `/public/api/v1/verify_code`,
+        path: `/public/api/v1/verify-code`,
         method: 'POST',
         query: query,
         ...params,
@@ -524,12 +524,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Public 인증/인가 API
      * @name SendVerificationCode
      * @summary 이메일 인증 코드 발송
-     * @request POST:/public/api/v1/send_verification_code
+     * @request POST:/public/api/v1/send-verification-code
      * @response `200` `string` OK
      */
     sendVerificationCode: (query: SendVerificationCodeParams, params: RequestParams = {}) =>
       this.request<string, any>({
-        path: `/public/api/v1/send_verification_code`,
+        path: `/public/api/v1/send-verification-code`,
         method: 'POST',
         query: query,
         ...params,
@@ -541,12 +541,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Public 인증/인가 API
      * @name ResetPassword
      * @summary 비밀번호 재발급
-     * @request POST:/public/api/v1/reset_password
+     * @request POST:/public/api/v1/reset-password
      * @response `200` `string` OK
      */
     resetPassword: (query: ResetPasswordParams, params: RequestParams = {}) =>
       this.request<string, any>({
-        path: `/public/api/v1/reset_password`,
+        path: `/public/api/v1/reset-password`,
         method: 'POST',
         query: query,
         ...params,
@@ -631,13 +631,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 인증/인가 API
      * @name ChangePassword
      * @summary 비밀번호 변경
-     * @request POST:/api/v1/change_password
+     * @request POST:/api/v1/change-password
      * @secure
      * @response `200` `string` OK
      */
     changePassword: (data: ChangePasswordRequest, params: RequestParams = {}) =>
       this.request<string, any>({
-        path: `/api/v1/change_password`,
+        path: `/api/v1/change-password`,
         method: 'POST',
         body: data,
         secure: true,

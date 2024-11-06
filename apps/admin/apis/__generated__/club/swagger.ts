@@ -19,7 +19,7 @@ export interface CreateClubRequest {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 동아리 한줄 설명
    * @example "가츠동은 최고의 동아리입니다."
@@ -58,7 +58,7 @@ export interface ClubResponse {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 한줄 소개
    * @example "가츠동은 최고의 동아리입니다."
@@ -91,10 +91,32 @@ export interface ClubResponse {
   updatedAt: string;
 }
 
+export interface ArrayResponseClubRecruitmentDetailResponse {
+  /** 결과 목록 */
+  results?: ClubRecruitmentDetailResponse[];
+}
+
+/** 결과 목록 */
+export interface ClubRecruitmentDetailResponse {
+  /** @format int64 */
+  clubId?: number;
+  /** @format int64 */
+  recruitmentId?: number;
+  title?: string;
+  content?: string;
+  recruitmentStatus?: boolean;
+  /** @format date-time */
+  startDate?: string;
+  /** @format date-time */
+  endDate?: string;
+}
+
 export interface ArrayResponseClubContactInfoResponse {
+  /** 결과 목록 */
   results?: ClubContactInfoResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubContactInfoResponse {
   /**
    * 연락 수단 (예: gmail, phone)
@@ -109,9 +131,11 @@ export interface ClubContactInfoResponse {
 }
 
 export interface ArrayResponseClubActivityResponse {
+  /** 결과 목록 */
   results?: ClubActivityResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubActivityResponse {
   /**
    * 활동 제목
@@ -131,10 +155,52 @@ export interface ClubActivityResponse {
   description: string;
 }
 
+export interface ArrayResponseClubRecruitmentResponse {
+  /** 결과 목록 */
+  results?: ClubRecruitmentResponse[];
+}
+
+/** 결과 목록 */
+export interface ClubRecruitmentResponse {
+  /**
+   * 동아리 id
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 모집공고 이름
+   * @example "GDSC Gachon 24-25 Member 모집"
+   */
+  title: string;
+  /**
+   * 동아리 이름
+   * @example "가츠동"
+   */
+  clubName: string;
+  /**
+   * 모집 시작일
+   * @format date-time
+   */
+  startDate: string;
+  /**
+   * 모집 마감일
+   * @format date-time
+   */
+  endDate: string;
+  /**
+   * 동아리 카테고리
+   * @example "SPORTS"
+   */
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
+}
+
 export interface ArrayResponseClubSummaryResponse {
+  /** 결과 목록 */
   results?: ClubSummaryResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubSummaryResponse {
   /**
    * 동아리 id
@@ -151,7 +217,7 @@ export interface ClubSummaryResponse {
    * 동아리 카테고리
    * @example "SPORTS"
    */
-  category: 'ART' | 'SPORTS' | 'SCIENCE' | 'MUSIC' | 'TECH' | 'OTHER';
+  category: 'ACADEMIC' | 'EXHIBITION' | 'SPORTS' | 'PERFORMANCE' | 'MUSIC' | 'RELIGION' | 'OTHER';
   /**
    * 한줄 소개
    * @example "가츠동은 최고의 동아리입니다."
@@ -213,6 +279,29 @@ export namespace Public동아리Api {
   }
 
   /**
+   * @description 특정 동아리의 모집 공고를 조회합니다.
+   * @tags Public 동아리 API
+   * @name GetClubRecruitments
+   * @summary 동아리 별 모집 공고 조회
+   * @request GET:/public/api/v1/{clubId}/recruitments
+   * @response `200` `ArrayResponseClubRecruitmentDetailResponse` OK
+   */
+  export namespace GetClubRecruitments {
+    export type RequestParams = {
+      /**
+       * 동아리 ID
+       * @format int64
+       * @example 1
+       */
+      clubId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseClubRecruitmentDetailResponse;
+  }
+
+  /**
    * @description 동아리 연락처 정보를 조회합니다.
    * @tags Public 동아리 API
    * @name GetClubContactInfo
@@ -256,6 +345,22 @@ export namespace Public동아리Api {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ArrayResponseClubActivityResponse;
+  }
+
+  /**
+   * @description 모든 동아리의 모집 공고를 조회합니다.
+   * @tags Public 동아리 API
+   * @name GetClubsRecruitments
+   * @summary 동아리 모집 공고 조회
+   * @request GET:/public/api/v1/recruitments
+   * @response `200` `ArrayResponseClubRecruitmentResponse` OK
+   */
+  export namespace GetClubsRecruitments {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseClubRecruitmentResponse;
   }
 
   /**
@@ -321,7 +426,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://gateway-dev.gachdong.club/club/';
+  public baseUrl: string = 'https://gateway-dev.gachdong.club/club/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -488,7 +593,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title 가츠동 API 명세 - 동아리 서비스
  * @version v1
- * @baseUrl http://gateway-dev.gachdong.club/club/
+ * @baseUrl https://gateway-dev.gachdong.club/club/
  *
  * 동아리 서비스에 대한 API 명세입니다.
  */
@@ -532,6 +637,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description 특정 동아리의 모집 공고를 조회합니다.
+     *
+     * @tags Public 동아리 API
+     * @name GetClubRecruitments
+     * @summary 동아리 별 모집 공고 조회
+     * @request GET:/public/api/v1/{clubId}/recruitments
+     * @response `200` `ArrayResponseClubRecruitmentDetailResponse` OK
+     */
+    getClubRecruitments: (clubId: number, params: RequestParams = {}) =>
+      this.request<ArrayResponseClubRecruitmentDetailResponse, any>({
+        path: `/public/api/v1/${clubId}/recruitments`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
      * @description 동아리 연락처 정보를 조회합니다.
      *
      * @tags Public 동아리 API
@@ -559,6 +680,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getClubActivities: (clubId: number, params: RequestParams = {}) =>
       this.request<ArrayResponseClubActivityResponse, any>({
         path: `/public/api/v1/${clubId}/activities`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * @description 모든 동아리의 모집 공고를 조회합니다.
+     *
+     * @tags Public 동아리 API
+     * @name GetClubsRecruitments
+     * @summary 동아리 모집 공고 조회
+     * @request GET:/public/api/v1/recruitments
+     * @response `200` `ArrayResponseClubRecruitmentResponse` OK
+     */
+    getClubsRecruitments: (params: RequestParams = {}) =>
+      this.request<ArrayResponseClubRecruitmentResponse, any>({
+        path: `/public/api/v1/recruitments`,
         method: 'GET',
         ...params,
       }),
