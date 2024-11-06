@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   if (isPrivateRoute) {
     // access token 유효성 검사
     try {
-      await authApi.인증인가Api.getProfile();
+      await authApi.사용자인증인가Api.getProfile();
 
       return NextResponse.next();
     } catch (error) {
