@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/header/header';
 import { Suspense } from 'react';
 import { ErrorBoundary } from '@/components/error-boundary/error-boundary';
 import './globals.css';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -55,6 +56,7 @@ export default function RootLayout({
             <Suspense>
               <Header />
               <ErrorBoundary>{children}</ErrorBoundary>
+              <Toaster />
             </Suspense>
           </ErrorBoundary>
         </Providers>

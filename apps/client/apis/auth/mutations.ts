@@ -5,6 +5,7 @@ import { authApi } from '../config/instance';
 import { useRouter } from 'next/navigation';
 import { CookieManager } from '@/lib/auth/cookies';
 import { keys } from './keys';
+import { toast } from '@/hooks/use-toast';
 
 const { login, completeRegistration, sendVerificationCode, resetPassword, verifyCode } = authApi.public인증인가Api;
 const { logout, changePassword, deleteAccount } = authApi.인증인가Api;
@@ -16,16 +17,19 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: login,
     onSuccess: response => {
-      // TODO: toast로 변경
-      alert('로그인이 완료되었습니다.');
+      toast({
+        title: '로그인이 완료되었습니다.',
+      });
 
       CookieManager.setToken({ accessToken: response.token ?? '' });
       queryClient.invalidateQueries({ queryKey: keys.all });
       router.replace('/');
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('로그인에 실패하였습니다.');
+      toast({
+        title: '로그인에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -35,6 +39,17 @@ export const useLogout = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: () => logout(),
+    onSuccess: () => {
+      toast({
+        title: '로그아웃이 완료되었습니다.',
+      });
+    },
+    onError: () => {
+      toast({
+        title: '로그아웃에 실패하였습니다.',
+        variant: 'destructive',
+      });
+    },
     onSettled: () => {
       CookieManager.removeToken();
       queryClient.invalidateQueries({ queryKey: keys.all });
@@ -50,13 +65,16 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: completeRegistration,
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('회원가입이 완료되었습니다.');
+      toast({
+        title: '회원가입이 완료되었습니다.',
+      });
       router.replace('/login');
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('회원가입에 실패하였습니다.');
+      toast({
+        title: '회원가입에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -65,12 +83,15 @@ export const useSendVerificationCode = () => {
   return useMutation({
     mutationFn: sendVerificationCode,
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('인증 코드가 전송되었습니다.');
+      toast({
+        title: '인증 코드가 전송되었습니다.',
+      });
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('인증 코드 전송에 실패하였습니다.');
+      toast({
+        title: '인증 코드 전송에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -81,13 +102,16 @@ export const useResetPassword = () => {
   return useMutation({
     mutationFn: resetPassword,
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('비밀번호 재설정이 완료되었습니다.');
+      toast({
+        title: '비밀번호 재설정이 완료되었습니다.',
+      });
       router.replace('/login');
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('비밀번호 재설정에 실패하였습니다.');
+      toast({
+        title: '비밀번호 재설정에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -96,12 +120,15 @@ export const useChangePassword = () => {
   return useMutation({
     mutationFn: changePassword,
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('비밀번호 변경이 완료되었습니다.');
+      toast({
+        title: '비밀번호 변경이 완료되었습니다.',
+      });
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('비밀번호 변경에 실패하였습니다.');
+      toast({
+        title: '비밀번호 변경에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -112,8 +139,9 @@ export const useDeleteAccount = () => {
   return useMutation({
     mutationFn: () => deleteAccount(),
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('회원탈퇴가 완료되었습니다.');
+      toast({
+        title: '회원탈퇴가 완료되었습니다.',
+      });
 
       CookieManager.removeToken();
       queryClient.invalidateQueries({ queryKey: keys.all });
@@ -121,8 +149,10 @@ export const useDeleteAccount = () => {
       router.replace('/login');
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('회원탈퇴에 실패하였습니다.');
+      toast({
+        title: '회원탈퇴에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };
@@ -131,12 +161,15 @@ export const useVerifyCode = () => {
   return useMutation({
     mutationFn: verifyCode,
     onSuccess: () => {
-      // TODO: toast로 변경
-      alert('인증이 완료되었습니다.');
+      toast({
+        title: '인증이 완료되었습니다.',
+      });
     },
     onError: () => {
-      // TODO: toast로 변경
-      alert('인증에 실패하였습니다.');
+      toast({
+        title: '인증에 실패하였습니다.',
+        variant: 'destructive',
+      });
     },
   });
 };

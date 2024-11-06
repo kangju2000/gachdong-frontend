@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -89,6 +88,7 @@ export default function AdminSignup() {
                   onChange={e => setUsername(e.target.value)}
                   required
                   className="rounded-r-none border-gray-600 bg-gray-700 text-white placeholder-gray-400"
+                  autoComplete="username"
                 />
                 <span className="inline-flex items-center rounded-r-md border border-l-0 border-gray-600 bg-gray-600 px-3 text-sm text-gray-400">
                   @gachon.ac.kr
@@ -108,6 +108,7 @@ export default function AdminSignup() {
                   onChange={e => setVerificationCode(e.target.value)}
                   disabled={!isVerificationSent || isVerified}
                   className="border-gray-600 bg-gray-700 text-white placeholder-gray-400"
+                  autoComplete="verification"
                 />
                 {!isVerified ? (
                   <Button
@@ -142,6 +143,7 @@ export default function AdminSignup() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   className="border-gray-600 bg-gray-700 text-white"
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
@@ -164,6 +166,7 @@ export default function AdminSignup() {
                   onChange={e => setConfirmPassword(e.target.value)}
                   required
                   className="border-gray-600 bg-gray-700 text-white"
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"

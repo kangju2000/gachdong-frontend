@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { useLogin } from '@/apis/auth';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -22,10 +22,7 @@ export default function AdminLogin() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    login({ email: `${email}@gachon.ac.kr`, password });
-
-    // console.log("운영진 로그인 시도:", email + "@gachon.ac.kr", password);
-    // setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+    login({ email: `${username}@gachon.ac.kr`, password });
   };
 
   return (
@@ -41,18 +38,19 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-300">
-                이메일
+              <Label htmlFor="username" className="text-sm font-medium text-gray-300">
+                아이디
               </Label>
               <div className="flex">
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
                   placeholder="아이디"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
                   required
                   className="flex-1 border-0 bg-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  autoComplete="username"
                 />
                 <span className="flex items-center rounded-r-md bg-gray-600 px-3 text-gray-400">@gachon.ac.kr</span>
               </div>
@@ -68,6 +66,7 @@ export default function AdminLogin() {
                 onChange={e => setPassword(e.target.value)}
                 required
                 className="w-full border-0 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"
+                autoComplete="current-password"
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -87,7 +86,7 @@ export default function AdminLogin() {
             <Button
               type="submit"
               className="w-full bg-blue-500 text-white hover:bg-blue-600"
-              disabled={email === '' || password === ''}
+              disabled={username === '' || password === ''}
             >
               로그인
             </Button>

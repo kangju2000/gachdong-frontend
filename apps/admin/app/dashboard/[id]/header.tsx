@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,17 +13,21 @@ import {
 import { ChevronRight, LogOut, User } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries, useLogout } from '@/apis/auth';
 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
+
+  const { data: profile } = useSuspenseQuery(authQueries.profile());
+  const { mutate: logout } = useLogout();
 
   const breadcrumbs = pathname
     .split('/')
     .filter(v => isNaN(Number(v)))
     .map((path, index, paths) => {
       const href = paths.slice(0, index + 1).join('/');
-      console.log({ href, index, paths });
       return {
         label: path,
         href: index === paths.length - 1 ? undefined : href,
@@ -62,15 +67,15 @@ export function Header() {
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatars/01.png" alt="프로필 이미지" />
-                <AvatarFallback>사용자</AvatarFallback>
+                <AvatarFallback>{profile.name?.[0] ?? 'A'}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 border-gray-700 bg-gray-800 text-gray-100" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">사용자 이름</p>
-                <p className="text-xs leading-none text-gray-400">user@example.com</p>
+                <p className="text-sm font-medium leading-none">{profile.name}</p>
+                <p className="text-xs leading-none text-gray-400">{profile.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-gray-700" />
@@ -78,7 +83,7 @@ export function Header() {
               <User className="mr-2 h-4 w-4" />
               <span>설정</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-gray-700">
+            <DropdownMenuItem className="hover:bg-gray-700" onSelect={() => logout()}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>로그아웃</span>
             </DropdownMenuItem>

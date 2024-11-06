@@ -3,13 +3,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LayoutDashboard, Users, BarChart, Settings, FileText, UserCog } from 'lucide-react';
+import { LayoutDashboard, BarChart, Settings, FileText, UserCog } from 'lucide-react';
 import Link from 'next/link';
 import { CLUBS } from '@/constants/data';
-import { Club } from '@/types';
 
 interface SidebarProps {
-  selectedClub: Club;
+  selectedClub: { id: number };
   onClubChange: (club: string) => void;
 }
 
