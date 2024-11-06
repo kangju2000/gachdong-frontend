@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { CATEGORY_MAP } from '@/constants/categories';
 
 type Props = {
   isOpen: boolean;
@@ -18,13 +19,13 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
   const [formData, setFormData] = useState<CreateClubRequest>({
     name: '',
     shortDescription: '',
-    category: 'OTHER',
+    category: 'ACADEMIC',
   });
 
   const handleSubmit = () => {
     if (formData.name && formData.shortDescription) {
       onSubmit(formData);
-      setFormData({ name: '', shortDescription: '', category: 'OTHER' });
+      setFormData({ name: '', shortDescription: '', category: 'ACADEMIC' });
     }
   };
 
@@ -60,12 +61,11 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ART">예술</SelectItem>
-                <SelectItem value="SPORTS">스포츠</SelectItem>
-                <SelectItem value="SCIENCE">과학</SelectItem>
-                <SelectItem value="MUSIC">음악</SelectItem>
-                <SelectItem value="TECH">기술</SelectItem>
-                <SelectItem value="OTHER">기타</SelectItem>
+                {Object.entries(CATEGORY_MAP).map(([key, value]) => (
+                  <SelectItem key={key} value={key}>
+                    {value}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

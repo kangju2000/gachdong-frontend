@@ -7,12 +7,7 @@ import { LayoutDashboard, BarChart, Settings, FileText, UserCog } from 'lucide-r
 import Link from 'next/link';
 import { CLUBS } from '@/constants/data';
 
-interface SidebarProps {
-  selectedClub: { id: number };
-  onClubChange: (club: string) => void;
-}
-
-export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
+export function Sidebar() {
   const menuItems = [
     {
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
@@ -44,7 +39,7 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
   return (
     <div className="flex w-64 flex-col border-r border-gray-800 bg-gray-900">
       <div className="p-4">
-        <Select onValueChange={onClubChange} defaultValue={String(selectedClub.id)}>
+        <Select>
           <SelectTrigger className="w-full border-gray-700 bg-gray-800 text-gray-100">
             <SelectValue placeholder="동아리 선택" />
           </SelectTrigger>
@@ -65,7 +60,7 @@ export function Sidebar({ selectedClub, onClubChange }: SidebarProps) {
             className="w-full justify-start px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white"
             asChild
           >
-            <Link href={`/dashboard/${selectedClub.id}${item.href}`}>
+            <Link href={`/dashboard/${1}${item.href}`}>
               {item.icon}
               {item.label}
             </Link>
