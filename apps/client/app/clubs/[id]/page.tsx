@@ -139,7 +139,7 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
                               {formatDistance(new Date(recruit.endDate ?? ''), new Date(), {
                                 locale: ko,
                                 addSuffix: true,
-                              })}
+                              })}{' '}
                               마감
                             </Badge>
                           </Link>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../config/instance';
 import { useRouter } from 'next/navigation';
