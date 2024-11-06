@@ -34,12 +34,12 @@ export interface LoginRequest {
    * 사용자 이메일
    * @example "user@gachon.ac.kr"
    */
-  email?: string;
+  email: string;
   /**
    * 비밀번호
    * @example "password123!"
    */
-  password?: string;
+  password: string;
 }
 
 export interface AuthResponse {
@@ -82,7 +82,7 @@ export interface UserProfileResponse {
   name?: string;
   /**
    * 사용자 권한
-   * @example "ADMIN"
+   * @example "USER, ADMIN"
    */
   role?: string;
 }
@@ -106,10 +106,17 @@ export interface ResetPasswordParams {
   code: string;
 }
 
-export namespace Public인증인가Api {
+export interface ResetPassword1Params {
+  /** 사용자의 이메일 주소 */
+  email: string;
+  /** 인증 코드 */
+  code: string;
+}
+
+export namespace Public사용자인증인가Api {
   /**
    * @description 사용자가 입력한 인증 코드를 검증합니다.
-   * @tags Public 인증/인가 API
+   * @tags Public 사용자 인증/인가 API
    * @name VerifyCode
    * @summary 인증 코드 검증
    * @request POST:/public/api/v1/verify-code
@@ -130,7 +137,7 @@ export namespace Public인증인가Api {
 
   /**
    * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
-   * @tags Public 인증/인가 API
+   * @tags Public 사용자 인증/인가 API
    * @name SendVerificationCode
    * @summary 이메일 인증 코드 발송
    * @request POST:/public/api/v1/send-verification-code
@@ -149,7 +156,7 @@ export namespace Public인증인가Api {
 
   /**
    * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
-   * @tags Public 인증/인가 API
+   * @tags Public 사용자 인증/인가 API
    * @name ResetPassword
    * @summary 비밀번호 재발급
    * @request POST:/public/api/v1/reset-password
@@ -170,7 +177,7 @@ export namespace Public인증인가Api {
 
   /**
    * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인) - password: 8~16자 영문, 숫자, 특수문자를 포함한 비밀번호 - name: 사용자 이름 - role: ADMIN, USER
-   * @tags Public 인증/인가 API
+   * @tags Public 사용자 인증/인가 API
    * @name CompleteRegistration
    * @summary 회원가입
    * @request POST:/public/api/v1/register
@@ -186,7 +193,7 @@ export namespace Public인증인가Api {
 
   /**
    * @description 사용자가 로그인합니다.
-   * @tags Public 인증/인가 API
+   * @tags Public 사용자 인증/인가 API
    * @name Login
    * @summary 사용자 로그인
    * @request POST:/public/api/v1/login
@@ -201,14 +208,68 @@ export namespace Public인증인가Api {
   }
 }
 
-export namespace 인증인가Api {
+export namespace Public관리자인증인가Api {
+  /**
+   * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
+   * @tags Public 관리자 인증/인가 API
+   * @name ResetPassword1
+   * @summary 비밀번호 재발급
+   * @request POST:/public/admin/api/v1/reset-password
+   * @response `200` `string` OK
+   */
+  export namespace ResetPassword1 {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 사용자의 이메일 주소 */
+      email: string;
+      /** 인증 코드 */
+      code: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인) - password: 8~16자 영문, 숫자, 특수문자를 포함한 비밀번호 - name: 사용자 이름 - role: ADMIN, USER
+   * @tags Public 관리자 인증/인가 API
+   * @name CompleteRegistration1
+   * @summary 회원가입
+   * @request POST:/public/admin/api/v1/register
+   * @response `200` `string` OK
+   */
+  export namespace CompleteRegistration1 {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = RegistrationRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 사용자가 로그인합니다.
+   * @tags Public 관리자 인증/인가 API
+   * @name Login1
+   * @summary 사용자 로그인
+   * @request POST:/public/admin/api/v1/login
+   * @response `200` `AuthResponse` OK
+   */
+  export namespace Login1 {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = LoginRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = AuthResponse;
+  }
+}
+
+export namespace 사용자인증인가Api {
   /**
    * @description 사용자의 계정을 삭제합니다.
-   * @tags 인증/인가 API
+   * @tags 사용자 인증/인가 API
    * @name DeleteAccount
    * @summary 회원탈퇴
    * @request POST:/api/v1/unregister
-   * @secure
    * @response `200` `string` OK
    */
   export namespace DeleteAccount {
@@ -224,11 +285,10 @@ export namespace 인증인가Api {
 
   /**
    * @description 사용자를 로그아웃합니다.
-   * @tags 인증/인가 API
+   * @tags 사용자 인증/인가 API
    * @name Logout
    * @summary 로그아웃
    * @request POST:/api/v1/logout
-   * @secure
    * @response `200` `string` OK
    */
   export namespace Logout {
@@ -244,11 +304,10 @@ export namespace 인증인가Api {
 
   /**
    * @description 기존 비밀번호를 변경합니다.
-   * @tags 인증/인가 API
+   * @tags 사용자 인증/인가 API
    * @name ChangePassword
    * @summary 비밀번호 변경
    * @request POST:/api/v1/change-password
-   * @secure
    * @response `200` `string` OK
    */
   export namespace ChangePassword {
@@ -264,13 +323,91 @@ export namespace 인증인가Api {
 
   /**
    * @description 사용자의 프로필 정보를 조회합니다.
-   * @tags 인증/인가 API
+   * @tags 사용자 인증/인가 API
    * @name GetProfile
    * @summary 회원 정보 조회
    * @request GET:/api/v1/profile
    * @response `200` `UserProfileResponse` OK
    */
   export namespace GetProfile {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = UserProfileResponse;
+  }
+}
+
+export namespace 관리자인증인가Api {
+  /**
+   * @description 사용자의 계정을 삭제합니다.
+   * @tags 관리자 인증/인가 API
+   * @name DeleteAccount1
+   * @summary 회원탈퇴
+   * @request POST:/admin/api/v1/unregister
+   * @response `200` `string` OK
+   */
+  export namespace DeleteAccount1 {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 사용자를 로그아웃합니다.
+   * @tags 관리자 인증/인가 API
+   * @name Logout1
+   * @summary 로그아웃
+   * @request POST:/admin/api/v1/logout
+   * @response `200` `string` OK
+   */
+  export namespace Logout1 {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 기존 비밀번호를 변경합니다.
+   * @tags 관리자 인증/인가 API
+   * @name ChangePassword1
+   * @summary 비밀번호 변경
+   * @request POST:/admin/api/v1/change-password
+   * @response `200` `string` OK
+   */
+  export namespace ChangePassword1 {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ChangePasswordRequest;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = string;
+  }
+
+  /**
+   * @description 사용자의 프로필 정보를 조회합니다.
+   * @tags 관리자 인증/인가 API
+   * @name GetProfile1
+   * @summary 회원 정보 조회
+   * @request GET:/admin/api/v1/profile
+   * @response `200` `UserProfileResponse` OK
+   */
+  export namespace GetProfile1 {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -500,11 +637,11 @@ export class HttpClient<SecurityDataType = unknown> {
  * 인증/인가 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  public인증인가Api = {
+  public사용자인증인가Api = {
     /**
      * @description 사용자가 입력한 인증 코드를 검증합니다.
      *
-     * @tags Public 인증/인가 API
+     * @tags Public 사용자 인증/인가 API
      * @name VerifyCode
      * @summary 인증 코드 검증
      * @request POST:/public/api/v1/verify-code
@@ -521,7 +658,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 이메일로 유효시간 3분의 6자리의 인증 코드를 발송합니다.
      *
-     * @tags Public 인증/인가 API
+     * @tags Public 사용자 인증/인가 API
      * @name SendVerificationCode
      * @summary 이메일 인증 코드 발송
      * @request POST:/public/api/v1/send-verification-code
@@ -538,7 +675,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
      *
-     * @tags Public 인증/인가 API
+     * @tags Public 사용자 인증/인가 API
      * @name ResetPassword
      * @summary 비밀번호 재발급
      * @request POST:/public/api/v1/reset-password
@@ -555,7 +692,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인) - password: 8~16자 영문, 숫자, 특수문자를 포함한 비밀번호 - name: 사용자 이름 - role: ADMIN, USER
      *
-     * @tags Public 인증/인가 API
+     * @tags Public 사용자 인증/인가 API
      * @name CompleteRegistration
      * @summary 회원가입
      * @request POST:/public/api/v1/register
@@ -573,7 +710,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 사용자가 로그인합니다.
      *
-     * @tags Public 인증/인가 API
+     * @tags Public 사용자 인증/인가 API
      * @name Login
      * @summary 사용자 로그인
      * @request POST:/public/api/v1/login
@@ -588,51 +725,100 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
-  인증인가Api = {
+  public관리자인증인가Api = {
+    /**
+     * @description 이메일 인증 코드를 입력하여 임시 비밀번호를 재발급합니다.
+     *
+     * @tags Public 관리자 인증/인가 API
+     * @name ResetPassword1
+     * @summary 비밀번호 재발급
+     * @request POST:/public/admin/api/v1/reset-password
+     * @response `200` `string` OK
+     */
+    resetPassword1: (query: ResetPassword1Params, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/public/admin/api/v1/reset-password`,
+        method: 'POST',
+        query: query,
+        ...params,
+      }),
+
+    /**
+     * @description 회원가입을 완료합니다. - email: 사용자 이메일 (gachon.ac.kr 도메인) - password: 8~16자 영문, 숫자, 특수문자를 포함한 비밀번호 - name: 사용자 이름 - role: ADMIN, USER
+     *
+     * @tags Public 관리자 인증/인가 API
+     * @name CompleteRegistration1
+     * @summary 회원가입
+     * @request POST:/public/admin/api/v1/register
+     * @response `200` `string` OK
+     */
+    completeRegistration1: (data: RegistrationRequest, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/public/admin/api/v1/register`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 사용자가 로그인합니다.
+     *
+     * @tags Public 관리자 인증/인가 API
+     * @name Login1
+     * @summary 사용자 로그인
+     * @request POST:/public/admin/api/v1/login
+     * @response `200` `AuthResponse` OK
+     */
+    login1: (data: LoginRequest, params: RequestParams = {}) =>
+      this.request<AuthResponse, any>({
+        path: `/public/admin/api/v1/login`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
+  사용자인증인가Api = {
     /**
      * @description 사용자의 계정을 삭제합니다.
      *
-     * @tags 인증/인가 API
+     * @tags 사용자 인증/인가 API
      * @name DeleteAccount
      * @summary 회원탈퇴
      * @request POST:/api/v1/unregister
-     * @secure
      * @response `200` `string` OK
      */
     deleteAccount: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/unregister`,
         method: 'POST',
-        secure: true,
         ...params,
       }),
 
     /**
      * @description 사용자를 로그아웃합니다.
      *
-     * @tags 인증/인가 API
+     * @tags 사용자 인증/인가 API
      * @name Logout
      * @summary 로그아웃
      * @request POST:/api/v1/logout
-     * @secure
      * @response `200` `string` OK
      */
     logout: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/logout`,
         method: 'POST',
-        secure: true,
         ...params,
       }),
 
     /**
      * @description 기존 비밀번호를 변경합니다.
      *
-     * @tags 인증/인가 API
+     * @tags 사용자 인증/인가 API
      * @name ChangePassword
      * @summary 비밀번호 변경
      * @request POST:/api/v1/change-password
-     * @secure
      * @response `200` `string` OK
      */
     changePassword: (data: ChangePasswordRequest, params: RequestParams = {}) =>
@@ -640,7 +826,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/change-password`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.Json,
         ...params,
       }),
@@ -648,7 +833,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 사용자의 프로필 정보를 조회합니다.
      *
-     * @tags 인증/인가 API
+     * @tags 사용자 인증/인가 API
      * @name GetProfile
      * @summary 회원 정보 조회
      * @request GET:/api/v1/profile
@@ -657,6 +842,73 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getProfile: (params: RequestParams = {}) =>
       this.request<UserProfileResponse, any>({
         path: `/api/v1/profile`,
+        method: 'GET',
+        ...params,
+      }),
+  };
+  관리자인증인가Api = {
+    /**
+     * @description 사용자의 계정을 삭제합니다.
+     *
+     * @tags 관리자 인증/인가 API
+     * @name DeleteAccount1
+     * @summary 회원탈퇴
+     * @request POST:/admin/api/v1/unregister
+     * @response `200` `string` OK
+     */
+    deleteAccount1: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/admin/api/v1/unregister`,
+        method: 'POST',
+        ...params,
+      }),
+
+    /**
+     * @description 사용자를 로그아웃합니다.
+     *
+     * @tags 관리자 인증/인가 API
+     * @name Logout1
+     * @summary 로그아웃
+     * @request POST:/admin/api/v1/logout
+     * @response `200` `string` OK
+     */
+    logout1: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/admin/api/v1/logout`,
+        method: 'POST',
+        ...params,
+      }),
+
+    /**
+     * @description 기존 비밀번호를 변경합니다.
+     *
+     * @tags 관리자 인증/인가 API
+     * @name ChangePassword1
+     * @summary 비밀번호 변경
+     * @request POST:/admin/api/v1/change-password
+     * @response `200` `string` OK
+     */
+    changePassword1: (data: ChangePasswordRequest, params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/admin/api/v1/change-password`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 사용자의 프로필 정보를 조회합니다.
+     *
+     * @tags 관리자 인증/인가 API
+     * @name GetProfile1
+     * @summary 회원 정보 조회
+     * @request GET:/admin/api/v1/profile
+     * @response `200` `UserProfileResponse` OK
+     */
+    getProfile1: (params: RequestParams = {}) =>
+      this.request<UserProfileResponse, any>({
+        path: `/admin/api/v1/profile`,
         method: 'GET',
         ...params,
       }),

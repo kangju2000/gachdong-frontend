@@ -42,7 +42,7 @@ export interface CreateClubRequest {
   establishedAt?: string;
 }
 
-export interface ClubResponse {
+export interface CreateClubResponse {
   /**
    * 동아리 ID
    * @format int64
@@ -89,6 +89,80 @@ export interface ClubResponse {
    * @format date-time
    */
   updatedAt: string;
+}
+
+export interface CreateClubContactInfoRequest {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 연락처 유형
+   * @example "전화번호"
+   */
+  type: string;
+  /**
+   * 연락처
+   * @example "010-1234-5678"
+   */
+  contact: string;
+}
+
+export interface CreateClubContactInfoResponse {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 연락처 ID
+   * @format int64
+   * @example 1
+   */
+  ContactId: number;
+}
+
+export interface CreateClubActivityRequest {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 활동 제목
+   * @example "가츠동 축구 동아리 첫 모임"
+   */
+  title: string;
+  /**
+   * 활동 설명
+   * @example "가츠동 축구 동아리 첫 모임입니다."
+   */
+  description: string;
+  /**
+   * 활동 날짜
+   * @format date
+   * @example "2023-08-31"
+   */
+  date: string;
+}
+
+export interface CreateClubActivityResponse {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 활동 ID
+   * @format int64
+   * @example 1
+   */
+  activityId: number;
 }
 
 export interface ArrayResponseClubRecruitmentDetailResponse {
@@ -235,22 +309,56 @@ export interface ClubSummaryResponse {
   recruitingStatus: boolean;
 }
 
-export namespace 동아리Api {
+export namespace Admin동아리Api {
   /**
    * @description 동아리 정보를 입력받아 동아리를 생성합니다.
-   * @tags 동아리 API
+   * @tags Admin 동아리 API
    * @name CreateClub
    * @summary 동아리 생성
-   * @request POST:/api/v1/create
+   * @request POST:/admin/api/v1/create
    * @secure
-   * @response `200` `ClubResponse` OK
+   * @response `200` `CreateClubResponse` OK
    */
   export namespace CreateClub {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = CreateClubRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = ClubResponse;
+    export type ResponseBody = CreateClubResponse;
+  }
+
+  /**
+   * @description 동아리 연락처 정보를 입력받아 동아리에 추가합니다.
+   * @tags Admin 동아리 API
+   * @name CreateClubContactInfo
+   * @summary 동아리 연락처 정보 생성
+   * @request POST:/admin/api/v1/contact-info/create
+   * @secure
+   * @response `200` `CreateClubContactInfoResponse` OK
+   */
+  export namespace CreateClubContactInfo {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = CreateClubContactInfoRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = CreateClubContactInfoResponse;
+  }
+
+  /**
+   * @description 동아리 활동 내역을 입력받아 동아리에 추가합니다.
+   * @tags Admin 동아리 API
+   * @name CreateClubActivity
+   * @summary 동아리 활동 내역 생성
+   * @request POST:/admin/api/v1/activities/create
+   * @secure
+   * @response `200` `CreateClubActivityResponse` OK
+   */
+  export namespace CreateClubActivity {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = CreateClubActivityRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = CreateClubActivityResponse;
   }
 }
 
@@ -261,7 +369,7 @@ export namespace Public동아리Api {
    * @name GetClub
    * @summary 동아리 조회
    * @request GET:/public/api/v1/{clubId}
-   * @response `200` `ClubResponse` OK
+   * @response `200` `CreateClubResponse` OK
    */
   export namespace GetClub {
     export type RequestParams = {
@@ -275,7 +383,7 @@ export namespace Public동아리Api {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ClubResponse;
+    export type ResponseBody = CreateClubResponse;
   }
 
   /**
@@ -377,6 +485,25 @@ export namespace Public동아리Api {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ArrayResponseClubSummaryResponse;
+  }
+}
+
+export namespace 동아리Api {
+  /**
+   * @description 테스트입니다.
+   * @tags 동아리 API
+   * @name GetUserInfo
+   * @summary 테스트 조회
+   * @request GET:/api/v1/user-info
+   * @secure
+   * @response `200` `string` OK
+   */
+  export namespace GetUserInfo {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = string;
   }
 }
 
@@ -598,20 +725,60 @@ export class HttpClient<SecurityDataType = unknown> {
  * 동아리 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  동아리Api = {
+  admin동아리Api = {
     /**
      * @description 동아리 정보를 입력받아 동아리를 생성합니다.
      *
-     * @tags 동아리 API
+     * @tags Admin 동아리 API
      * @name CreateClub
      * @summary 동아리 생성
-     * @request POST:/api/v1/create
+     * @request POST:/admin/api/v1/create
      * @secure
-     * @response `200` `ClubResponse` OK
+     * @response `200` `CreateClubResponse` OK
      */
     createClub: (data: CreateClubRequest, params: RequestParams = {}) =>
-      this.request<ClubResponse, any>({
-        path: `/api/v1/create`,
+      this.request<CreateClubResponse, any>({
+        path: `/admin/api/v1/create`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 연락처 정보를 입력받아 동아리에 추가합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name CreateClubContactInfo
+     * @summary 동아리 연락처 정보 생성
+     * @request POST:/admin/api/v1/contact-info/create
+     * @secure
+     * @response `200` `CreateClubContactInfoResponse` OK
+     */
+    createClubContactInfo: (data: CreateClubContactInfoRequest, params: RequestParams = {}) =>
+      this.request<CreateClubContactInfoResponse, any>({
+        path: `/admin/api/v1/contact-info/create`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 활동 내역을 입력받아 동아리에 추가합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name CreateClubActivity
+     * @summary 동아리 활동 내역 생성
+     * @request POST:/admin/api/v1/activities/create
+     * @secure
+     * @response `200` `CreateClubActivityResponse` OK
+     */
+    createClubActivity: (data: CreateClubActivityRequest, params: RequestParams = {}) =>
+      this.request<CreateClubActivityResponse, any>({
+        path: `/admin/api/v1/activities/create`,
         method: 'POST',
         body: data,
         secure: true,
@@ -627,10 +794,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetClub
      * @summary 동아리 조회
      * @request GET:/public/api/v1/{clubId}
-     * @response `200` `ClubResponse` OK
+     * @response `200` `CreateClubResponse` OK
      */
     getClub: (clubId: number, params: RequestParams = {}) =>
-      this.request<ClubResponse, any>({
+      this.request<CreateClubResponse, any>({
         path: `/public/api/v1/${clubId}`,
         method: 'GET',
         ...params,
@@ -713,6 +880,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ArrayResponseClubSummaryResponse, any>({
         path: `/public/api/v1/`,
         method: 'GET',
+        ...params,
+      }),
+  };
+  동아리Api = {
+    /**
+     * @description 테스트입니다.
+     *
+     * @tags 동아리 API
+     * @name GetUserInfo
+     * @summary 테스트 조회
+     * @request GET:/api/v1/user-info
+     * @secure
+     * @response `200` `string` OK
+     */
+    getUserInfo: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/api/v1/user-info`,
+        method: 'GET',
+        secure: true,
         ...params,
       }),
   };
