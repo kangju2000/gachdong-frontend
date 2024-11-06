@@ -92,9 +92,11 @@ export interface ClubResponse {
 }
 
 export interface ArrayResponseClubRecruitmentDetailResponse {
+  /** 결과 목록 */
   results?: ClubRecruitmentDetailResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubRecruitmentDetailResponse {
   /** @format int64 */
   clubId?: number;
@@ -110,9 +112,11 @@ export interface ClubRecruitmentDetailResponse {
 }
 
 export interface ArrayResponseClubContactInfoResponse {
+  /** 결과 목록 */
   results?: ClubContactInfoResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubContactInfoResponse {
   /**
    * 연락 수단 (예: gmail, phone)
@@ -127,9 +131,11 @@ export interface ClubContactInfoResponse {
 }
 
 export interface ArrayResponseClubActivityResponse {
+  /** 결과 목록 */
   results?: ClubActivityResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubActivityResponse {
   /**
    * 활동 제목
@@ -150,9 +156,11 @@ export interface ClubActivityResponse {
 }
 
 export interface ArrayResponseClubRecruitmentResponse {
+  /** 결과 목록 */
   results?: ClubRecruitmentResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubRecruitmentResponse {
   /**
    * 동아리 id
@@ -188,9 +196,11 @@ export interface ClubRecruitmentResponse {
 }
 
 export interface ArrayResponseClubSummaryResponse {
+  /** 결과 목록 */
   results?: ClubSummaryResponse[];
 }
 
+/** 결과 목록 */
 export interface ClubSummaryResponse {
   /**
    * 동아리 id

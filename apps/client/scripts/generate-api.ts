@@ -71,33 +71,8 @@ async function generateApiClient(api: (typeof apis)[0]) {
   }
 }
 
-const generatedDir = path.resolve('apis/__generated__');
-
-async function cleanupDirectories() {
-  const targetApis = process.argv.slice(2);
-
-  if (targetApis.length === 0) {
-    if (fs.existsSync(generatedDir)) {
-      fs.rmSync(generatedDir, { recursive: true, force: true });
-      console.log(`전체 generated 디렉토리 삭제 완료: ${generatedDir}`);
-    }
-    return;
-  }
-
-  const apisToClean = apis.filter(api => targetApis.includes(api.name));
-  apisToClean.forEach(api => {
-    const apiDir = path.resolve(api.output);
-    if (fs.existsSync(apiDir)) {
-      fs.rmSync(apiDir, { recursive: true, force: true });
-      console.log(`${api.name} API 디렉토리 삭제 완료: ${apiDir}`);
-    }
-  });
-}
-
 async function generateAllApis() {
   try {
-    await cleanupDirectories();
-
     const targetApis = process.argv.slice(2);
     let apisToGenerate = apis;
 
