@@ -2,7 +2,7 @@
 import { clubQueries } from '@/apis/club';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatDate, formatDistanceToNow } from '@/lib/date';
+import { formatDate, formatDistanceToNow, ko } from '@/lib/date';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import remarkGfm from 'remark-gfm';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -94,7 +94,7 @@ export function RecruitContainer() {
               </div>
               <div className="pt-2">
                 <Badge variant="outline" className="w-full justify-center py-1 text-sm">
-                  마감까지 {formatDistanceToNow(announcement.endDate)}
+                  마감까지 {formatDistanceToNow(announcement.endDate, { locale: ko, addSuffix: true })}
                 </Badge>
               </div>
             </CardContent>
