@@ -127,7 +127,7 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
                       {clubRecruits.map(recruit => (
                         <li key={recruit.clubId}>
                           <Link
-                            href={`/recruits/${recruit.clubId}`}
+                            href={`/clubs/${params.clubId}/recruits/${recruit.recruitmentId}`}
                             className="hover:bg-accent block rounded-lg p-3 transition-colors"
                           >
                             <h3 className="mb-1 font-semibold">{recruit.title}</h3>
