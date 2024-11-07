@@ -28,7 +28,7 @@ export function ActiveRecruitments() {
 
       <div className="grid gap-4">
         {recruitments.slice(0, 3).map(recruitment => (
-          <Link key={recruitment.clubId} href={`/recruits/${recruitment.clubId}`}>
+          <Link key={recruitment.clubId} href={`/clubs/${recruitment.clubId}/recruits/${recruitment.recruitmentId}`}>
             <div className="group rounded-xl border border-gray-200 bg-white p-4 transition-all hover:shadow-lg">
               <div className="flex gap-4">
                 <div className="flex-1">
