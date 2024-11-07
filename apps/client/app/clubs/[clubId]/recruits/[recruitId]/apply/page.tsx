@@ -78,6 +78,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
       createdAt: new Date().toISOString(),
     });
 
+    removeDraft(draftKey);
     toast({
       title: '지원 완료',
       description: '지원서가 제출되었습니다.',

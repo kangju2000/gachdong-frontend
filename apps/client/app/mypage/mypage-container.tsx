@@ -90,7 +90,7 @@ export default function MyPageContainer() {
                         className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100"
                         asChild
                       >
-                        <Link href={`/clubs/${app.clubId}/recruits/${app.recruitId}`}>지원서 보기</Link>
+                        <Link href={`/clubs/${app.clubId}/recruits/${app.recruitId}`}>공고 보기</Link>
                       </Button>
                     </div>
                   </li>
