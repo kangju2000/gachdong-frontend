@@ -2,9 +2,9 @@ import { clubQueries } from '@/apis/club';
 import { PrefetchHydration } from '@/components/PrefetchHydration';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { StatCard } from './components/stat-card';
-import { FeaturedClubs } from './components/featured-clubs';
-import { ActiveRecruitments } from './components/active-recruitments';
+import { StatCard } from './_components/stat-card';
+import { FeaturedClubs } from './_components/featured-clubs';
+import { ActiveRecruitments } from './_components/active-recruitments';
 
 export default function Home() {
   return (

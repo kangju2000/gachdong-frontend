@@ -5,10 +5,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from '@/apis/club';
 import { Category } from '@/constants/categories';
 import { CategoryTabs } from '@/components/shared/category-tabs';
-import { SearchBar } from './components/search-bar';
-import { SortButton } from './components/sort-button';
-import { RecruitmentGrid } from './components/recruitment-grid';
-import { EmptyState } from './components/empty-state';
+import { SearchBar } from './_components/search-bar';
+import { SortButton } from './_components/sort-button';
+import { RecruitmentGrid } from './_components/recruitment-grid';
+import { EmptyState } from './_components/empty-state';
 
 export type SortOption = 'latest' | 'deadline' | 'views';
 

@@ -1,6 +1,6 @@
 import { clubQueries } from '@/apis/club';
 import { PrefetchHydration } from '@/components/PrefetchHydration';
-import { ClubListContainer } from './components/club-list-container';
+import { ClubListContainer } from './_components/club-list-container';
 
 export default function ClubsPage() {
   return (
