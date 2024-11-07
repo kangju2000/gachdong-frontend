@@ -29,7 +29,7 @@ export default function RecruitmentDetailPage({ params }: { params: { clubId: st
       >
         <main className="mx-auto max-w-[980px] px-4 py-6">
           <Button variant="ghost" asChild className="mb-6">
-            <Link href={`/clubs/${params.clubId}/recruits`} className="flex items-center">
+            <Link href={`/recruits`} className="flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" />
               모든 공고 보기
             </Link>
