@@ -2,7 +2,7 @@
 import { clubQueries } from '@/apis/club';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatDistanceToNow } from '@/lib/date';
+import { formatDate, formatDistanceToNow } from '@/lib/date';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import remarkGfm from 'remark-gfm';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -69,7 +69,8 @@ export function RecruitContainer() {
                   모집기간
                 </span>
                 <span className="font-medium">
-                  {announcement.startDate} - {announcement.endDate}
+                  {formatDate(new Date(announcement.startDate ?? ''), 'yyyy년 MM월 dd일')} -{' '}
+                  {formatDate(new Date(announcement.endDate ?? ''), 'yyyy년 MM월 dd일')}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">

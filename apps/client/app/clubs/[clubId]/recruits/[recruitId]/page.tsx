@@ -34,6 +34,7 @@ export default function RecruitmentDetailPage({ params }: { params: { clubId: st
               모든 공고 보기
             </Link>
           </Button>
+
           <RecruitContainer />
         </main>
       </PrefetchHydration>
