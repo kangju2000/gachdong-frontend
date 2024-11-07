@@ -12,7 +12,7 @@ export function Header() {
           <AuthSection />
         </div>
       </header>
-      <div className="h-[68px]"></div>
+      <div className="h-[68px]" />
     </PrefetchHydration>
   );
 }

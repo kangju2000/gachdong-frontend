@@ -11,11 +11,13 @@ import { useQuery } from '@tanstack/react-query';
 import { authQueries } from '@/apis/auth';
 import { useChangePassword, useDeleteAccount } from '@/apis/auth';
 import { toast } from '@/hooks/use-toast';
+import { useUserStore } from '@/stores/user-store';
 
 export default function SettingsContainer() {
   const { data: user } = useQuery(authQueries.profile());
   const { mutateAsync: changePassword } = useChangePassword();
   const { mutateAsync: deleteAccount } = useDeleteAccount();
+  const localProfile = useUserStore();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -25,14 +27,35 @@ export default function SettingsContainer() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    alert('아직 구현되지 않은 기능입니다.');
+    const formData = new FormData(e.target as HTMLFormElement);
+    const newName = formData.get('name') as string;
+    localProfile.setName(newName);
+    toast({
+      title: '프로필이 업데이트되었습니다.',
+    });
   };
 
-  const handleAvatarChange = () => {
-    // TODO: 아바타 변경 로직 구현
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 체크 (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: '파일 크기는 5MB 이하여야 합니다.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      localProfile.setProfileUrl(base64);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
@@ -72,18 +95,17 @@ export default function SettingsContainer() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative mx-auto mb-4 h-20 w-20">
               <Avatar className="h-full w-full">
-                {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+                <AvatarImage src={localProfile.profileUrl} alt={localProfile.name} />
+                <AvatarFallback>{localProfile.name?.[0]}</AvatarFallback>
               </Avatar>
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100">
-                <Button type="button" variant="ghost" size="icon" onClick={handleAvatarChange} className="text-white">
-                  <Camera className="h-6 w-6" />
-                </Button>
-              </div>
+              <label className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100">
+                <input type="file" className="hidden" accept="image/*" onChange={handleAvatarChange} />
+                <Camera className="h-6 w-6 text-white" />
+              </label>
             </div>
             <div className="space-y-2">
               <Label htmlFor="name">이름</Label>
-              <Input id="name" defaultValue={user.name} required />
+              <Input id="name" name="name" defaultValue={localProfile.name} required />
             </div>
             <Button type="submit">변경사항 저장</Button>
           </form>

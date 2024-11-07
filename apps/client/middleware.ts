@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { AUTH_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from '@/lib/auth/constants';
 import { authApi } from './apis/config/instance';
 
-const PRIVATE_ROUTES = ['/settings', '/mypage'];
+const PRIVATE_ROUTES = ['/mypage'];
 
 export async function middleware(request: NextRequest) {
   // const token = request.cookies.get(AUTH_COOKIE_NAME);

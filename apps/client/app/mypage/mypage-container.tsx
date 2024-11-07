@@ -7,9 +7,12 @@ import Link from 'next/link';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from '@/apis/auth';
 import { applicationQueries } from '@/apis/application';
+import { useUserStore } from '@/stores/user-store';
 
 export default function MyPageContainer() {
   const { data: user } = useQuery(authQueries.profile());
+
+  const localProfile = useUserStore();
 
   const {
     data: { result: applications = {} },
@@ -29,10 +32,12 @@ export default function MyPageContainer() {
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
               {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-              <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+              <AvatarImage src={localProfile.profileUrl} alt={localProfile.name} />
+              {/* <AvatarFallback>{user?.name?.[0]}</AvatarFallback> */}
             </Avatar>
             <div>
-              <h2 className="text-xl font-semibold">{user.name}</h2>
+              {/* <h2 className="text-xl font-semibold">{user.name}</h2> */}
+              <h2 className="text-xl font-semibold">{localProfile.name}</h2>
             </div>
           </div>
           <Button asChild className="mt-4 w-full">
