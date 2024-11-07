@@ -11,11 +11,100 @@ import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from '@/apis/club';
 import { format } from '@/lib/date';
+import { useApplicationStore } from '@/stores/application-store';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
 
 export default function ApplyPage({ params }: { params: { clubId: string; recruitId: string } }) {
+  const router = useRouter();
   const { clubId, recruitId } = params;
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    motivation: '',
+    techStack: [] as string[],
+    preferredEnvironment: 'windows',
+  });
+
+  const { saveDraft, submitApplication, getDraft, removeDraft } = useApplicationStore();
+  const draftKey = `${clubId}-${recruitId}`;
+
+  // Load draft if exists
+  useEffect(() => {
+    const draft = getDraft(draftKey);
+
+    if (draft) {
+      const confirmed = confirm('임시저장된 지원서가 있습니다. 이어서 지원하시겠습니까?');
+      if (confirmed) {
+        setFormData({
+          name: draft.name,
+          phone: draft.phone,
+          email: draft.email,
+          motivation: draft.motivation,
+          techStack: draft.techStack,
+          preferredEnvironment: draft.preferredEnvironment,
+        });
+      } else {
+        removeDraft(draftKey);
+      }
+    }
+  }, [draftKey, getDraft]);
+
+  const handleSaveDraft = () => {
+    console.log(formData);
+    saveDraft(draftKey, {
+      clubId: Number(clubId),
+      recruitId: Number(recruitId),
+      ...formData,
+      status: 'DRAFT',
+      createdAt: new Date().toISOString(),
+    });
+
+    toast({
+      title: '임시저장 완료',
+      description: '지원서가 임시저장되었습니다.',
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitApplication({
+      clubId: Number(clubId),
+      recruitId: Number(recruitId),
+      ...formData,
+      status: 'SUBMITTED',
+      createdAt: new Date().toISOString(),
+    });
+
+    toast({
+      title: '지원 완료',
+      description: '지원서가 제출되었습니다.',
+    });
+    router.push('/mypage');
+  };
 
   const { data: recruitment } = useSuspenseQuery(clubQueries.recruitmentsDetail(Number(clubId), Number(recruitId)));
+
+  // Add handleInputChange function
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Add handleCheckboxChange function
+  const handleCheckboxChange = (techName: string, checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      techStack: checked ? [...prev.techStack, techName] : prev.techStack.filter(tech => tech !== techName),
+    }));
+  };
+
+  // Add handleRadioChange function
+  const handleEnvironmentChange = (value: string) => {
+    setFormData(prev => ({ ...prev, preferredEnvironment: value }));
+  };
 
   return (
     <main className="mx-auto max-w-[980px] px-4 py-6">
@@ -35,7 +124,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
           </p>
         </div>
 
-        <form className="space-y-6 p-6">
+        <form className="space-y-6 p-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">지원 정보</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -43,19 +132,42 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
                 <Label htmlFor="name" className="text-sm font-medium text-gray-700">
                   이름 <span className="text-red-500">*</span>
                 </Label>
-                <Input id="name" name="name" placeholder="지원자 이름을 입력해주세요." required />
+                <Input
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="지원자 이름을 입력해주세요."
+                  required
+                />
               </div>
               <div>
                 <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
                   전화번호 <span className="text-red-500">*</span>
                 </Label>
-                <Input id="phone" name="phone" type="tel" placeholder="연락 가능한 전화번호를 입력해주세요." required />
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="연락 가능한 전화번호를 입력해주세요."
+                  required
+                />
               </div>
               <div>
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
                   이메일 <span className="text-red-500">*</span>
                 </Label>
-                <Input id="email" name="email" type="email" placeholder="이메일 주소를 입력해주세요." required />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="이메일 주소를 입력해주세요."
+                  required
+                />
               </div>
             </div>
           </div>
@@ -89,50 +201,40 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
             <Textarea
               id="motivation"
               name="motivation"
+              value={formData.motivation}
+              onChange={handleInputChange}
               rows={6}
               placeholder="GDSC에 지원하게 된 동기와 활동 계획을 자유롭게 작성해주세요. (500자 이내)"
               required
             />
-            <div className="text-muted-foreground text-right text-sm">0/500</div>
+            <div className="text-muted-foreground text-right text-sm">{formData.motivation.length}/500</div>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">기술 스택</h2>
-            <div className="space-y-2">
-              <Checkbox id="javascript" />
-              <Label htmlFor="javascript" className="ml-2">
-                JavaScript
-              </Label>
-            </div>
-            <div className="space-y-2">
-              <Checkbox id="python" />
-              <Label htmlFor="python" className="ml-2">
-                Python
-              </Label>
-            </div>
-            <div className="space-y-2">
-              <Checkbox id="java" />
-              <Label htmlFor="java" className="ml-2">
-                Java
-              </Label>
-            </div>
+            {['javascript', 'python', 'java'].map(tech => (
+              <div key={tech} className="space-y-2">
+                <Checkbox
+                  id={tech}
+                  checked={formData.techStack.includes(tech)}
+                  onCheckedChange={checked => handleCheckboxChange(tech, checked as boolean)}
+                />
+                <Label htmlFor={tech} className="ml-2">
+                  {tech.charAt(0).toUpperCase() + tech.slice(1)}
+                </Label>
+              </div>
+            ))}
           </div>
 
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">선호하는 개발 환경</h2>
-            <RadioGroup defaultValue="windows">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="windows" id="windows" />
-                <Label htmlFor="windows">Windows</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="mac" id="mac" />
-                <Label htmlFor="mac">Mac</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="linux" id="linux" />
-                <Label htmlFor="linux">Linux</Label>
-              </div>
+            <RadioGroup value={formData.preferredEnvironment} onValueChange={handleEnvironmentChange}>
+              {['windows', 'mac', 'linux'].map(os => (
+                <div key={os} className="flex items-center space-x-2">
+                  <RadioGroupItem value={os} id={os} />
+                  <Label htmlFor={os}>{os.charAt(0).toUpperCase() + os.slice(1)}</Label>
+                </div>
+              ))}
             </RadioGroup>
           </div>
 
@@ -155,7 +257,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
           </div> */}
 
           <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={handleSaveDraft}>
               임시저장
             </Button>
             <Button type="submit">지원하기</Button>
