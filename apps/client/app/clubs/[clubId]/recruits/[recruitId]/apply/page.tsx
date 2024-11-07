@@ -8,9 +8,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from '@/apis/club';
+import { format } from '@/lib/date';
 
 export default function ApplyPage({ params }: { params: { clubId: string; recruitId: string } }) {
   const { clubId, recruitId } = params;
+
+  const { data: recruitment } = useSuspenseQuery(clubQueries.recruitmentsDetail(Number(clubId), Number(recruitId)));
 
   return (
     <main className="mx-auto max-w-[980px] px-4 py-6">
@@ -24,9 +29,10 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
 
       <div className="overflow-hidden rounded-lg bg-white shadow">
         <div className="border-b p-6">
-          <h1 className="text-2xl font-bold">채용 정보</h1>
-          <p className="text-muted-foreground mt-1">GDSC Gachon 24-25 Member 모집</p>
-          <p className="text-muted-foreground">xx.xx.xx - xx.xx.xx</p>
+          <h1 className="text-2xl font-bold">{recruitment.title}</h1>
+          <p className="text-muted-foreground">
+            {format(recruitment.startDate, 'yyyy.MM.dd')} - {format(recruitment.endDate, 'yyyy.MM.dd')}
+          </p>
         </div>
 
         <form className="space-y-6 p-6">
@@ -130,7 +136,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
             </RadioGroup>
           </div>
 
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h2 className="text-xl font-semibold">개인정보 수집 및 이용 동의</h2>
             <div className="bg-muted rounded-md p-4 text-sm">
               <p>1. 수집하는 개인정보 항목: 이름, 전화번호, 이메일</p>
@@ -146,7 +152,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
                 개인정보 수집 및 이용에 동의합니다.
               </Label>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-end space-x-4">
             <Button type="button" variant="outline">
