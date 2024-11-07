@@ -38,7 +38,16 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
         <CardContent className="p-6">
           <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
             <div className="bg-muted relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
-              <Image src={club.clubImageUrl} alt={`${club.clubName} logo`} className="object-cover" fill sizes="100%" />
+              <Image
+                src={
+                  club.clubImageUrl ??
+                  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4='
+                }
+                alt={`${club.clubName} logo`}
+                className="object-cover"
+                fill
+                sizes="100%"
+              />
             </div>
             <div className="flex-grow">
               <h1 className="mb-2 text-3xl font-bold">{club.clubName}</h1>
@@ -68,7 +77,7 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
               <Card>
                 <CardContent className="pt-6">
                   <h2 className="mb-4 text-xl font-semibold">동아리 소개</h2>
-                  <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:text-sm prose-ul:text-sm prose-ol:text-sm max-w-none">
+                  <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:text-sm prose-ul:text-sm prose-ol:text-sm min-h-[350px] max-w-none">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
@@ -86,6 +95,7 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
                         {activity.title}
                       </Badge>
                     ))}
+                    {clubActivities.length === 0 && <p className="text-muted-foreground">주요 활동이 없습니다.</p>}
                   </div>
                 </CardContent>
               </Card>
@@ -103,14 +113,15 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
                         </p>
                       </div>
                     ))}
+                    {clubActivities.length === 0 && <p className="text-muted-foreground">활동 내역이 없습니다.</p>}
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
         </div>
-
-        <div className="lg:w-1/3">
+        {/* FIXME: 레이아웃 개선하기 / 44px 계산된 것 제거하기 */}
+        <div className="lg:relative lg:top-[44px] lg:w-1/3">
           <Card>
             <CardHeader>
               <CardTitle>모집 공고</CardTitle>

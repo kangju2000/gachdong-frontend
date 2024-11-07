@@ -12,7 +12,7 @@ export const useUserStore = create(
   persist<UserState>(
     set => ({
       name: '이창민',
-      profileUrl: '',
+      profileUrl: 'https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png',
       setName: name => set({ name }),
       setProfileUrl: url => set({ profileUrl: url }),
     }),
