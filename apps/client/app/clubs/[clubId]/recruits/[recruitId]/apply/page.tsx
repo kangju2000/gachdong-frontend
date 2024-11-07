@@ -9,11 +9,13 @@ import { Label } from '@/components/ui/label';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ApplyPage() {
+export default function ApplyPage({ params }: { params: { clubId: string; recruitId: string } }) {
+  const { clubId, recruitId } = params;
+
   return (
     <main className="mx-auto max-w-[980px] px-4 py-6">
       <Link
-        href="/recruits/1"
+        href={`/clubs/${clubId}/recruits/${recruitId}`}
         className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
