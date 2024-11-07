@@ -7,8 +7,8 @@ import { Category } from '@/constants/categories';
 import { CategoryTabs } from '@/components/shared/category-tabs';
 import { SearchBar } from './_components/search-bar';
 import { SortButton } from './_components/sort-button';
-import { RecruitmentGrid } from './_components/recruitment-grid';
 import { EmptyState } from './_components/empty-state';
+import { RecruitmentCard } from './_components/recruitment-card';
 
 export type SortOption = 'latest' | 'deadline' | 'views';
 
@@ -58,7 +58,11 @@ export default function RecruitmentsPage() {
       {sortedRecruitments.length === 0 ? (
         <EmptyState searchTerm={searchTerm} selectedCategory={selectedCategory} />
       ) : (
-        <RecruitmentGrid recruitments={sortedRecruitments} />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {recruitments.map(recruitment => (
+            <RecruitmentCard recruitment={recruitment} />
+          ))}
+        </div>
       )}
     </main>
   );

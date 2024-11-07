@@ -322,6 +322,12 @@ export interface ClubRecruitmentResponse {
    */
   clubId: number;
   /**
+   * 모집공고 ID
+   * @format int64
+   * @example 1
+   */
+  recruitmentId: number;
+  /**
    * 모집공고 이름
    * @example "GDSC Gachon 24-25 Member 모집"
    */
@@ -331,6 +337,11 @@ export interface ClubRecruitmentResponse {
    * @example "가츠동"
    */
   clubName: string;
+  /**
+   * 동아리 이미지 URL
+   * @example "https://gach-dong.club"
+   */
+  clubImageUrl: string;
   /**
    * 모집 시작일
    * @format date-time

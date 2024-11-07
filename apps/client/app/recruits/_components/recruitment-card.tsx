@@ -8,20 +8,19 @@ import { ClubRecruitmentResponse } from '@/apis/__generated__/club/swagger';
 
 interface RecruitmentCardProps {
   recruitment: ClubRecruitmentResponse;
-  clubImageUrl: string;
 }
 
-export function RecruitmentCard({ recruitment, clubImageUrl }: RecruitmentCardProps) {
+export function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
   const daysUntilDeadline = Math.ceil(
     (new Date(recruitment.endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
 
   return (
-    <Link href={`/clubs/${recruitment.clubId}/recruits/${recruitment.recruitId}`}>
+    <Link href={`/clubs/${recruitment.clubId}/recruits/${recruitment.recruitmentId}`}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
         <div className="relative aspect-[2/1] w-full overflow-hidden bg-gray-100">
           <Image
-            src={clubImageUrl}
+            src={recruitment.clubImageUrl}
             alt={recruitment.clubName}
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             fill
