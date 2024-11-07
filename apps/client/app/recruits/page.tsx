@@ -21,12 +21,15 @@ export default function RecruitmentsPage() {
     data: { results: recruitments = [] },
   } = useSuspenseQuery(clubQueries.recruitments());
 
-  const filteredRecruitments = recruitments.filter(
-    recruitment =>
-      (selectedCategory === 'ALL' || recruitment.category === selectedCategory) &&
-      (recruitment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        recruitment.clubName.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredRecruitments = recruitments.filter(recruitment => {
+    const matchesCategory = selectedCategory === 'ALL' || recruitment.category === selectedCategory;
+
+    const matchesSearch =
+      recruitment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      recruitment.clubName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
 
   const sortedRecruitments = [...filteredRecruitments].sort((a, b) => {
     switch (sortBy) {
@@ -59,7 +62,7 @@ export default function RecruitmentsPage() {
         <EmptyState searchTerm={searchTerm} selectedCategory={selectedCategory} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {recruitments.map(recruitment => (
+          {sortedRecruitments.map(recruitment => (
             <RecruitmentCard recruitment={recruitment} />
           ))}
         </div>
