@@ -19,7 +19,7 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: response => {
       toast({
-        title: '로그인이 완료되었습니다.',
+        title: '로그인에 성공하였습니다.',
       });
 
       CookieManager.setToken({ accessToken: response.token ?? '' });
