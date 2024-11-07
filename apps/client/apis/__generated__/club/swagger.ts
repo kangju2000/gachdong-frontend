@@ -9,6 +9,53 @@
  * ---------------------------------------------------------------
  */
 
+export interface CreateClubRecruitmentRequest {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 모집 제목
+   * @example "2021년도 1학기 신입부원 모집"
+   */
+  title: string;
+  /**
+   * 공고 내용
+   * @example "신입부원을 모집합니다."
+   */
+  content: string;
+  /**
+   * 모집 인원
+   * @format int64
+   * @example 10
+   */
+  recruitmentCount: number;
+  /**
+   * 모집 시작일
+   * @format date-time
+   */
+  startDate: string;
+  /**
+   * 모집 마감일
+   * @format date-time
+   */
+  endDate: string;
+  /**
+   * 모집 프로세스 설정, Json 형식으로 넣어주세요.
+   * @example "{
+   *   "process1": "서류 심사",
+   *   "process2": "1차 면접",
+   *   "process3": "2차 면접"
+   *  "process4": "최종 합격"
+   * }"
+   */
+  processData: Record<string, object>;
+}
+
+export type CreateClubRecruitmentResponse = object;
+
 export interface CreateClubRequest {
   /**
    * 동아리 이름
@@ -172,17 +219,49 @@ export interface ArrayResponseClubRecruitmentDetailResponse {
 
 /** 결과 목록 */
 export interface ClubRecruitmentDetailResponse {
-  /** @format int64 */
-  clubId?: number;
-  /** @format int64 */
-  recruitmentId?: number;
-  title?: string;
-  content?: string;
-  recruitmentStatus?: boolean;
-  /** @format date-time */
-  startDate?: string;
-  /** @format date-time */
-  endDate?: string;
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 모집 ID
+   * @format int64
+   * @example 1
+   */
+  recruitmentId: number;
+  /**
+   * 모집공고 이름
+   * @example "GDSC Gachon 24-25 Member 모집"
+   */
+  title: string;
+  /**
+   * 모집공고 내용
+   * @example "GDSC Gachon 24-25 Member 모집합니다."
+   */
+  content: string;
+  /**
+   * 모집 인원
+   * @format int64
+   * @example 5
+   */
+  recruitmentCount: number;
+  /**
+   * 모집 상태
+   * @example true
+   */
+  recruitmentStatus: boolean;
+  /**
+   * 모집 시작일
+   * @format date-time
+   */
+  startDate: string;
+  /**
+   * 모집 마감일
+   * @format date-time
+   */
+  endDate: string;
 }
 
 export interface ArrayResponseClubContactInfoResponse {
@@ -311,6 +390,23 @@ export interface ClubSummaryResponse {
 
 export namespace Admin동아리Api {
   /**
+   * @description 동아리 모집 공고를 입력받아 동아리에 추가합니다.
+   * @tags Admin 동아리 API
+   * @name CreateClubRecruitment
+   * @summary 동아리 모집 공고 생성
+   * @request POST:/admin/api/v1/recruitment/create
+   * @secure
+   * @response `200` `CreateClubRecruitmentResponse` OK
+   */
+  export namespace CreateClubRecruitment {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = CreateClubRecruitmentRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = CreateClubRecruitmentResponse;
+  }
+
+  /**
    * @description 동아리 정보를 입력받아 동아리를 생성합니다.
    * @tags Admin 동아리 API
    * @name CreateClub
@@ -407,6 +503,35 @@ export namespace Public동아리Api {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ArrayResponseClubRecruitmentDetailResponse;
+  }
+
+  /**
+   * @description 특정 동아리의 특정 모집 공고를 조회합니다.
+   * @tags Public 동아리 API
+   * @name GetClubRecruitment
+   * @summary 특정 동아리 모집 공고 상세 조회
+   * @request GET:/public/api/v1/{clubId}/recruitments/{recruitmentId}
+   * @response `200` `ClubRecruitmentDetailResponse` OK
+   */
+  export namespace GetClubRecruitment {
+    export type RequestParams = {
+      /**
+       * 동아리 ID
+       * @format int64
+       * @example 1
+       */
+      clubId: number;
+      /**
+       * 모집 공고 ID
+       * @format int64
+       * @example 1
+       */
+      recruitmentId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ClubRecruitmentDetailResponse;
   }
 
   /**
@@ -727,6 +852,26 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   admin동아리Api = {
     /**
+     * @description 동아리 모집 공고를 입력받아 동아리에 추가합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name CreateClubRecruitment
+     * @summary 동아리 모집 공고 생성
+     * @request POST:/admin/api/v1/recruitment/create
+     * @secure
+     * @response `200` `CreateClubRecruitmentResponse` OK
+     */
+    createClubRecruitment: (data: CreateClubRecruitmentRequest, params: RequestParams = {}) =>
+      this.request<CreateClubRecruitmentResponse, any>({
+        path: `/admin/api/v1/recruitment/create`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description 동아리 정보를 입력받아 동아리를 생성합니다.
      *
      * @tags Admin 동아리 API
@@ -815,6 +960,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     getClubRecruitments: (clubId: number, params: RequestParams = {}) =>
       this.request<ArrayResponseClubRecruitmentDetailResponse, any>({
         path: `/public/api/v1/${clubId}/recruitments`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * @description 특정 동아리의 특정 모집 공고를 조회합니다.
+     *
+     * @tags Public 동아리 API
+     * @name GetClubRecruitment
+     * @summary 특정 동아리 모집 공고 상세 조회
+     * @request GET:/public/api/v1/{clubId}/recruitments/{recruitmentId}
+     * @response `200` `ClubRecruitmentDetailResponse` OK
+     */
+    getClubRecruitment: (clubId: number, recruitmentId: number, params: RequestParams = {}) =>
+      this.request<ClubRecruitmentDetailResponse, any>({
+        path: `/public/api/v1/${clubId}/recruitments/${recruitmentId}`,
         method: 'GET',
         ...params,
       }),

@@ -10,6 +10,7 @@ const instance = ky.create({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   },
+  retry: 0,
   hooks: {
     beforeRequest: [
       async request => {

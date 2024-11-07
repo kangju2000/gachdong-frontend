@@ -1,9 +1,16 @@
 import { keys } from './keys';
-import { queryOptions, skipToken } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 import { clubApi } from '../config/instance';
 
-const { getClubs, getClub, getClubContactInfo, getClubActivities, getClubRecruitments, getClubsRecruitments } =
-  clubApi.public동아리Api;
+const {
+  getClubs,
+  getClub,
+  getClubContactInfo,
+  getClubActivities,
+  getClubRecruitments,
+  getClubsRecruitments,
+  getClubRecruitment,
+} = clubApi.public동아리Api;
 
 export const queries = {
   clubs: () =>
@@ -31,11 +38,10 @@ export const queries = {
       queryKey: keys.recruitmentByClub(clubId),
       queryFn: () => getClubRecruitments(clubId),
     }),
-  recruitmentsDetail: (recruitmentId: number) =>
+  recruitmentsDetail: (clubId: number, recruitmentId: number) =>
     queryOptions({
-      queryKey: keys.recruitmentsDetail(recruitmentId),
-      // queryFn: () => getClubRecruitments(recruitmentId),
-      queryFn: () => skipToken,
+      queryKey: keys.recruitmentsDetail(clubId, recruitmentId),
+      queryFn: () => getClubRecruitment(clubId, recruitmentId),
     }),
   activities: (clubId: number) =>
     queryOptions({

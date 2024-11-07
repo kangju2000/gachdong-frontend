@@ -42,9 +42,9 @@ export function AuthSection() {
 }
 
 function NotificationPopover() {
-  const notifications = [
-    { id: 1, message: '새로운 동아리 지원이 있습니다.' },
-    { id: 2, message: '프로필 업데이트를 완료해주세요.' },
+  const notifications: { id: number; message: string }[] = [
+    // { id: 1, message: '새로운 동아리 지원이 있습니다.' },
+    // { id: 2, message: '프로필 업데이트를 완료해주세요.' },
   ];
 
   return (
@@ -66,6 +66,7 @@ function NotificationPopover() {
                 {notification.message}
               </li>
             ))}
+            {notifications.length === 0 && <div className="text-sm">알림이 없습니다.</div>}
           </ul>
         </div>
       </PopoverContent>

@@ -15,14 +15,14 @@ import { clubQueries } from '@/apis/club';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { SuspenseQuery } from '@suspensive/react-query';
 
-export default function ClubDetailPage({ params }: { params: { id: string } }) {
+export default function ClubDetailPage({ params }: { params: { clubId: string } }) {
   const [
     { data: club },
     {
       data: { results: clubActivities = [] },
     },
   ] = useSuspenseQueries({
-    queries: [clubQueries.club(Number(params.id)), clubQueries.activities(Number(params.id))],
+    queries: [clubQueries.club(Number(params.clubId)), clubQueries.activities(Number(params.clubId))],
   });
 
   return (
@@ -116,7 +116,7 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
               <CardTitle>모집 공고</CardTitle>
             </CardHeader>
             <CardContent>
-              <SuspenseQuery {...clubQueries.recruitmentByClub(Number(params.id))}>
+              <SuspenseQuery {...clubQueries.recruitmentByClub(Number(params.clubId))}>
                 {({ data: { results: clubRecruits = [] } }) => {
                   if (clubRecruits.length === 0) {
                     return <p className="text-muted-foreground">현재 진행 중인 모집 공고가 없습니다.</p>;
@@ -161,7 +161,7 @@ export default function ClubDetailPage({ params }: { params: { id: string } }) {
                 동아리에 대해 궁금한 점이 있으신가요? 아래 연락처로 문의해주세요.
               </p>
               <div className="space-y-2 text-sm">
-                <SuspenseQuery {...clubQueries.contactInfo(Number(params.id))}>
+                <SuspenseQuery {...clubQueries.contactInfo(Number(params.clubId))}>
                   {({ data: { results: clubContactInfo = [] } }) =>
                     clubContactInfo.map((contact, index) => (
                       <p key={index}>

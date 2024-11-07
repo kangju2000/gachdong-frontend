@@ -17,7 +17,7 @@ export function RecruitmentCard({ recruitment, clubImageUrl }: RecruitmentCardPr
   );
 
   return (
-    <Link href={`/recruits/${recruitment.clubId}`}>
+    <Link href={`/clubs/${recruitment.clubId}/recruits/${recruitment.recruitId}`}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
         <div className="relative aspect-[2/1] w-full overflow-hidden bg-gray-100">
           <Image
