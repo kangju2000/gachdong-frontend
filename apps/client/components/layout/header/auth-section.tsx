@@ -17,12 +17,9 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProfileResponse } from '@/apis/__generated__/auth/swagger';
-import { useUserStore } from '@/stores/user-store';
 
 export function AuthSection() {
   const { data: profile, isLoading } = useQuery(authQueries.profile());
-
-  const localProfile = useUserStore();
 
   if (isLoading) {
     return null;
@@ -39,7 +36,7 @@ export function AuthSection() {
   return (
     <div className="flex items-center space-x-4">
       <NotificationPopover />
-      <UserDropdown profile={localProfile} />
+      <UserDropdown profile={profile} />
     </div>
   );
 }
@@ -84,9 +81,8 @@ function UserDropdown({ profile }: { profile: UserProfileResponse }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 cursor-pointer">
-          <AvatarImage src={(profile as any).profileUrl} alt="User" />
-          {/* <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback> */}
-          {/* <AvatarFallback>{ ?? 'U'}</AvatarFallback> */}
+          {/* <AvatarImage src={(profile as any).profileUrl} alt="User" /> */}
+          <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

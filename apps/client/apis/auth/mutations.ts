@@ -23,6 +23,8 @@ export const useLogin = () => {
       });
 
       CookieManager.setToken({ accessToken: response.token ?? '' });
+      router.refresh();
+
       queryClient.invalidateQueries({ queryKey: keys.all });
       router.replace('/');
     },
@@ -52,10 +54,13 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
-      router.replace('/login');
+      console.log('@@@@ onSettled');
       CookieManager.removeToken();
+      router.refresh();
+
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
+      router.replace('/login');
     },
   });
 };

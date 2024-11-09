@@ -1,8 +1,8 @@
 'use client';
 
+import { TextLogo } from '@/components/icons/TextLogo';
 import { cn } from '@/lib/utils';
 import { Users, Megaphone, Newspaper } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -18,7 +18,7 @@ export function NavigationSection() {
   return (
     <div className="flex items-center space-x-6">
       <Link href="/" className="text-2xl font-bold">
-        <Image src="/text-logo.svg" alt="GACHDONG" width={100} height={30} style={{ width: '100px', height: '30px' }} />
+        <TextLogo />
       </Link>
       <nav className="flex items-center space-x-2 sm:space-x-4">
         {navItems.map(item => (
@@ -31,6 +31,7 @@ export function NavigationSection() {
 
 function NavItem({ item, isActive }: { item: (typeof navItems)[number]; isActive: boolean }) {
   const Icon = item.icon;
+
   return (
     <Link
       href={item.href}

@@ -5,6 +5,7 @@ import { clubQueries } from '@/apis/club';
 import { ArrowLeft } from 'lucide-react';
 import { RecruitContainer } from './_components/recruit-container';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense } from 'react';
 
 function RecruitErrorFallback() {
   return (
@@ -35,7 +36,9 @@ export default function RecruitmentDetailPage({ params }: { params: { clubId: st
             </Link>
           </Button>
 
-          <RecruitContainer />
+          <Suspense fallback={null}>
+            <RecruitContainer />
+          </Suspense>
         </main>
       </PrefetchHydration>
     </ErrorBoundary>
