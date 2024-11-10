@@ -7,19 +7,15 @@ import Link from 'next/link';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from '@/apis/auth';
 import { applicationQueries } from '@/apis/application';
-import { useUserStore } from '@/stores/user-store';
-import { useApplicationStore } from '@/stores/application-store';
-import { clubQueries } from '@/apis/club';
-import { SuspenseQuery } from '@suspensive/react-query';
 
 export default function MyPageContainer() {
-  const { data: user } = useQuery(authQueries.profile());
+  const { data: profile } = useQuery(authQueries.profile());
 
-  const localProfile = useUserStore();
+  const {
+    data: { result: applications = {} },
+  } = useSuspenseQuery(applicationQueries.applicationHistory());
 
-  const { submittedApplications } = useApplicationStore();
-
-  if (user == null) {
+  if (profile == null) {
     return null;
   }
 
@@ -32,13 +28,12 @@ export default function MyPageContainer() {
         <CardContent>
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-              <AvatarImage src={localProfile.profileUrl} alt={localProfile.name} />
-              {/* <AvatarFallback>{user?.name?.[0]}</AvatarFallback> */}
+              {/* <AvatarImage src={profile.profileUrl} alt={profile.name} /> */}
+              <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback>
             </Avatar>
             <div>
               {/* <h2 className="text-xl font-semibold">{user.name}</h2> */}
-              <h2 className="text-xl font-semibold">{localProfile.name}</h2>
+              <h2 className="text-xl font-semibold">{profile.name}</h2>
             </div>
           </div>
           <Button asChild className="mt-4 w-full">
@@ -53,7 +48,8 @@ export default function MyPageContainer() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {submittedApplications.map(app => (
+            {/* TODO: application */}
+            {/* {applications.toGetApplicationHistoryDTO?.map(app => (
               <SuspenseQuery {...clubQueries.club(app.clubId)}>
                 {({ data: club }) => (
                   <li
@@ -96,8 +92,8 @@ export default function MyPageContainer() {
                   </li>
                 )}
               </SuspenseQuery>
-            ))}
-            {submittedApplications.length === 0 && (
+            ))} */}
+            {applications.toGetApplicationHistoryDTO?.length === 0 && (
               <div className="text-muted-foreground flex flex-col items-center py-8">
                 <p>아직 지원한 동아리가 없습니다.</p>
                 <Button variant="link" asChild className="mt-2">

@@ -7,28 +7,6 @@ import Link from 'next/link';
 export function Banner() {
   return (
     <section className="relative overflow-hidden bg-slate-900 py-32 sm:py-40">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem]">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.2 }}
-          transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
-          className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-fuchsia-400 blur-[100px]"
-        />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.2 }}
-          transition={{ duration: 2.5, repeat: Infinity, repeatType: 'reverse', delay: 0.5 }}
-          className="absolute left-20 top-40 -z-10 h-[310px] w-[310px] rounded-full bg-blue-400 blur-[100px]"
-        />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.2 }}
-          transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', delay: 1 }}
-          className="absolute right-20 top-60 -z-10 h-[310px] w-[310px] rounded-full bg-purple-400 blur-[100px]"
-        />
-      </div>
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
           {/* Animated badge */}
@@ -76,10 +54,14 @@ export function Banner() {
               <span className="relative text-white">더 풍요롭게</span>
             </motion.span>
           </motion.h1>
-          <p className="relative mx-auto mt-8 max-w-2xl text-lg font-medium text-gray-700">
-            <span className="absolute -inset-2 -z-10 block rounded-lg bg-white/50 backdrop-blur-sm"></span>
+          <motion.p
+            className="relative mx-auto mt-8 max-w-2xl text-lg font-medium text-slate-300"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.2 }}
+          >
             <span className="relative block py-4">관심있는 동아리를 찾고, 새로운 친구들과 함께 성장하세요</span>
-          </p>
+          </motion.p>
           <div className="relative mt-10">
             <span className="absolute -inset-4 -z-10 block rounded-lg bg-white/50 backdrop-blur-sm"></span>
             <div className="relative flex justify-center gap-4 py-4">

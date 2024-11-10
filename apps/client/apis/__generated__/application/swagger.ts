@@ -38,8 +38,6 @@ export interface ToApplyClubDTO {
 }
 
 export interface ResFormToCreateApplicationDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 동아리 지원 결과 반환 DTO */
@@ -73,8 +71,6 @@ export interface ToChangeApplicationStatus {
 }
 
 export interface ResFormObject {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   result?: object;
@@ -109,8 +105,6 @@ export interface ToCreateApplicationFormDTO {
 }
 
 export interface ResFormToCreateApplicationFormDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 지원서 양식 생성 요청 DTO */
@@ -118,8 +112,6 @@ export interface ResFormToCreateApplicationFormDTO {
 }
 
 export interface ResFormToGetApplicationHistoryListDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 지원 내역 목록 조회 결과 반환 DTO */
@@ -150,8 +142,6 @@ export interface ToGetApplicationHistoryListDTO {
 }
 
 export interface ResFormToGetFormInfoUserDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 사용자용 양식 조회 결과 반환 DTO */
@@ -172,8 +162,6 @@ export interface ToGetFormInfoUserDTO {
 }
 
 export interface ResFormToGetApplicationListAdminDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 관리자용 동아리 지원 리스트 반환 DTO */
@@ -205,8 +193,6 @@ export interface ToGetApplicationListAdminDTO {
 }
 
 export interface ResFormToGetFormInfoAdminDTO {
-  /** @format date-time */
-  time?: string;
   code?: string;
   message?: string;
   /** 관리자용 양식 조회 결과 반환 DTO */
@@ -240,6 +226,13 @@ export interface CreateApplicationPayload {
   files?: File[];
   /** 동아리 지원에 필요한 요청 데이터 */
   toApplyClub: ToApplyClubDTO;
+}
+
+export interface TestAuthParams {
+  /** @format int64 */
+  userId: number;
+  /** @format int32 */
+  applyId: number;
 }
 
 export namespace 지원Api사용자 {
@@ -347,7 +340,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name ChangeApplicationStatus
    * @summary 사용자 지원 상태 변경 API
-   * @request PUT:/api/v1/admin/status
+   * @request PUT:/admin/api/v1/status
    * @secure
    * @response `200` `ResFormObject` OK
    */
@@ -364,7 +357,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name ChangeApplicationForm
    * @summary 동아리 지원서 양식 수정 요청 API
-   * @request PUT:/api/v1/admin/form/{form_id}
+   * @request PUT:/admin/api/v1/form/{form_id}
    * @secure
    * @response `200` `ResFormToCreateApplicationFormDTO` OK
    */
@@ -384,7 +377,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name CreateApplicationForm
    * @summary 동아리 지원서 양식 생성 요청 API
-   * @request POST:/api/v1/admin/form/create
+   * @request POST:/admin/api/v1/form/create
    * @secure
    * @response `200` `ResFormToCreateApplicationFormDTO` OK
    */
@@ -401,7 +394,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name GetClubApplicationList
    * @summary 지원 목록 조회 API
-   * @request GET:/api/v1/admin/{applyId}
+   * @request GET:/admin/api/v1/{applyId}
    * @secure
    * @response `200` `ResFormToGetApplicationListAdminDTO` OK
    */
@@ -421,7 +414,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name GetFormInfoAdmin
    * @summary 관리자용 지원서 양식 조회 API
-   * @request GET:/api/v1/admin/form/{formId}
+   * @request GET:/admin/api/v1/form/{formId}
    * @secure
    * @response `200` `ResFormToGetFormInfoAdminDTO` OK
    */
@@ -441,7 +434,7 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name DeleteApplicationForm
    * @summary 지원 양식 삭제 API
-   * @request DELETE:/api/v1/admin/form/{formId}
+   * @request DELETE:/admin/api/v1/form/{formId}
    * @secure
    * @response `200` `ResFormObject` OK
    */
@@ -454,6 +447,28 @@ export namespace 지원Api관리자 {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ResFormObject;
+  }
+}
+
+export namespace MockUpController {
+  /**
+   * No description
+   * @tags mock-up-controller
+   * @name TestAuth
+   * @request GET:/authTest
+   * @response `200` `boolean` OK
+   */
+  export namespace TestAuth {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** @format int64 */
+      userId: number;
+      /** @format int32 */
+      applyId: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = boolean;
   }
 }
 
@@ -777,13 +792,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name ChangeApplicationStatus
      * @summary 사용자 지원 상태 변경 API
-     * @request PUT:/api/v1/admin/status
+     * @request PUT:/admin/api/v1/status
      * @secure
      * @response `200` `ResFormObject` OK
      */
     changeApplicationStatus: (data: ToChangeApplicationStatus, params: RequestParams = {}) =>
       this.request<ResFormObject, any>({
-        path: `/api/v1/admin/status`,
+        path: `/admin/api/v1/status`,
         method: 'PUT',
         body: data,
         secure: true,
@@ -797,13 +812,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name ChangeApplicationForm
      * @summary 동아리 지원서 양식 수정 요청 API
-     * @request PUT:/api/v1/admin/form/{form_id}
+     * @request PUT:/admin/api/v1/form/{form_id}
      * @secure
      * @response `200` `ResFormToCreateApplicationFormDTO` OK
      */
     changeApplicationForm: (formId: number, data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
       this.request<ResFormToCreateApplicationFormDTO, any>({
-        path: `/api/v1/admin/form/${formId}`,
+        path: `/admin/api/v1/form/${formId}`,
         method: 'PUT',
         body: data,
         secure: true,
@@ -817,13 +832,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name CreateApplicationForm
      * @summary 동아리 지원서 양식 생성 요청 API
-     * @request POST:/api/v1/admin/form/create
+     * @request POST:/admin/api/v1/form/create
      * @secure
      * @response `200` `ResFormToCreateApplicationFormDTO` OK
      */
     createApplicationForm: (data: ToCreateApplicationFormDTO, params: RequestParams = {}) =>
       this.request<ResFormToCreateApplicationFormDTO, any>({
-        path: `/api/v1/admin/form/create`,
+        path: `/admin/api/v1/form/create`,
         method: 'POST',
         body: data,
         secure: true,
@@ -837,13 +852,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name GetClubApplicationList
      * @summary 지원 목록 조회 API
-     * @request GET:/api/v1/admin/{applyId}
+     * @request GET:/admin/api/v1/{applyId}
      * @secure
      * @response `200` `ResFormToGetApplicationListAdminDTO` OK
      */
     getClubApplicationList: (applyId: number, params: RequestParams = {}) =>
       this.request<ResFormToGetApplicationListAdminDTO, any>({
-        path: `/api/v1/admin/${applyId}`,
+        path: `/admin/api/v1/${applyId}`,
         method: 'GET',
         secure: true,
         ...params,
@@ -855,13 +870,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name GetFormInfoAdmin
      * @summary 관리자용 지원서 양식 조회 API
-     * @request GET:/api/v1/admin/form/{formId}
+     * @request GET:/admin/api/v1/form/{formId}
      * @secure
      * @response `200` `ResFormToGetFormInfoAdminDTO` OK
      */
     getFormInfoAdmin: (formId: number, params: RequestParams = {}) =>
       this.request<ResFormToGetFormInfoAdminDTO, any>({
-        path: `/api/v1/admin/form/${formId}`,
+        path: `/admin/api/v1/form/${formId}`,
         method: 'GET',
         secure: true,
         ...params,
@@ -873,15 +888,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name DeleteApplicationForm
      * @summary 지원 양식 삭제 API
-     * @request DELETE:/api/v1/admin/form/{formId}
+     * @request DELETE:/admin/api/v1/form/{formId}
      * @secure
      * @response `200` `ResFormObject` OK
      */
     deleteApplicationForm: (formId: number, params: RequestParams = {}) =>
       this.request<ResFormObject, any>({
-        path: `/api/v1/admin/form/${formId}`,
+        path: `/admin/api/v1/form/${formId}`,
         method: 'DELETE',
         secure: true,
+        ...params,
+      }),
+  };
+  mockUpController = {
+    /**
+     * No description
+     *
+     * @tags mock-up-controller
+     * @name TestAuth
+     * @request GET:/authTest
+     * @response `200` `boolean` OK
+     */
+    testAuth: (query: TestAuthParams, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/authTest`,
+        method: 'GET',
+        query: query,
         ...params,
       }),
   };
