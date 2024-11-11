@@ -1,6 +1,5 @@
 import { generateApi } from 'swagger-typescript-api';
 import path from 'path';
-import fs from 'fs';
 import dotenv from 'dotenv';
 import prettier from 'prettier';
 
@@ -27,6 +26,11 @@ const apis = [
     name: 'auth',
     url: `${PREFIX_URL}/auth/v3/api-docs`,
     output: 'apis/__generated__/auth',
+  },
+  {
+    name: 'user',
+    url: `${PREFIX_URL}/user/v3/api-docs`,
+    output: 'apis/__generated__/user',
   },
 ];
 
