@@ -72,6 +72,32 @@ async function generateApiClient(api: (typeof apis)[0]) {
   }
 }
 
+async function generateIndexFile() {
+  try {
+    const indexContent = `// This file is auto-generated. Do not edit manually.
+${apis
+  .map(
+    api => `import * as ${api.name} from './__generated__/${api.name}/swagger';
+export { ${api.name} };`
+  )
+  .join('\n')}
+`;
+
+    const prettierConfig = await getPrettierConfig();
+    const formattedContent = await prettier.format(indexContent, {
+      ...prettierConfig,
+      parser: 'typescript',
+    });
+
+    const indexPath = path.resolve('src/index.ts');
+    fs.writeFileSync(indexPath, formattedContent);
+    console.log('Successfully generated index.ts file');
+  } catch (error) {
+    console.error('Failed to generate index.ts:', error);
+    throw error;
+  }
+}
+
 async function generateAllApis() {
   try {
     const targetApis = process.argv.slice(2);
@@ -86,6 +112,7 @@ async function generateAllApis() {
     }
 
     await Promise.all(apisToGenerate.map(generateApiClient));
+    await generateIndexFile();
     console.log('API 클라이언트 생성이 완료되었습니다.');
   } catch (error) {
     console.error('API 클라이언트 생성 실패:', error);

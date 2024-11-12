@@ -3,7 +3,7 @@ import type { TokenPayload } from './types';
 import { AUTH_COOKIE_NAME, COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS } from './constants';
 
 export class CookieManager {
-  static getToken() {
+  static getClientToken() {
     return getCookie(AUTH_COOKIE_NAME) ?? null;
   }
 

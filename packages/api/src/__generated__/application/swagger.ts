@@ -228,9 +228,8 @@ export interface CreateApplicationPayload {
   toApplyClub: ToApplyClubDTO;
 }
 
-export interface TestAuthParams {
-  /** @format int64 */
-  userId: number;
+export interface TestAuth1Params {
+  userId: string;
   /** @format int32 */
   applyId: number;
 }
@@ -455,14 +454,31 @@ export namespace MockUpController {
    * No description
    * @tags mock-up-controller
    * @name TestAuth
-   * @request GET:/authTest
+   * @request GET:/validApplyTest/{applyId}
    * @response `200` `boolean` OK
    */
   export namespace TestAuth {
+    export type RequestParams = {
+      /** @format int64 */
+      applyId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = boolean;
+  }
+
+  /**
+   * No description
+   * @tags mock-up-controller
+   * @name TestAuth1
+   * @request GET:/authTest
+   * @response `200` `boolean` OK
+   */
+  export namespace TestAuth1 {
     export type RequestParams = {};
     export type RequestQuery = {
-      /** @format int64 */
-      userId: number;
+      userId: string;
       /** @format int32 */
       applyId: number;
     };
@@ -906,10 +922,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags mock-up-controller
      * @name TestAuth
+     * @request GET:/validApplyTest/{applyId}
+     * @response `200` `boolean` OK
+     */
+    testAuth: (applyId: number, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/validApplyTest/${applyId}`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags mock-up-controller
+     * @name TestAuth1
      * @request GET:/authTest
      * @response `200` `boolean` OK
      */
-    testAuth: (query: TestAuthParams, params: RequestParams = {}) =>
+    testAuth1: (query: TestAuth1Params, params: RequestParams = {}) =>
       this.request<boolean, any>({
         path: `/authTest`,
         method: 'GET',

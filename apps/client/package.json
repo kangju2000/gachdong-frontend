@@ -6,14 +6,10 @@
     "dev": "next dev --turbo --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate-api": "ts-node scripts/generate-api.ts",
-    "generate-api:auth": "ts-node scripts/generate-api.ts auth",
-    "generate-api:application": "ts-node scripts/generate-api.ts application",
-    "generate-api:club": "ts-node scripts/generate-api.ts club",
-    "generate-api:user": "ts-node scripts/generate-api.ts user"
+    "lint": "next lint"
   },
   "dependencies": {
+    "@gachdong/api": "workspace:*",
     "@gachdong/ui": "workspace:*",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -58,12 +54,9 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
-    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",
     "postcss": "^8.4.47",
-    "swagger-typescript-api": "^13.0.22",
-    "tailwindcss": "^3.4.13",
-    "ts-node": "^10.9.2"
+    "tailwindcss": "^3.4.13"
   }
 }

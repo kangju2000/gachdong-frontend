@@ -1,8 +1,5 @@
 import ky from 'ky';
-import { Api as ClubApi } from '../__generated__/club/swagger';
-import { Api as ApplicationApi } from '../__generated__/application/swagger';
-import { Api as AuthApi } from '../__generated__/auth/swagger';
-import { Api as UserApi } from '../__generated__/user/swagger';
+import { club, application, auth, user } from '@gachdong/api';
 import { CookieManager } from '@/lib/auth/cookies';
 
 const instance = ky.create({
@@ -11,10 +8,12 @@ const instance = ky.create({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   },
+  retry: 0,
   hooks: {
     beforeRequest: [
       async request => {
-        const token = typeof window !== 'undefined' ? CookieManager.getToken() : await CookieManager.getServerToken();
+        const token =
+          typeof window !== 'undefined' ? CookieManager.getClientToken() : await CookieManager.getServerToken();
 
         if (token) {
           request.headers.set('Authorization', `Bearer ${token}`);
@@ -24,7 +23,7 @@ const instance = ky.create({
   },
 });
 
-const clubApi = new ClubApi({
+const clubApi = new club.Api({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/club',
   baseApiParams: {
@@ -32,7 +31,7 @@ const clubApi = new ClubApi({
   },
 });
 
-const applicationApi = new ApplicationApi({
+const applicationApi = new application.Api({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/application',
   baseApiParams: {
@@ -40,7 +39,7 @@ const applicationApi = new ApplicationApi({
   },
 });
 
-const authApi = new AuthApi({
+const authApi = new auth.Api({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/auth',
   baseApiParams: {
@@ -48,7 +47,7 @@ const authApi = new AuthApi({
   },
 });
 
-const userApi = new UserApi({
+const userApi = new user.Api({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/user',
   baseApiParams: {

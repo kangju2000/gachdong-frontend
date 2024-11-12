@@ -11,13 +11,11 @@ import { useQuery } from '@tanstack/react-query';
 import { authQueries } from '@/apis/auth';
 import { useChangePassword, useDeleteAccount } from '@/apis/auth';
 import { toast } from '@/hooks/use-toast';
-import { useUserStore } from '@/stores/user-store';
 
 export default function SettingsContainer() {
   const { data: user } = useQuery(authQueries.profile());
   const { mutateAsync: changePassword } = useChangePassword();
   const { mutateAsync: deleteAccount } = useDeleteAccount();
-  const localProfile = useUserStore();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -29,9 +27,7 @@ export default function SettingsContainer() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const newName = formData.get('name') as string;
-    localProfile.setName(newName);
+    // TODO: 프로필 업데이트
     toast({
       title: '프로필이 업데이트되었습니다.',
     });
@@ -53,7 +49,7 @@ export default function SettingsContainer() {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64 = reader.result as string;
-      localProfile.setProfileUrl(base64);
+      // TODO: 프로필 업데이트
     };
     reader.readAsDataURL(file);
   };
@@ -95,8 +91,8 @@ export default function SettingsContainer() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative mx-auto mb-4 h-20 w-20">
               <Avatar className="h-full w-full">
-                <AvatarImage src={localProfile.profileUrl} alt={localProfile.name} />
-                <AvatarFallback>{localProfile.name?.[0]}</AvatarFallback>
+                {/* <AvatarImage src={user.profileUrl} alt={user.name} /> */}
+                <AvatarFallback>{user.name?.[0]}</AvatarFallback>
               </Avatar>
               <label className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100">
                 <input type="file" className="hidden" accept="image/*" onChange={handleAvatarChange} />
@@ -105,7 +101,7 @@ export default function SettingsContainer() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="name">이름</Label>
-              <Input id="name" name="name" defaultValue={localProfile.name} required />
+              <Input id="name" name="name" defaultValue={user.name} required />
             </div>
             <Button type="submit">변경사항 저장</Button>
           </form>

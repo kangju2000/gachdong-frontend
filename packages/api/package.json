@@ -1,8 +1,19 @@
 {
   "name": "@gachdong/api",
   "version": "0.1.0",
+
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./auth": "./dist/auth.js",
+    "./application": "./dist/application.js",
+    "./club": "./dist/club.js",
+    "./user": "./dist/user.js"
+  },
   "scripts": {
-    "build": "tsup src/__generated__",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "generate-api": "ts-node scripts/generate-api.ts",
     "generate-api:auth": "ts-node scripts/generate-api.ts auth",
     "generate-api:application": "ts-node scripts/generate-api.ts application",
