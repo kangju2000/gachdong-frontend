@@ -6,32 +6,28 @@ import prettier from 'prettier';
 
 dotenv.config();
 
-const PREFIX_URL = process.env.NEXT_PUBLIC_API_URL!;
-
-if (!PREFIX_URL) {
-  throw new Error('NEXT_PUBLIC_API_URL is not defined');
-}
+const PREFIX_URL = 'https://gateway-dev.gachdong.club';
 
 const apis = [
   {
     name: 'club',
     url: `${PREFIX_URL}/club/v3/api-docs`,
-    output: 'apis/__generated__/club',
+    output: 'src/__generated__/club',
   },
   {
     name: 'application',
     url: `${PREFIX_URL}/application/v3/api-docs`,
-    output: 'apis/__generated__/application',
+    output: 'src/__generated__/application',
   },
   {
     name: 'auth',
     url: `${PREFIX_URL}/auth/v3/api-docs`,
-    output: 'apis/__generated__/auth',
+    output: 'src/__generated__/auth',
   },
   {
     name: 'user',
     url: `${PREFIX_URL}/user/v3/api-docs`,
-    output: 'apis/__generated__/user',
+    output: 'src/__generated__/user',
   },
 ];
 

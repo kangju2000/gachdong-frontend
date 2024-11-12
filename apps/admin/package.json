@@ -6,13 +6,10 @@
     "dev": "next dev --turbo --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate-api": "ts-node scripts/generate-api.ts",
-    "generate-api:auth": "ts-node scripts/generate-api.ts auth",
-    "generate-api:application": "ts-node scripts/generate-api.ts application",
-    "generate-api:club": "ts-node scripts/generate-api.ts club"
+    "lint": "next lint"
   },
   "dependencies": {
+    "@gachdong/api": "workspace:^",
     "@gachdong/ui": "workspace:*",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.2",

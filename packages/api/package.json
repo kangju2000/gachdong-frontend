@@ -1,0 +1,21 @@
+{
+  "name": "@gachdong/api",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "tsup src/__generated__",
+    "generate-api": "ts-node scripts/generate-api.ts",
+    "generate-api:auth": "ts-node scripts/generate-api.ts auth",
+    "generate-api:application": "ts-node scripts/generate-api.ts application",
+    "generate-api:club": "ts-node scripts/generate-api.ts club"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "swagger-typescript-api": "^13.0.22",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5"
+  }
+}

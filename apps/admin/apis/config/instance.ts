@@ -2,6 +2,7 @@ import ky from 'ky';
 import { Api as ClubApi } from '../__generated__/club/swagger';
 import { Api as ApplicationApi } from '../__generated__/application/swagger';
 import { Api as AuthApi } from '../__generated__/auth/swagger';
+import { Api as UserApi } from '../__generated__/user/swagger';
 import { CookieManager } from '@/lib/auth/cookies';
 
 const instance = ky.create({
@@ -30,6 +31,7 @@ const clubApi = new ClubApi({
     format: 'json',
   },
 });
+
 const applicationApi = new ApplicationApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/application',
@@ -37,6 +39,7 @@ const applicationApi = new ApplicationApi({
     format: 'json',
   },
 });
+
 const authApi = new AuthApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/auth',
@@ -45,4 +48,12 @@ const authApi = new AuthApi({
   },
 });
 
-export { clubApi, applicationApi, authApi };
+const userApi = new UserApi({
+  customFetch: instance,
+  baseUrl: process.env.NEXT_PUBLIC_API_URL + '/user',
+  baseApiParams: {
+    format: 'json',
+  },
+});
+
+export { clubApi, applicationApi, authApi, userApi };

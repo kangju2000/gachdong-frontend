@@ -12,16 +12,21 @@ import { InviteCodeModal } from './components/invite-code-modal';
 import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';
 import { authQueries } from '@/apis/auth';
+import { useUploadProfileImage } from '@/apis/user';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
   const { mutate: createClub } = useCreateClub();
+  const { mutate: uploadProfileImage } = useUploadProfileImage();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
-  const handleAddClub = (newClubData: CreateClubRequest) => {
+  const handleAddClub = (newClubData: CreateClubRequest, imageFile?: File) => {
     createClub(newClubData);
+    if (imageFile) {
+      uploadProfileImage({ image: imageFile });
+    }
     setIsAddDialogOpen(false);
   };
 
@@ -37,7 +42,7 @@ export default function DashboardCard() {
           <CardTitle className="mb-4 text-center text-2xl font-bold text-white">동아리를 선택해주세요</CardTitle>
           <div className="flex items-center justify-center space-x-2">
             <span className="rounded-full bg-gray-700 px-3 py-1 text-sm text-gray-300">{profile?.email}</span>
-            <Button variant="ghost" size="sm" asChild className="text-gray-400">
+            <Button variant="ghost" size="sm" className="text-gray-400" asChild>
               <Link href="/login">변경</Link>
             </Button>
           </div>
