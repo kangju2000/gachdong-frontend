@@ -1,4 +1,4 @@
-import { CreateClubRequest } from '@/apis/__generated__/club/swagger';
+import { CreateClubRequest } from '@gachdong/api/club';
 import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Dialog } from '@/components/ui/dialog';

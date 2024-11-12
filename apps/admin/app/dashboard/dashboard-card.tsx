@@ -7,7 +7,7 @@ import { Plus, Key } from 'lucide-react';
 import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useCreateClub } from '@/apis/club';
-import { CreateClubRequest } from '@/apis/__generated__/club/swagger';
+import { CreateClubRequest } from '@gachdong/api/club';
 import { InviteCodeModal } from './components/invite-code-modal';
 import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';

@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Calendar, Eye } from 'lucide-react';
 import { CATEGORY_MAP } from '@/constants/categories';
-import { ClubRecruitmentResponse } from '@/apis/__generated__/club/swagger';
+import { ClubRecruitmentResponse } from '@gachdong/api/club';
 
 interface RecruitmentCardProps {
   recruitment: ClubRecruitmentResponse;

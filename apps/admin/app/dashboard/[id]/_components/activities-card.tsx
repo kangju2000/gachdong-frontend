@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 import { SuspenseQuery } from '@suspensive/react-query';
 import { clubQueries, useCreateClubActivity } from '@/apis/club';
-import { ClubActivityResponse } from '@/apis/__generated__/club/swagger';
+import { ClubActivityResponse } from '@gachdong/api/club';
 
 interface ActivitiesCardProps {
   clubId: number;

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 import { SuspenseQuery } from '@suspensive/react-query';
 import { clubQueries, useCreateClubContactInfo } from '@/apis/club';
-import { ClubContactInfoResponse } from '@/apis/__generated__/club/swagger';
+import { ClubContactInfoResponse } from '@gachdong/api/club';
 
 export function ContactInfoCard({ clubId }: { clubId: number }) {
   const [editingContact, setEditingContact] = useState<ClubContactInfoResponse | null>(null);

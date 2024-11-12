@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
+import { ClubSummaryResponse } from '@gachdong/api/club';
 import { CATEGORY_MAP } from '@/constants/categories';
 import { cn } from '@/lib/utils';
 

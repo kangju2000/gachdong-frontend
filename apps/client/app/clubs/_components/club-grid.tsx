@@ -1,4 +1,4 @@
-import { ClubSummaryResponse } from '@/apis/__generated__/club/swagger';
+import { ClubSummaryResponse } from '@gachdong/api/club';
 import { ClubCard } from './club-card';
 
 interface ClubGridProps {

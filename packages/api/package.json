@@ -6,11 +6,31 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./auth": "./dist/auth.js",
-    "./application": "./dist/application.js",
-    "./club": "./dist/club.js",
-    "./user": "./dist/user.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./auth": {
+      "types": "./dist/auth/swagger.d.ts",
+      "require": "./dist/auth/swagger.js",
+      "import": "./dist/auth/swagger.mjs"
+    },
+    "./application": {
+      "types": "./dist/application/swagger.d.ts",
+      "require": "./dist/application/swagger.js",
+      "import": "./dist/application/swagger.mjs"
+    },
+    "./club": {
+      "types": "./dist/club/swagger.d.ts",
+      "require": "./dist/club/swagger.js",
+      "import": "./dist/club/swagger.mjs"
+    },
+    "./user": {
+      "types": "./dist/user/swagger.d.ts",
+      "require": "./dist/user/swagger.js",
+      "import": "./dist/user/swagger.mjs"
+    }
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",

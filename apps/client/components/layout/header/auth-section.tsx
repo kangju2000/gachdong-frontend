@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { UserProfileResponse } from '@/apis/__generated__/auth/swagger';
+import { UserProfileResponse } from '@gachdong/api/auth';
 
 export function AuthSection() {
   const { data: profile, isLoading } = useQuery(authQueries.profile());
