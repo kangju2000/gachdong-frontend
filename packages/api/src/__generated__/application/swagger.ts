@@ -111,6 +111,35 @@ export interface ResFormToCreateApplicationFormDTO {
   result?: ToCreateApplicationFormDTO;
 }
 
+/** 내부 Service Mesh용 DTO (FrontEnd와는 관계가 없습니다.) */
+export interface GetUserProfile {
+  /**
+   * 사용자 ID
+   * @example "654fdh46-658fdg"
+   */
+  userReferenceId?: string;
+  /**
+   * 사용자 이메일
+   * @example "user@gachon.ac.kr"
+   */
+  email?: string;
+  /**
+   * 사용자 이름
+   * @example "홍길동"
+   */
+  name?: string;
+  /**
+   * 사용자 권한
+   * @example "USER, ADMIN"
+   */
+  role?: string;
+  /**
+   * 프로필 이미지 URL
+   * @example "https://example.com/profile.png"
+   */
+  profileImageUrl?: string;
+}
+
 export interface ResFormToGetApplicationHistoryListDTO {
   code?: string;
   message?: string;
@@ -161,6 +190,24 @@ export interface ToGetFormInfoUserDTO {
   formBody: Record<string, object>;
 }
 
+export interface ResFormToGetApplicationTempDTO {
+  code?: string;
+  message?: string;
+  /** 사용자용 특정 지원에 대한 임시저장 여부 반환 DTO */
+  result?: ToGetApplicationTempDTO;
+}
+
+/** 사용자용 특정 지원에 대한 임시저장 여부 반환 DTO */
+export interface ToGetApplicationTempDTO {
+  /**
+   * 임시 저장된 지원 ID
+   * @format int64
+   */
+  applicationId: number;
+  /** 임시 저장된 답변 내용 */
+  applicationBody: Record<string, object>;
+}
+
 export interface ResFormToGetApplicationListAdminDTO {
   code?: string;
   message?: string;
@@ -175,6 +222,14 @@ export interface ToGetApplicationDTO {
    * @format int64
    */
   applicationId: number;
+  /** 지원자 ID */
+  userReferenceId: string;
+  /** 지원자 email */
+  userEmail: string;
+  /** 지원자 이름 */
+  userName: string;
+  /** 지원자 프로필 이미지 */
+  userProfileUrl: string;
   /** 지원 상태(합격, 불합격, 서류 합격 등) */
   status: string;
   /**
@@ -220,6 +275,8 @@ export interface ChangeApplicationPayload {
   /** 동아리 지원에 필요한 요청 데이터 */
   toApplyClub: ToApplyClubDTO;
 }
+
+export type GetUserProfilesPayload = Record<string, string[]>;
 
 export interface CreateApplicationPayload {
   /** 업로드할 문서 리스트 */
@@ -310,6 +367,26 @@ export namespace 지원Api사용자 {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ResFormToGetFormInfoUserDTO;
+  }
+
+  /**
+   * @description 지원 ID를 이용해 해당 사용자가 해당 임시적으로 저장한 지원이 있는지 확인 및 내용을 반환합니다.
+   * @tags 지원 API(사용자)
+   * @name GetTempApplication
+   * @summary 사용자 임시저장 여부 및 내용 반환 API
+   * @request GET:/api/v1/apply/{applyId}
+   * @secure
+   * @response `200` `ResFormToGetApplicationTempDTO` OK
+   */
+  export namespace GetTempApplication {
+    export type RequestParams = {
+      /** @format int64 */
+      applyId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormToGetApplicationTempDTO;
   }
 
   /**
@@ -450,6 +527,21 @@ export namespace 지원Api관리자 {
 }
 
 export namespace MockUpController {
+  /**
+   * No description
+   * @tags mock-up-controller
+   * @name GetUserProfiles
+   * @request POST:/profile
+   * @response `200` `(GetUserProfile)[]` OK
+   */
+  export namespace GetUserProfiles {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = GetUserProfilesPayload;
+    export type RequestHeaders = {};
+    export type ResponseBody = GetUserProfile[];
+  }
+
   /**
    * No description
    * @tags mock-up-controller
@@ -784,6 +876,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description 지원 ID를 이용해 해당 사용자가 해당 임시적으로 저장한 지원이 있는지 확인 및 내용을 반환합니다.
+     *
+     * @tags 지원 API(사용자)
+     * @name GetTempApplication
+     * @summary 사용자 임시저장 여부 및 내용 반환 API
+     * @request GET:/api/v1/apply/{applyId}
+     * @secure
+     * @response `200` `ResFormToGetApplicationTempDTO` OK
+     */
+    getTempApplication: (applyId: number, params: RequestParams = {}) =>
+      this.request<ResFormToGetApplicationTempDTO, any>({
+        path: `/api/v1/apply/${applyId}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description 지원 ID를 이용해 지원을 취소합니다.
      *
      * @tags 지원 API(사용자)
@@ -917,6 +1027,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
   };
   mockUpController = {
+    /**
+     * No description
+     *
+     * @tags mock-up-controller
+     * @name GetUserProfiles
+     * @request POST:/profile
+     * @response `200` `(GetUserProfile)[]` OK
+     */
+    getUserProfiles: (data: GetUserProfilesPayload, params: RequestParams = {}) =>
+      this.request<GetUserProfile[], any>({
+        path: `/profile`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
     /**
      * No description
      *

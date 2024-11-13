@@ -2,41 +2,39 @@ import { ArrowRight } from 'lucide-react';
 
 import Link from 'next/link';
 import Image from 'next/image';
-
-const clubs = [
-  {
-    id: 1,
-    name: 'GDG On Campus Gachon',
-    memberCount: 50,
-    logoUrl:
-      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-  },
-];
+import { clubQueries } from '@/apis/club';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { AdminAuthorizedClubResponse } from '@gachdong/api/club';
 
 export function ClubList() {
+  const {
+    data: { results: clubs = [] },
+  } = useSuspenseQuery(clubQueries.authorizedClubs());
+
   return (
     <>
       {clubs.map(club => (
-        <ClubItem key={club.id} club={club} />
+        <ClubItem key={club.clubId} club={club} />
       ))}
+      {clubs.length === 0 && <div className="text-center text-gray-400">가입된 동아리가 없습니다. </div>}
     </>
   );
 }
 
-function ClubItem({ club }: { club: (typeof clubs)[0] }) {
+function ClubItem({ club }: { club: AdminAuthorizedClubResponse }) {
   return (
     <Link
-      key={club.id}
-      href={`/dashboard/${club.id}`}
+      key={club.clubId}
+      href={`/dashboard/${club.clubId}`}
       className="flex items-center justify-between rounded-lg bg-gray-700 p-4"
     >
       <div className="flex items-center space-x-4">
         <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-800">
-          <Image src={club.logoUrl} alt={`${club.name} logo`} className="object-cover" fill />
+          {/* FIXME: 이미지가 없을 경우 대체 이미지를 표시해야 함 */}
+          <Image src={club.clubImageUrl ?? ''} alt={`${club.clubName} logo`} className="object-cover" fill />
         </div>
         <div>
-          <h3 className="font-semibold text-white">{club.name}</h3>
-          <p className="text-sm text-gray-400">{club.memberCount}명의 멤버</p>
+          <h3 className="font-semibold text-white">{club.clubName}</h3>
         </div>
       </div>
       <ArrowRight className="text-gray-400" />

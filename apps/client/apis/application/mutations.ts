@@ -1,46 +1,28 @@
-import {
-  ChangeApplicationPayload,
-  CreateApplicationPayload,
-  ToCreateApplicationFormDTO,
-} from '../__generated__/application/swagger';
+import { ChangeApplicationPayload, CreateApplicationPayload } from '@gachdong/api/application';
 import { applicationApi } from '../config/instance';
 import { useMutation } from '@tanstack/react-query';
 
+const { changeApplication, createApplication, deleteApplication } = applicationApi.지원Api사용자;
+
+// TODO
 export const useChangeApplication = () => {
   return useMutation({
     mutationFn: ({ applyId, data }: { applyId: number; data: ChangeApplicationPayload }) =>
-      applicationApi.지원Api.changeApplication(applyId, data),
+      changeApplication(applyId, data),
   });
 };
 
+// TODO
 export const useCreateApplication = () => {
   return useMutation({
     mutationFn: ({ applyId, data }: { applyId: number; data: CreateApplicationPayload }) =>
-      applicationApi.지원Api.createApplication(applyId, data),
+      createApplication(applyId, data),
   });
 };
 
-export const useChangeApplicationForm = () => {
-  return useMutation({
-    mutationFn: ({ formId, data }: { formId: number; data: ToCreateApplicationFormDTO }) =>
-      applicationApi.지원Api.changeApplicationForm(formId, data),
-  });
-};
-
-export const useCreateApplicationForm = () => {
-  return useMutation({
-    mutationFn: (data: ToCreateApplicationFormDTO) => applicationApi.지원Api.createApplicationForm(data),
-  });
-};
-
-export const useDeleteForm = () => {
-  return useMutation({
-    mutationFn: (formId: number) => applicationApi.지원Api.deleteApplicationForm(formId),
-  });
-};
-
+// TODO
 export const useDeleteApplication = () => {
   return useMutation({
-    mutationFn: (applyId: number) => applicationApi.지원Api.deleteApplication(applyId),
+    mutationFn: (applyId: number) => deleteApplication(applyId),
   });
 };

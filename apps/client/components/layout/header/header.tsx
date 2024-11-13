@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { CookieManager } from '@/lib/auth/cookies';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function Header() {
   const token = (await CookieManager.getServerToken()) ?? CookieManager.getClientToken();

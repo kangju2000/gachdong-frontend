@@ -1,39 +1,33 @@
 {
   "name": "@gachdong/api",
   "version": "0.1.0",
-
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
     "./auth": {
-      "types": "./dist/auth/swagger.d.ts",
-      "require": "./dist/auth/swagger.js",
-      "import": "./dist/auth/swagger.mjs"
+      "types": "./dist/__generated__/auth/swagger.d.ts",
+      "require": "./dist/__generated__/auth/swagger.js",
+      "import": "./dist/__generated__/auth/swagger.mjs"
     },
     "./application": {
-      "types": "./dist/application/swagger.d.ts",
-      "require": "./dist/application/swagger.js",
-      "import": "./dist/application/swagger.mjs"
+      "types": "./dist/__generated__/application/swagger.d.ts",
+      "require": "./dist/__generated__/application/swagger.js",
+      "import": "./dist/__generated__/application/swagger.mjs"
     },
     "./club": {
-      "types": "./dist/club/swagger.d.ts",
-      "require": "./dist/club/swagger.js",
-      "import": "./dist/club/swagger.mjs"
+      "types": "./dist/__generated__/club/swagger.d.ts",
+      "require": "./dist/__generated__/club/swagger.js",
+      "import": "./dist/__generated__/club/swagger.mjs"
     },
     "./user": {
-      "types": "./dist/user/swagger.d.ts",
-      "require": "./dist/user/swagger.js",
-      "import": "./dist/user/swagger.mjs"
+      "types": "./dist/__generated__/user/swagger.d.ts",
+      "require": "./dist/__generated__/user/swagger.js",
+      "import": "./dist/__generated__/user/swagger.mjs"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "rm -rf dist && tsup src/**/*.ts --format esm,cjs --dts",
     "generate-api": "ts-node scripts/generate-api.ts",
     "generate-api:auth": "ts-node scripts/generate-api.ts auth",
     "generate-api:application": "ts-node scripts/generate-api.ts application",

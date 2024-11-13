@@ -6,7 +6,7 @@ import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { keys } from './keys';
 
-const { createClub, createClubActivity, createClubContactInfo } = clubApi.admin동아리Api;
+const { createClub, createClubActivity, createClubContactInfo, createClubRecruitment } = clubApi.admin동아리Api;
 
 export const useCreateClub = () => {
   const queryClient = useQueryClient();
@@ -62,6 +62,21 @@ export const useCreateClubContactInfo = () => {
     onError: () => {
       toast({
         title: '동아리 연락처 추가에 실패하였습니다.',
+      });
+    },
+  });
+};
+
+export const useCreateClubRecruitment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createClubRecruitment,
+    onSuccess: () => {
+      // TODO: 리턴으로 recruitmentId 생기면 recruitmentsDetail 쿼리 invalidate 처리하기
+      queryClient.invalidateQueries({ queryKey: keys.recruitments() });
+      toast({
+        title: '동아리 채용 공고가 추가되었습니다.',
       });
     },
   });

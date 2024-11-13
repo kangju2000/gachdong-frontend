@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
-import { useRegister, useSendVerificationCode, useVerifyCode } from '@/apis/auth';
+import { useRegister, useSendRegistrationVerificationCode, useVerifyCode } from '@/apis/auth';
 import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
@@ -20,7 +20,7 @@ export default function SignupPage() {
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [isVerificationSuccess, setIsVerificationSuccess] = useState(false);
-  const { mutate: sendVerificationCode } = useSendVerificationCode();
+  const { mutate: sendVerificationCode } = useSendRegistrationVerificationCode();
   const { mutateAsync: registerAsync } = useRegister();
   const { mutateAsync: verifyCode } = useVerifyCode();
   const router = useRouter();

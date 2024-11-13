@@ -1,5 +1,8 @@
 import ky from 'ky';
-import { club, application, auth, user } from '@gachdong/api';
+import { Api as ClubApi } from '@gachdong/api/club';
+import { Api as ApplicationApi } from '@gachdong/api/application';
+import { Api as AuthApi } from '@gachdong/api/auth';
+import { Api as UserApi } from '@gachdong/api/user';
 import { CookieManager } from '@/lib/auth/cookies';
 
 const instance = ky.create({
@@ -23,7 +26,7 @@ const instance = ky.create({
   },
 });
 
-const clubApi = new club.Api({
+const clubApi = new ClubApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/club',
   baseApiParams: {
@@ -31,7 +34,7 @@ const clubApi = new club.Api({
   },
 });
 
-const applicationApi = new application.Api({
+const applicationApi = new ApplicationApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/application',
   baseApiParams: {
@@ -39,7 +42,7 @@ const applicationApi = new application.Api({
   },
 });
 
-const authApi = new auth.Api({
+const authApi = new AuthApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/auth',
   baseApiParams: {
@@ -47,7 +50,7 @@ const authApi = new auth.Api({
   },
 });
 
-const userApi = new user.Api({
+const userApi = new UserApi({
   customFetch: instance,
   baseUrl: process.env.NEXT_PUBLIC_API_URL + '/user',
   baseApiParams: {

@@ -7,8 +7,14 @@ import { CookieManager } from '@/lib/auth/cookies';
 import { keys } from './keys';
 import { toast } from '@/hooks/use-toast';
 
-const { login, completeRegistration, sendVerificationCode, resetPassword, verifyCode } =
-  authApi.public사용자인증인가Api;
+const {
+  login,
+  completeRegistration,
+  sendVerificationCode,
+  resetPassword,
+  verifyCode,
+  sendRegistrationVerificationCode,
+} = authApi.public사용자인증인가Api;
 const { logout, changePassword, deleteAccount } = authApi.사용자인증인가Api;
 
 export const useLogin = () => {
@@ -22,7 +28,7 @@ export const useLogin = () => {
         title: '로그인에 성공하였습니다.',
       });
 
-      CookieManager.setToken({ accessToken: response.token ?? '' });
+      CookieManager.setToken({ accessToken: response.accessToken ?? '' });
       router.refresh();
 
       queryClient.invalidateQueries({ queryKey: keys.all });
@@ -94,6 +100,33 @@ export const useSendVerificationCode = () => {
       });
     },
     onError: () => {
+      toast({
+        title: '인증 코드 전송에 실패하였습니다.',
+        variant: 'destructive',
+      });
+    },
+  });
+};
+
+export const useSendRegistrationVerificationCode = () => {
+  return useMutation({
+    mutationFn: sendRegistrationVerificationCode,
+    onSuccess: () => {
+      toast({
+        title: '인증 코드가 전송되었습니다.',
+      });
+    },
+    onError: e => {
+      console.log({ Response: e.response });
+      // FIXME: 400 에러 처리
+      if (e.response.status === 400) {
+        toast({
+          title: '이미 등록된 이메일입니다.',
+          variant: 'destructive',
+        });
+
+        return;
+      }
       toast({
         title: '인증 코드 전송에 실패하였습니다.',
         variant: 'destructive',

@@ -72,11 +72,14 @@ export namespace 사용자프로필이미지Api {
    * @tags 사용자 프로필 이미지 API
    * @name GetProfileImage
    * @summary 프로필 이미지 조회
-   * @request GET:/api/v1/profile-image
+   * @request GET:/api/v1/profile-image/{userReferenceId}
    * @response `200` `string` OK
    */
   export namespace GetProfileImage {
-    export type RequestParams = {};
+    export type RequestParams = {
+      /** 사용자 참조 ID */
+      userReferenceId: string;
+    };
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
@@ -146,7 +149,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'https://gateway-dev.gachdong.club/profile/';
+  public baseUrl: string = 'https://gateway-dev.gachdong.club/user/';
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -311,11 +314,11 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title 가츠동 API 명세 - 프로필 이미지 서비스
+ * @title 가츠동 API 명세 - 사용자 서비스
  * @version v1
- * @baseUrl https://gateway-dev.gachdong.club/profile/
+ * @baseUrl https://gateway-dev.gachdong.club/user/
  *
- * 프로필 이미지 서비스에 대한 API 명세입니다.
+ * 사용자 서비스에 대한 API 명세입니다.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   사용자프로필이미지Api = {
@@ -363,12 +366,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 사용자 프로필 이미지 API
      * @name GetProfileImage
      * @summary 프로필 이미지 조회
-     * @request GET:/api/v1/profile-image
+     * @request GET:/api/v1/profile-image/{userReferenceId}
      * @response `200` `string` OK
      */
-    getProfileImage: (params: RequestParams = {}) =>
+    getProfileImage: (userReferenceId: string, params: RequestParams = {}) =>
       this.request<string, any>({
-        path: `/api/v1/profile-image`,
+        path: `/api/v1/profile-image/${userReferenceId}`,
         method: 'GET',
         format: 'json',
         ...params,

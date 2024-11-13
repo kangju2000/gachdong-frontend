@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { authApi } from './apis/config/instance';
+import { authApi, clubApi } from './apis/config/instance';
 
 const PUBLIC_PATHS = ['/login', '/forgot-password', '/signup'];
 
@@ -10,6 +10,12 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
+    // if (request.nextUrl.pathname.startsWith('/dashboard/')) {
+    //   const [, , clubId] = request.nextUrl.pathname.split('/');
+    //   console.log({ clubId });
+    //   const a = await clubApi.admin동아리Api.hasAuthority({ clubId: clubId as string });
+    // }
+
     await authApi.관리자인증인가Api.getProfile1();
 
     if (request.nextUrl.pathname === '/') {

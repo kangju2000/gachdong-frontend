@@ -89,7 +89,7 @@ export interface CreateClubRequest {
   establishedAt?: string;
 }
 
-export interface CreateClubResponse {
+export interface ClubResponse {
   /**
    * 동아리 ID
    * @format int64
@@ -262,6 +262,16 @@ export interface ClubRecruitmentDetailResponse {
    * @format date-time
    */
   endDate: string;
+  /**
+   * 모집 프로세스 설정
+   * @example "{
+   *   "process1": "서류 심사",
+   *   "process2": "1차 면접",
+   *   "process3": "2차 면접"
+   *  "process4": "최종 합격"
+   * }"
+   */
+  processData: Record<string, object>;
 }
 
 export interface ArrayResponseClubContactInfoResponse {
@@ -399,6 +409,44 @@ export interface ClubSummaryResponse {
   recruitingStatus: boolean;
 }
 
+/** 결과 목록 */
+export interface AdminAuthorizedClubResponse {
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 1
+   */
+  clubId: number;
+  /**
+   * 동아리 이름
+   * @example "가츠동"
+   */
+  clubName: string;
+  /**
+   * 동아리 관리자 권한
+   * @example "CLUB_ADMIN"
+   */
+  clubAdminRole: 'PRESIDENT' | 'MEMBER';
+  /**
+   * 동아리 이미지 URL
+   * @example "https://example.com/club.png"
+   */
+  clubImageUrl: string;
+}
+
+export interface ArrayResponseAdminAuthorizedClubResponse {
+  /** 결과 목록 */
+  results?: AdminAuthorizedClubResponse[];
+}
+
+export interface HasAuthorityParams {
+  clubId: string;
+}
+
+export interface IsValidRecruitmentParams {
+  recruitmentId: string;
+}
+
 export namespace Admin동아리Api {
   /**
    * @description 동아리 모집 공고를 입력받아 동아리에 추가합니다.
@@ -424,14 +472,14 @@ export namespace Admin동아리Api {
    * @summary 동아리 생성
    * @request POST:/admin/api/v1/create
    * @secure
-   * @response `200` `CreateClubResponse` OK
+   * @response `200` `ClubResponse` OK
    */
   export namespace CreateClub {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = CreateClubRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = CreateClubResponse;
+    export type ResponseBody = ClubResponse;
   }
 
   /**
@@ -467,16 +515,77 @@ export namespace Admin동아리Api {
     export type RequestHeaders = {};
     export type ResponseBody = CreateClubActivityResponse;
   }
+
+  /**
+   * @description 특정 동아리에 대한 권한이 있는지 확인합니다.
+   * @tags Admin 동아리 API
+   * @name HasAuthority
+   * @summary 특정 동아리에 대한 권한이 있는지 확인
+   * @request GET:/admin/api/v1/{clubId}/has-authority
+   * @secure
+   * @response `200` `boolean` OK
+   */
+  export namespace HasAuthority {
+    export type RequestParams = {
+      clubId: string;
+    };
+    export type RequestQuery = {
+      /** @format int64 */
+      clubId: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = boolean;
+  }
+
+  /**
+   * @description 유효한 동아리 모집 공고인지 확인합니다.
+   * @tags Admin 동아리 API
+   * @name IsValidRecruitment
+   * @summary 유효한 동아리 모집 공고인지 확인
+   * @request GET:/admin/api/v1/recruitment/{recruitmentId}/is-valid
+   * @secure
+   * @response `200` `boolean` OK
+   */
+  export namespace IsValidRecruitment {
+    export type RequestParams = {
+      recruitmentId: string;
+    };
+    export type RequestQuery = {
+      /** @format int64 */
+      recruitmentId: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = boolean;
+  }
+
+  /**
+   * @description 권한이 있는 사용자의 동아리 리스트를 조회합니다.
+   * @tags Admin 동아리 API
+   * @name GetAuthorizedClubs
+   * @summary 권한있는 동아리 리스트 조회
+   * @request GET:/admin/api/v1/authorized-clubs
+   * @secure
+   * @response `200` `ArrayResponseAdminAuthorizedClubResponse` OK
+   */
+  export namespace GetAuthorizedClubs {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseAdminAuthorizedClubResponse;
+  }
 }
 
 export namespace Public동아리Api {
   /**
-   * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
+   * @description 동아리 ID을 이용하여 동아리 정보를 조회합니다.
    * @tags Public 동아리 API
    * @name GetClub
    * @summary 동아리 조회
    * @request GET:/public/api/v1/{clubId}
-   * @response `200` `CreateClubResponse` OK
+   * @response `200` `ClubResponse` OK
    */
   export namespace GetClub {
     export type RequestParams = {
@@ -490,7 +599,7 @@ export namespace Public동아리Api {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CreateClubResponse;
+    export type ResponseBody = ClubResponse;
   }
 
   /**
@@ -890,10 +999,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary 동아리 생성
      * @request POST:/admin/api/v1/create
      * @secure
-     * @response `200` `CreateClubResponse` OK
+     * @response `200` `ClubResponse` OK
      */
     createClub: (data: CreateClubRequest, params: RequestParams = {}) =>
-      this.request<CreateClubResponse, any>({
+      this.request<ClubResponse, any>({
         path: `/admin/api/v1/create`,
         method: 'POST',
         body: data,
@@ -941,19 +1050,75 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type: ContentType.Json,
         ...params,
       }),
+
+    /**
+     * @description 특정 동아리에 대한 권한이 있는지 확인합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name HasAuthority
+     * @summary 특정 동아리에 대한 권한이 있는지 확인
+     * @request GET:/admin/api/v1/{clubId}/has-authority
+     * @secure
+     * @response `200` `boolean` OK
+     */
+    hasAuthority: ({ clubId, ...query }: HasAuthorityParams, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/admin/api/v1/${clubId}/has-authority`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 유효한 동아리 모집 공고인지 확인합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name IsValidRecruitment
+     * @summary 유효한 동아리 모집 공고인지 확인
+     * @request GET:/admin/api/v1/recruitment/{recruitmentId}/is-valid
+     * @secure
+     * @response `200` `boolean` OK
+     */
+    isValidRecruitment: ({ recruitmentId, ...query }: IsValidRecruitmentParams, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/admin/api/v1/recruitment/${recruitmentId}/is-valid`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 권한이 있는 사용자의 동아리 리스트를 조회합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name GetAuthorizedClubs
+     * @summary 권한있는 동아리 리스트 조회
+     * @request GET:/admin/api/v1/authorized-clubs
+     * @secure
+     * @response `200` `ArrayResponseAdminAuthorizedClubResponse` OK
+     */
+    getAuthorizedClubs: (params: RequestParams = {}) =>
+      this.request<ArrayResponseAdminAuthorizedClubResponse, any>({
+        path: `/admin/api/v1/authorized-clubs`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
   };
   public동아리Api = {
     /**
-     * @description 동아리 이름을 이용하여 동아리 정보를 조회합니다.
+     * @description 동아리 ID을 이용하여 동아리 정보를 조회합니다.
      *
      * @tags Public 동아리 API
      * @name GetClub
      * @summary 동아리 조회
      * @request GET:/public/api/v1/{clubId}
-     * @response `200` `CreateClubResponse` OK
+     * @response `200` `ClubResponse` OK
      */
     getClub: (clubId: number, params: RequestParams = {}) =>
-      this.request<CreateClubResponse, any>({
+      this.request<ClubResponse, any>({
         path: `/public/api/v1/${clubId}`,
         method: 'GET',
         ...params,

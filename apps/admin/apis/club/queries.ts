@@ -1,11 +1,24 @@
 import { keys } from './keys';
-import { queryOptions, skipToken } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 import { clubApi } from '../config/instance';
 
-const { getClubs, getClub, getClubContactInfo, getClubActivities, getClubRecruitments, getClubsRecruitments } =
-  clubApi.public동아리Api;
+const {
+  getClubs,
+  getClub,
+  getClubContactInfo,
+  getClubActivities,
+  getClubRecruitments,
+  getClubsRecruitments,
+  getClubRecruitment,
+} = clubApi.public동아리Api;
+
+const { hasAuthority, isValidRecruitment, getAuthorizedClubs } = clubApi.admin동아리Api;
 
 export const queries = {
+  /**
+   * PUBLIC
+   */
+
   clubs: () =>
     queryOptions({
       queryKey: keys.clubs(),
@@ -31,15 +44,34 @@ export const queries = {
       queryKey: keys.recruitmentByClub(clubId),
       queryFn: () => getClubRecruitments(clubId),
     }),
-  recruitmentsDetail: (recruitmentId: number) =>
+  recruitmentsDetail: (clubId: number, recruitmentId: number) =>
     queryOptions({
-      queryKey: keys.recruitmentsDetail(recruitmentId),
-      // queryFn: () => getClubRecruitments(recruitmentId),
-      queryFn: () => skipToken,
+      queryKey: keys.recruitmentsDetail(clubId, recruitmentId),
+      queryFn: () => getClubRecruitment(clubId, recruitmentId),
     }),
   activities: (clubId: number) =>
     queryOptions({
       queryKey: keys.activities(clubId),
       queryFn: () => getClubActivities(clubId),
+    }),
+
+  /**
+   * ADMIN
+   */
+
+  hasAuthority: (clubId: number) =>
+    queryOptions({
+      queryKey: keys.hasAuthority(clubId),
+      queryFn: () => hasAuthority({ clubId: clubId.toString() }),
+    }),
+  isValidRecruitment: (recruitmentId: number) =>
+    queryOptions({
+      queryKey: keys.isValidRecruitment(recruitmentId),
+      queryFn: () => isValidRecruitment({ recruitmentId: recruitmentId.toString() }),
+    }),
+  authorizedClubs: () =>
+    queryOptions({
+      queryKey: keys.authorizedClubs(),
+      queryFn: getAuthorizedClubs,
     }),
 };

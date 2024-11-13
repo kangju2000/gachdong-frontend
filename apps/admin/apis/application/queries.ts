@@ -5,7 +5,6 @@ import { keys } from './keys';
 const { getFormInfoUser, getApplicationHistory } = applicationApi.지원Api사용자;
 
 export const queries = {
-  // TODO
   formInfoUser: (formId: number) =>
     queryOptions({
       queryKey: keys.formInfoUser(formId),
