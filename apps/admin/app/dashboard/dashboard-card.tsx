@@ -12,21 +12,34 @@ import { InviteCodeModal } from './components/invite-code-modal';
 import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';
 import { authQueries } from '@/apis/auth';
+import ky from 'ky';
+import { CookieManager } from '@/lib/auth/cookies';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
-
-  const { mutate: createClub } = useCreateClub();
-  // const { mutate: uploadProfileImage } = useUploadProfileImage();
+  const { mutateAsync: createClub, isPending: isCreatingClub } = useCreateClub();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
-  const handleAddClub = (newClubData: CreateClubRequest, imageFile?: File) => {
-    createClub(newClubData);
+  const handleAddClub = async (newClubData: CreateClubRequest, imageFile?: File) => {
     if (imageFile) {
-      // uploadProfileImage({ image: imageFile });
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      const res = await ky.post(
+        `https://iibli2f5x4.execute-api.ap-northeast-2.amazonaws.com/dev/club/profile-upload?clubName=${newClubData.name}`,
+        {
+          headers: { Authorization: `Bearer ${CookieManager.getClientAccessToken()}` },
+          body: formData,
+        }
+      );
+
+      const { url } = await res.json<{ url: string }>();
+      await createClub({ ...newClubData, clubImageUrl: url });
+    } else {
+      await createClub(newClubData);
     }
+
     setIsAddDialogOpen(false);
   };
 
@@ -53,19 +66,26 @@ export default function DashboardCard() {
         </CardContent>
         <CardFooter className="flex justify-center space-x-4">
           <Button variant="link" className="text-blue-400 hover:text-blue-300" onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> 동아리 추가하기
+            <Plus className="h-4 w-4" />
+            동아리 추가하기
           </Button>
           <Button
             variant="link"
             className="text-gray-400 hover:text-gray-300"
             onClick={() => setIsInviteDialogOpen(true)}
           >
-            <Key className="mr-2 h-4 w-4" /> 초대코드 입력
+            <Key className="h-4 w-4" />
+            초대코드 입력
           </Button>
         </CardFooter>
       </Card>
 
-      <CreateClubModal isOpen={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} onSubmit={handleAddClub} />
+      <CreateClubModal
+        isOpen={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+        onSubmit={handleAddClub}
+        isLoading={isCreatingClub}
+      />
       <InviteCodeModal
         isOpen={isInviteDialogOpen}
         onOpenChange={setIsInviteDialogOpen}

@@ -9,10 +9,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Eye } from 'lucide-react';
 import { Users } from 'lucide-react';
 import { Calendar } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function RecruitContainer() {
   const { clubId, recruitId } = useParams();
@@ -25,18 +25,10 @@ export function RecruitContainer() {
         <Card className="mb-6">
           <CardHeader className="border-b">
             <div className="flex items-center space-x-4">
-              <div className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
-                <Image
-                  src={
-                    club.clubImageUrl ??
-                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4='
-                  }
-                  alt={`${club.clubName} logo`}
-                  width={64}
-                  height={64}
-                  className="object-cover"
-                />
-              </div>
+              <Avatar className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
+                <AvatarImage src={club.clubImageUrl} alt={club.clubName} />
+                <AvatarFallback className="bg-muted">{club.clubName.slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
               <div>
                 <CardTitle className="text-2xl">{announcement.title}</CardTitle>
                 <p className="text-muted-foreground mt-1">{club.clubName}</p>

@@ -18,17 +18,18 @@ export function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
   return (
     <Link href={`/clubs/${recruitment.clubId}/recruits/${recruitment.recruitmentId}`}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
-        <div className="relative aspect-[2/1] w-full overflow-hidden bg-gray-100">
-          <Image
-            src={
-              recruitment.clubImageUrl ??
-              'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4='
-            }
-            alt={recruitment.clubName}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+        <div className="relative aspect-[2/1] w-full overflow-hidden">
+          {recruitment.clubImageUrl ? (
+            <Image
+              src={recruitment.clubImageUrl}
+              alt={recruitment.clubName}
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="bg-muted relative h-full w-full" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent" />
           <div className="absolute bottom-3 left-3">
             <Badge className="bg-primary/90 text-xs font-medium text-white">{CATEGORY_MAP[recruitment.category]}</Badge>

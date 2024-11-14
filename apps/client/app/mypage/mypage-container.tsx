@@ -28,11 +28,10 @@ export default function MyPageContainer() {
         <CardContent>
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              {/* <AvatarImage src={profile.profileUrl} alt={profile.name} /> */}
-              <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback>
+              <AvatarImage src={profile.profileImageUrl} alt={profile.name} />
+              <AvatarFallback>{profile.name?.[0]}</AvatarFallback>
             </Avatar>
             <div>
-              {/* <h2 className="text-xl font-semibold">{user.name}</h2> */}
               <h2 className="text-xl font-semibold">{profile.name}</h2>
             </div>
           </div>

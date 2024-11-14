@@ -3,7 +3,6 @@
 import { format, formatDate, formatDistance, ko } from '@/lib/date';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +13,7 @@ import { CATEGORY_MAP } from '@/constants/categories';
 import { clubQueries } from '@/apis/club';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { SuspenseQuery } from '@suspensive/react-query';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function ClubDetailPage({ params }: { params: { clubId: string } }) {
   const [
@@ -37,18 +37,10 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
       <Card className="mb-6">
         <CardContent className="p-6">
           <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
-            <div className="bg-muted relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
-              <Image
-                src={
-                  club.clubImageUrl ??
-                  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4='
-                }
-                alt={`${club.clubName} logo`}
-                className="object-cover"
-                fill
-                sizes="100%"
-              />
-            </div>
+            <Avatar className="bg-muted relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
+              <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} />
+              <AvatarFallback>{club.clubName[0]}</AvatarFallback>
+            </Avatar>
             <div className="flex-grow">
               <h1 className="mb-2 text-3xl font-bold">{club.clubName}</h1>
               <p className="text-muted-foreground mb-2">{CATEGORY_MAP[club.category]}</p>

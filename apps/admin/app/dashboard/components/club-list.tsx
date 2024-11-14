@@ -1,10 +1,10 @@
 import { ArrowRight } from 'lucide-react';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { clubQueries } from '@/apis/club';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { AdminAuthorizedClubResponse } from '@gachdong/api/club';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function ClubList() {
   const {
@@ -30,8 +30,10 @@ function ClubItem({ club }: { club: AdminAuthorizedClubResponse }) {
     >
       <div className="flex items-center space-x-4">
         <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-800">
-          {/* FIXME: 이미지가 없을 경우 대체 이미지를 표시해야 함 */}
-          <Image src={club.clubImageUrl ?? ''} alt={`${club.clubName} logo`} className="object-cover" fill />
+          <Avatar className="h-12 w-12">
+            <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} />
+            <AvatarFallback>{club.clubName.slice(0, 2)}</AvatarFallback>
+          </Avatar>
         </div>
         <div>
           <h3 className="font-semibold text-white">{club.clubName}</h3>

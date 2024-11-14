@@ -5,19 +5,22 @@ import { Dialog } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { CATEGORY_MAP } from '@/constants/categories';
 import { ImageIcon, X } from 'lucide-react';
 import Image from 'next/image';
+import MDEditor from '@uiw/react-md-editor';
+import { CookieManager } from '@/lib/auth/cookies';
+import ky from 'ky';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: CreateClubRequest, imageFile?: File) => void;
+  isLoading: boolean;
 };
 
-export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
+export function CreateClubModal({ isOpen, onOpenChange, onSubmit, isLoading }: Props) {
   const [formData, setFormData] = useState<CreateClubRequest>({
     name: '',
     shortDescription: '',
@@ -50,7 +53,7 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formData.name && formData.shortDescription) {
       onSubmit(formData, imageFile || undefined);
       setFormData({
@@ -66,7 +69,7 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto border-gray-700 bg-gray-800">
+      <DialogContent className="max-h-[90vh] min-w-[800px] overflow-y-auto border-gray-700 bg-gray-800">
         <DialogHeader>
           <DialogTitle className="text-white">새 동아리 추가</DialogTitle>
         </DialogHeader>
@@ -121,11 +124,10 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
             <Label htmlFor="introduction" className="text-right text-gray-300">
               동아리 소개
             </Label>
-            <Textarea
-              id="introduction"
+            <MDEditor
               value={formData.introduction}
-              onChange={e => setFormData(prev => ({ ...prev, introduction: e.target.value }))}
-              className="col-span-3 min-h-[150px] border-gray-600 bg-gray-700 text-white"
+              onChange={value => setFormData(prev => ({ ...prev, introduction: value ?? '' }))}
+              className="col-span-3 border-gray-600 bg-gray-700 text-white"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -167,7 +169,7 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit }: Props) {
         </div>
         <div className="flex flex-col gap-4">
           <p className="text-sm text-gray-400">* 표시는 필수 입력 항목입니다.</p>
-          <Button onClick={handleSubmit} className="bg-blue-600 text-white hover:bg-blue-700">
+          <Button onClick={handleSubmit} className="bg-blue-600 text-white hover:bg-blue-700" disabled={isLoading}>
             추가
           </Button>
         </div>

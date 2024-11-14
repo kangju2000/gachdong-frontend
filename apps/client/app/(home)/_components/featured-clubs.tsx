@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { CATEGORY_MAP } from '@/constants/categories';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 export function FeaturedClubs() {
   const {
@@ -32,15 +33,10 @@ export function FeaturedClubs() {
             <div className="group rounded-xl border border-gray-200 bg-white p-4 transition-all hover:shadow-lg">
               <div className="flex gap-4">
                 <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
-                  <Image
-                    src={
-                      club.clubImageUrl ??
-                      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4='
-                    }
-                    alt={club.clubName}
-                    fill
-                    className="object-cover"
-                  />
+                  <Avatar>
+                    <AvatarImage src={club.clubImageUrl} alt={club.clubName} />
+                    <AvatarFallback>{club.clubName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">

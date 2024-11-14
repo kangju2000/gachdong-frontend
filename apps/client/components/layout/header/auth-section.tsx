@@ -81,8 +81,8 @@ function UserDropdown({ profile }: { profile: UserProfileResponse }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 cursor-pointer">
-          {/* <AvatarImage src={(profile as any).profileUrl} alt="User" /> */}
-          <AvatarFallback>{profile.name?.[0] ?? 'U'}</AvatarFallback>
+          <AvatarImage src={profile.profileImageUrl} alt={profile.name} />
+          <AvatarFallback>{profile.name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

@@ -19,7 +19,7 @@ export const useCreateClub = () => {
         title: '동아리가 추가되었습니다.',
       });
       queryClient.invalidateQueries({ queryKey: keys.clubs() });
-      router.replace(`/dashboard/${club.clubId}`);
+      router.push(`/dashboard/${club.clubId}`);
     },
     onError: () => {
       toast({
