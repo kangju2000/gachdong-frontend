@@ -2,17 +2,17 @@ import { applicationApi } from '../config/instance';
 import { queryOptions } from '@tanstack/react-query';
 import { keys } from './keys';
 
-const { getFormInfoUser, getApplicationHistory } = applicationApi.지원Api사용자;
+const { getClubApplicationList, getFormInfoAdmin } = applicationApi.지원Api관리자;
 
 export const queries = {
-  formInfoUser: (formId: number) =>
+  clubApplicationList: (clubId: number) =>
     queryOptions({
-      queryKey: keys.formInfoUser(formId),
-      queryFn: () => getFormInfoUser(formId),
+      queryKey: keys.clubApplicationList(clubId),
+      queryFn: () => getClubApplicationList(clubId),
     }),
-  applicationHistory: () =>
+  formInfoAdmin: (formId: number) =>
     queryOptions({
-      queryKey: keys.formHistory(),
-      queryFn: () => getApplicationHistory(),
+      queryKey: keys.formInfoAdmin(formId),
+      queryFn: () => getFormInfoAdmin(formId),
     }),
 };

@@ -3,13 +3,22 @@ import type { TokenPayload } from './types';
 import { AUTH_COOKIE_NAME, COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS } from './constants';
 
 export class CookieManager {
-  static getClientToken() {
+  static getClientAccessToken() {
     return getCookie(AUTH_COOKIE_NAME) ?? null;
   }
 
-  static async getServerToken() {
+  static getClientRefreshToken() {
+    return getCookie(REFRESH_TOKEN_COOKIE_NAME) ?? null;
+  }
+
+  static async getServerAccessToken() {
     const { cookies } = await import('next/headers');
     return getCookie(AUTH_COOKIE_NAME, { cookies }) ?? null;
+  }
+
+  static async getServerRefreshToken() {
+    const { cookies } = await import('next/headers');
+    return getCookie(REFRESH_TOKEN_COOKIE_NAME, { cookies }) ?? null;
   }
 
   static setToken({ accessToken, refreshToken }: TokenPayload): void {
@@ -19,8 +28,16 @@ export class CookieManager {
     }
   }
 
-  static removeToken(): void {
+  static removeAllToken(): void {
     deleteCookie(AUTH_COOKIE_NAME);
+    deleteCookie(REFRESH_TOKEN_COOKIE_NAME);
+  }
+
+  static removeAccessToken(): void {
+    deleteCookie(AUTH_COOKIE_NAME);
+  }
+
+  static removeRefreshToken(): void {
     deleteCookie(REFRESH_TOKEN_COOKIE_NAME);
   }
 }

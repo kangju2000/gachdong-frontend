@@ -1,6 +1,8 @@
 import { ToChangeApplicationStatus, ToCreateApplicationFormDTO } from '@gachdong/api/application';
 import { applicationApi } from '../config/instance';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { clubKeys } from '../club';
+import { useParams } from 'next/navigation';
 
 const {
   changeApplicationForm,
@@ -19,8 +21,14 @@ export const useChangeApplicationForm = () => {
 };
 
 export const useCreateApplicationForm = () => {
+  const queryClient = useQueryClient();
+  const params = useParams();
+
   return useMutation({
     mutationFn: (data: ToCreateApplicationFormDTO) => createApplicationForm(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentByClub(Number(params.id)) });
+    },
   });
 };
 

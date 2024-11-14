@@ -11,6 +11,7 @@
   "dependencies": {
     "@gachdong/api": "workspace:*",
     "@gachdong/ui": "workspace:*",
+    "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
@@ -40,10 +41,12 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-error-boundary": "^4.1.2",
+    "react-hook-form": "^7.53.2",
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

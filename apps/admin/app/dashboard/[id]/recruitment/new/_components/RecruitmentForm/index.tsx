@@ -1,72 +1,149 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from '@/hooks/use-toast';
 import { PostInfoSection } from './PostInfoSection';
 import { ProcessSection } from './ProcessSection';
 import { ApplicationTemplate } from './ApplicationTemplate';
 import { ActionButtons } from './ActionButtons';
-import { usePostInfo } from '../../hooks/usePostInfo';
-import { useQuestions } from '../../hooks/useQuestions';
+import { useCreateApplicationForm } from '@/apis/application/mutation';
+import { useCreateClubRecruitment } from '@/apis/club';
+import { RecruitmentFormData, recruitmentFormSchema } from '../../schemas';
+
+const DEFAULT_VALUES: RecruitmentFormData = {
+  postInfo: {
+    title: '',
+    content: '',
+    startDate: '',
+    endDate: '',
+  },
+  processes: [
+    {
+      label: '서류 심사',
+      order: 1,
+    },
+  ],
+  questions: [],
+};
 
 export default function RecruitmentForm() {
   const router = useRouter();
-  const { postInfo, handlePostInfoChange, addProcess, updateProcess, removeProcess } = usePostInfo();
+  const params = useParams();
+  const { mutateAsync: createClubRecruitment, isPending: isCreatingRecruitment } = useCreateClubRecruitment();
+  const { mutateAsync: createApplicationForm, isPending: isCreatingForm } = useCreateApplicationForm();
+
+  const methods = useForm<RecruitmentFormData>({
+    resolver: zodResolver(recruitmentFormSchema),
+    defaultValues: DEFAULT_VALUES,
+    mode: 'onChange',
+  });
 
   const {
-    questions,
-    addQuestion,
-    updateQuestion,
-    removeQuestion,
-    handleQuestionReorder,
-    addOption,
-    updateOption,
-    removeOption,
-  } = useQuestions();
+    handleSubmit,
+    formState: { isValid, isDirty, errors },
+  } = methods;
+
+  const isSubmitting = isCreatingRecruitment || isCreatingForm;
 
   const handleSaveDraft = async () => {
     try {
-      // TODO: API 호출 구현
-      console.log('임시 저장:', { postInfo, questions });
+      const data = methods.getValues();
+      // TODO: Implement draft saving logic
+      toast({
+        title: '임시저장 되었습니다.',
+      });
     } catch (error) {
-      console.error('임시 저장 실패:', error);
-      // TODO: 에러 처리
+      console.error('Draft save error:', error);
+      toast({
+        title: '임시저장에 실패했습니다.',
+        variant: 'destructive',
+      });
     }
   };
 
-  const handlePublish = async () => {
+  const handlePublish = async (data: RecruitmentFormData) => {
     try {
-      // TODO: API 호출 구현
-      console.log('공고 게시:', { postInfo, questions });
-      router.push('/recruitment');
+      // 프로세스 데이터를 Record 형태로 변환
+      const processData = data.processes.reduce(
+        (acc, process, index) => ({
+          ...acc,
+          [`process${index + 1}`]: {
+            order: index + 1,
+            label: process.label,
+          },
+        }),
+        {} as Record<string, { order: number; label: string }>
+      );
+
+      // 모집 공고 생성
+      const { clubRecruitmentId } = await createClubRecruitment({
+        clubId: Number(params.id),
+        title: data.postInfo.title,
+        content: data.postInfo.content,
+        recruitmentCount: 10, // TODO: Make this configurable
+        startDate: new Date(data.postInfo.startDate).toISOString(),
+        endDate: new Date(data.postInfo.endDate).toISOString(),
+        processData,
+      });
+
+      // 지원서 양식 생성
+      const formBody = Object.fromEntries(
+        data.questions.map((question, index) => [
+          `question${index + 1}`,
+          {
+            ...question,
+            order: index + 1,
+          },
+        ])
+      );
+
+      await createApplicationForm({
+        applyId: clubRecruitmentId,
+        status: 'SAVED',
+        formName: data.postInfo.title,
+        formBody,
+      });
+
+      toast({
+        title: '모집 공고가 성공적으로 등록되었습니다.',
+      });
+      router.push(`/dashboard/${params.id}/recruitment`);
+      router.refresh();
     } catch (error) {
-      console.error('공고 게시 실패:', error);
-      // TODO: 에러 처리
+      console.error('Publish error:', error);
+      toast({
+        title: '모집 공고 등록에 실패했습니다.',
+        variant: 'destructive',
+      });
     }
   };
 
   return (
-    <div className="space-y-6">
-      <PostInfoSection postInfo={postInfo} onChange={handlePostInfoChange} />
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(handlePublish)} className="space-y-6">
+        <PostInfoSection />
+        <ProcessSection />
+        <ApplicationTemplate />
+        <ActionButtons
+          onSaveDraft={handleSaveDraft}
+          onPublish={handleSubmit(handlePublish)}
+          isValid={isValid && isDirty}
+          isSubmitting={isSubmitting}
+        />
 
-      <ProcessSection
-        processes={postInfo.processes}
-        onAdd={addProcess}
-        onUpdate={updateProcess}
-        onRemove={removeProcess}
-      />
-
-      <ApplicationTemplate
-        questions={questions}
-        onAdd={addQuestion}
-        onUpdate={updateQuestion}
-        onRemove={removeQuestion}
-        onReorder={handleQuestionReorder}
-        onAddOption={addOption}
-        onUpdateOption={updateOption}
-        onRemoveOption={removeOption}
-      />
-
-      <ActionButtons onSaveDraft={handleSaveDraft} onPublish={handlePublish} />
-    </div>
+        {process.env.NODE_ENV === 'development' && (
+          <div className="fixed bottom-4 right-4 max-w-md">
+            <details className="bg-muted rounded-lg p-4 shadow-lg">
+              <summary className="cursor-pointer text-sm font-medium">Debug Info</summary>
+              <pre className="mt-2 max-h-96 overflow-auto text-xs">
+                {JSON.stringify({ isValid, isDirty, errors }, null, 2)}
+              </pre>
+            </details>
+          </div>
+        )}
+      </form>
+    </FormProvider>
   );
 }

@@ -1,26 +1,28 @@
 'use client';
 
 import React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Bell, Calendar, Plus, Search, Users } from 'lucide-react';
+import { Bell, Calendar, Plus, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-
-const recruitmentPosts = [
-  { id: 1, title: '2024년 봄학기 신입 부원 모집', status: '진행 중', applicants: 15, createdAt: '2024-02-01' },
-  { id: 2, title: '프론트엔드 개발자 모집', status: '마감', applicants: 8, createdAt: '2024-01-15' },
-  { id: 3, title: '디자인 팀 추가 모집', status: '진행 중', applicants: 5, createdAt: '2024-02-10' },
-];
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from '@/apis/club';
+import { formatDate } from '@/lib/date';
 
 export default function RecruitmentManagement() {
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
+
+  const {
+    data: { results: recruitmentPosts = [] },
+  } = useSuspenseQuery(clubQueries.recruitmentByClub(Number(params.id)));
 
   const handlePostClick = (postId: number) => {
     router.push(`${pathname}/${postId}`);
@@ -68,43 +70,45 @@ export default function RecruitmentManagement() {
                   <TableRow className="border-b border-gray-700 hover:bg-gray-800">
                     <TableHead className="text-gray-300">제목</TableHead>
                     <TableHead className="text-gray-300">상태</TableHead>
-                    <TableHead className="text-gray-300">지원자 수</TableHead>
+                    {/* TODO: 지원자 수 추가 */}
+                    {/* <TableHead className="text-gray-300">지원자 수</TableHead> */}
                     <TableHead className="text-gray-300">생성일</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {recruitmentPosts.map(post => (
                     <TableRow
-                      key={post.id}
+                      key={post.recruitmentId}
                       className="cursor-pointer border-b border-gray-700 hover:bg-gray-700"
-                      onClick={() => handlePostClick(post.id)}
+                      onClick={() => handlePostClick(post.recruitmentId)}
                     >
                       <TableCell className="font-medium text-gray-100">{post.title}</TableCell>
                       <TableCell>
                         <Badge
                           variant="default"
                           className={cn({
-                            'bg-blue-600 text-white': post.status === '진행 중',
-                            'bg-gray-600 text-white': post.status === '마감',
+                            'bg-blue-600 text-white': post.recruitmentStatus === true,
+                            'bg-gray-600 text-white': post.recruitmentStatus === false,
                           })}
                         >
-                          {post.status}
+                          {post.recruitmentStatus ? '진행 중' : '마감'}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-gray-300">
                         <div className="flex items-center">
-                          <Users className="mr-2 h-4 w-4 text-blue-400" />
-                          {post.applicants}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-gray-300">
-                        <div className="flex items-center">
                           <Calendar className="mr-2 h-4 w-4 text-green-400" />
-                          {post.createdAt}
+                          {formatDate(new Date(post.startDate), 'yyyy.MM.dd')}
                         </div>
                       </TableCell>
                     </TableRow>
                   ))}
+                  {recruitmentPosts.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-gray-300">
+                        모집 공고가 없습니다.
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>

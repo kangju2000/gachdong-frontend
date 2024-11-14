@@ -269,6 +269,13 @@ export interface ToGetFormInfoAdminDTO {
   formStatus: string;
 }
 
+export interface ResFormToGetApplicationDTO {
+  code?: string;
+  message?: string;
+  /** 관리자용 지원 내역 상세 조회 결과 반환 DTO */
+  result?: ToGetApplicationDTO;
+}
+
 export interface ChangeApplicationPayload {
   /** 업로드할 문서 리스트 */
   certificateDocs: File[];
@@ -285,10 +292,12 @@ export interface CreateApplicationPayload {
   toApplyClub: ToApplyClubDTO;
 }
 
+export interface TestAuthParams {
+  recruitmentId: string;
+}
+
 export interface TestAuth1Params {
-  userId: string;
-  /** @format int32 */
-  applyId: number;
+  recruitmentId: string;
 }
 
 export namespace 지원Api사용자 {
@@ -466,7 +475,7 @@ export namespace 지원Api관리자 {
   }
 
   /**
-   * @description 지원 ID를 이용해 지원 목록을 조회합니다.
+   * @description 지원 ID를(recruitmentId) 이용해 지원 목록을 조회합니다.
    * @tags 지원 API(관리자)
    * @name GetClubApplicationList
    * @summary 지원 목록 조회 API
@@ -524,6 +533,26 @@ export namespace 지원Api관리자 {
     export type RequestHeaders = {};
     export type ResponseBody = ResFormObject;
   }
+
+  /**
+   * @description applicationId를 이용해 지원 내역 단건을 조회합니다.
+   * @tags 지원 API(관리자)
+   * @name GetClubApplication
+   * @summary 지원 내역 단건 조회 API
+   * @request GET:/admin/api/v1/application/{applicationId}
+   * @secure
+   * @response `200` `ResFormToGetApplicationDTO` OK
+   */
+  export namespace GetClubApplication {
+    export type RequestParams = {
+      /** @format int64 */
+      applicationId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormToGetApplicationDTO;
+  }
 }
 
 export namespace MockUpController {
@@ -531,7 +560,7 @@ export namespace MockUpController {
    * No description
    * @tags mock-up-controller
    * @name GetUserProfiles
-   * @request POST:/profile
+   * @request POST:/profiles
    * @response `200` `(GetUserProfile)[]` OK
    */
   export namespace GetUserProfiles {
@@ -546,15 +575,17 @@ export namespace MockUpController {
    * No description
    * @tags mock-up-controller
    * @name TestAuth
-   * @request GET:/validApplyTest/{applyId}
+   * @request GET:/{recruitmentId}/has-authority
    * @response `200` `boolean` OK
    */
   export namespace TestAuth {
     export type RequestParams = {
-      /** @format int64 */
-      applyId: number;
+      recruitmentId: string;
     };
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /** @format int64 */
+      recruitmentId: number;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = boolean;
@@ -564,15 +595,16 @@ export namespace MockUpController {
    * No description
    * @tags mock-up-controller
    * @name TestAuth1
-   * @request GET:/authTest
+   * @request GET:/recruitment/{recruitmentId}/is-valid
    * @response `200` `boolean` OK
    */
   export namespace TestAuth1 {
-    export type RequestParams = {};
+    export type RequestParams = {
+      recruitmentId: string;
+    };
     export type RequestQuery = {
-      userId: string;
-      /** @format int32 */
-      applyId: number;
+      /** @format int64 */
+      recruitmentId: number;
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
@@ -973,7 +1005,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 지원 ID를 이용해 지원 목록을 조회합니다.
+     * @description 지원 ID를(recruitmentId) 이용해 지원 목록을 조회합니다.
      *
      * @tags 지원 API(관리자)
      * @name GetClubApplicationList
@@ -1025,6 +1057,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         secure: true,
         ...params,
       }),
+
+    /**
+     * @description applicationId를 이용해 지원 내역 단건을 조회합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name GetClubApplication
+     * @summary 지원 내역 단건 조회 API
+     * @request GET:/admin/api/v1/application/{applicationId}
+     * @secure
+     * @response `200` `ResFormToGetApplicationDTO` OK
+     */
+    getClubApplication: (applicationId: number, params: RequestParams = {}) =>
+      this.request<ResFormToGetApplicationDTO, any>({
+        path: `/admin/api/v1/application/${applicationId}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
   };
   mockUpController = {
     /**
@@ -1032,12 +1082,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags mock-up-controller
      * @name GetUserProfiles
-     * @request POST:/profile
+     * @request POST:/profiles
      * @response `200` `(GetUserProfile)[]` OK
      */
     getUserProfiles: (data: GetUserProfilesPayload, params: RequestParams = {}) =>
       this.request<GetUserProfile[], any>({
-        path: `/profile`,
+        path: `/profiles`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
@@ -1049,13 +1099,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags mock-up-controller
      * @name TestAuth
-     * @request GET:/validApplyTest/{applyId}
+     * @request GET:/{recruitmentId}/has-authority
      * @response `200` `boolean` OK
      */
-    testAuth: (applyId: number, params: RequestParams = {}) =>
+    testAuth: ({ recruitmentId, ...query }: TestAuthParams, params: RequestParams = {}) =>
       this.request<boolean, any>({
-        path: `/validApplyTest/${applyId}`,
+        path: `/${recruitmentId}/has-authority`,
         method: 'GET',
+        query: query,
         ...params,
       }),
 
@@ -1064,12 +1115,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags mock-up-controller
      * @name TestAuth1
-     * @request GET:/authTest
+     * @request GET:/recruitment/{recruitmentId}/is-valid
      * @response `200` `boolean` OK
      */
-    testAuth1: (query: TestAuth1Params, params: RequestParams = {}) =>
+    testAuth1: ({ recruitmentId, ...query }: TestAuth1Params, params: RequestParams = {}) =>
       this.request<boolean, any>({
-        path: `/authTest`,
+        path: `/recruitment/${recruitmentId}/is-valid`,
         method: 'GET',
         query: query,
         ...params,

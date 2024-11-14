@@ -6,8 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LayoutDashboard, BarChart, Settings, FileText, UserCog } from 'lucide-react';
 import Link from 'next/link';
 import { CLUBS } from '@/constants/data';
+import { useParams } from 'next/navigation';
 
 export function Sidebar() {
+  const params = useParams();
   const menuItems = [
     {
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
@@ -60,7 +62,7 @@ export function Sidebar() {
             className="w-full justify-start px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white"
             asChild
           >
-            <Link href={`/dashboard/${1}${item.href}`}>
+            <Link href={`/dashboard/${params.id}${item.href}`}>
               {item.icon}
               {item.label}
             </Link>

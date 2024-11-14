@@ -5,6 +5,7 @@ import { Providers } from './providers';
 import { Suspense } from 'react';
 import { ErrorBoundary } from '@/components/error-boundary/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
+import '@uiw/react-md-editor/markdown-editor.css';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

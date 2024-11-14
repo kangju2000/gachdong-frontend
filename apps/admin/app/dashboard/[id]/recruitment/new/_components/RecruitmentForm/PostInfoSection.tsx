@@ -1,84 +1,92 @@
-import { Calendar } from 'lucide-react';
+'use client';
+
+import { useFormContext } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { PostInfo } from '../../types';
+import MDEditor from '@uiw/react-md-editor';
+import { RecruitmentFormData } from '../../schemas';
 
-interface PostInfoSectionProps {
-  postInfo: PostInfo;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export function PostInfoSection() {
+  const { control } = useFormContext<RecruitmentFormData>();
 
-export function PostInfoSection({ postInfo, onChange }: PostInfoSectionProps) {
   return (
-    <Card className="border-gray-700 bg-gray-800 shadow-lg">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-100">모집 공고 생성</CardTitle>
+        <CardTitle>모집 공고 정보</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Title Input */}
-        <div className="space-y-2">
-          <Label htmlFor="title" className="text-gray-200">
-            제목
-          </Label>
-          <Input
-            id="title"
-            name="title"
-            value={postInfo.title}
-            onChange={onChange}
-            className="border-gray-600 bg-gray-700 text-gray-100"
-          />
-        </div>
+      <CardContent className="space-y-4">
+        <FormField
+          control={control}
+          name="postInfo.title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>제목</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="모집 공고 제목을 입력하세요" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        {/* Content Textarea */}
-        <div className="space-y-2">
-          <Label htmlFor="content" className="text-gray-200">
-            공고 내용
-          </Label>
-          <Textarea
-            id="content"
-            name="content"
-            value={postInfo.content}
-            onChange={onChange}
-            className="min-h-[200px] border-gray-600 bg-gray-700 text-gray-100"
-          />
-        </div>
+        <FormField
+          control={control}
+          name="postInfo.content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>내용</FormLabel>
+              <FormControl>
+                <div data-color-mode="dark">
+                  <MDEditor
+                    value={field.value}
+                    onChange={value => field.onChange(value || '')}
+                    height={400}
+                    visibleDragbar={false}
+                    hideToolbar={false}
+                    enableScroll={true}
+                    textareaProps={{
+                      placeholder:
+                        '모집 공고 내용을 입력하세요\n\n# 마크다운 문법을 지원합니다\n\n- 글머리 기호\n- **굵게**\n- *기울임*\n- [링크](url)\n- ![이미지](url)',
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        {/* Date Inputs */}
         <div className="grid grid-cols-2 gap-4">
-          <DateInput id="startDate" label="시작 날짜" value={postInfo.startDate} onChange={onChange} />
-          <DateInput id="endDate" label="마감 날짜" value={postInfo.endDate} onChange={onChange} />
+          <FormField
+            control={control}
+            name="postInfo.startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>시작일</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" min={new Date().toISOString().split('T')[0]} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
+            name="postInfo.endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>종료일</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" min={new Date().toISOString().split('T')[0]} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-interface DateInputProps {
-  id: string;
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-function DateInput({ id, label, value, onChange }: DateInputProps) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className="text-gray-200">
-        {label}
-      </Label>
-      <div className="relative">
-        <Input
-          id={id}
-          name={id}
-          type="date"
-          value={value}
-          onChange={onChange}
-          className="border-gray-600 bg-gray-700 pl-10 text-gray-100"
-        />
-        <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-      </div>
-    </div>
   );
 }

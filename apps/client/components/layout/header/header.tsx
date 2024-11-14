@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function Header() {
-  const token = (await CookieManager.getServerToken()) ?? CookieManager.getClientToken();
+  const token = (await CookieManager.getServerAccessToken()) ?? CookieManager.getClientAccessToken();
 
   return (
     <PrefetchHydration queries={token ? [authQueries.profile()] : []}>

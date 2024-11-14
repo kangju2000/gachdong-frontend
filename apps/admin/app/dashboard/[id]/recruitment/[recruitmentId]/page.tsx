@@ -1,78 +1,111 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Search, Bell, ChevronRight, Send } from 'lucide-react';
+import { Search, Bell, ChevronRight } from 'lucide-react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { clubQueries } from '@/apis/club';
+import { applicationQueries } from '@/apis/application';
+import { ToGetApplicationDTO } from '@gachdong/api/application';
+import { format } from '@/lib/date';
 
-interface Applicant {
-  id: number;
-  name: string;
-  email: string;
-  applyDate: string;
-  status: string;
+function DroppableWrapper({ id, children }: { id: string; children: React.ReactNode }) {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setEnabled(true));
+    return () => {
+      cancelAnimationFrame(animation);
+      setEnabled(false);
+    };
+  }, []);
+
+  if (!enabled) {
+    return null;
+  }
+
+  return (
+    <div className="flex-1" style={{ minWidth: '300px' }}>
+      <Droppable droppableId={id}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className={`h-full rounded-lg border border-gray-700 bg-gray-800 p-4 ${
+              snapshot.isDraggingOver ? 'bg-gray-750 border-blue-500' : ''
+            }`}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">{id}</h3>
+              <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300">
+                <Bell className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="h-[calc(100vh-400px)] overflow-y-auto">
+              {children}
+              {provided.placeholder}
+            </div>
+          </div>
+        )}
+      </Droppable>
+    </div>
+  );
 }
-
-interface ClubInfo {
-  name: string;
-  presidentName: string;
-  presidentEmail: string;
-  presidentPhone: string;
-}
-
-const mockApplicants: Applicant[] = [
-  { id: 1, name: '김철수', email: 'chulsoo@gachon.ac.kr', applyDate: '2024-03-01', status: '서류 심사 중' },
-  { id: 2, name: '이영희', email: 'younghee@gachon.ac.kr', applyDate: '2024-03-02', status: '1차 합격' },
-  { id: 3, name: '박민수', email: 'minsoo@gachon.ac.kr', applyDate: '2024-03-03', status: '최종 합격' },
-  { id: 4, name: '정다은', email: 'daeun@gachon.ac.kr', applyDate: '2024-03-04', status: '불합격' },
-];
-
-const statusOptions = ['서류 심사 중', '1차 합격', '최종 합격', '불합격'];
-
-const initialClubInfo: ClubInfo = {
-  name: 'GDG On Campus Gachon University',
-  presidentName: '홍길동',
-  presidentEmail: 'president@gdg-gachon.com',
-  presidentPhone: '010-1234-5678',
-};
 
 export default function RecruitmentPostDetail() {
   const router = useRouter();
   const pathname = usePathname();
-  const [applicants, setApplicants] = useState<Applicant[]>(mockApplicants);
+  const params = useParams();
+
+  const { data: recruitmentPost } = useSuspenseQuery(
+    clubQueries.recruitmentsDetail(Number(params.id), Number(params.recruitmentId))
+  );
+
+  const {
+    data: { result: { toGetApplicationDTO } = {} },
+  } = useSuspenseQuery(applicationQueries.clubApplicationList(Number(params.recruitmentId)));
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [notificationSubject, setNotificationSubject] = useState('');
-  const [notificationBody, setNotificationBody] = useState('');
-  const [clubInfo, setClubInfo] = useState<ClubInfo>(initialClubInfo);
+
+  const applicants = toGetApplicationDTO ?? [];
 
   const filteredApplicants = applicants.filter(
     applicant =>
-      applicant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      applicant.email.toLowerCase().includes(searchTerm.toLowerCase())
+      applicant.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      applicant.userEmail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const groupedApplicants = statusOptions.reduce(
-    (acc, status) => {
-      acc[status] = filteredApplicants.filter(applicant => applicant.status === status);
-      return acc;
-    },
-    {} as Record<string, Applicant[]>
-  );
+  const processData = recruitmentPost.processData as Record<string, { title: string; order: number }>;
+  const statusOptions = Object.values(processData).map(status => status.title);
 
-  const passRate = ((applicants.filter(a => a.status === '최종 합격').length / applicants.length) * 100).toFixed(2);
+  const [draggedGroupedApplicants, setDraggedGroupedApplicants] = useState<Record<string, ToGetApplicationDTO[]>>({});
 
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
+  const initialGroupedApplicants = useMemo(() => {
+    return Object.values(processData).reduce(
+      (acc, status) => {
+        acc[status.title] = filteredApplicants.filter(applicant => applicant.status === status.title);
+        return acc;
+      },
+      {} as Record<string, ToGetApplicationDTO[]>
+    );
+  }, [processData, filteredApplicants, searchTerm]);
+
+  const displayedGroupedApplicants =
+    Object.keys(draggedGroupedApplicants).length > 0 ? draggedGroupedApplicants : initialGroupedApplicants;
+
+  const passRate =
+    applicants.length > 0
+      ? ((applicants.filter(a => a.status === '최종 합격').length / applicants.length) * 100).toFixed(2)
+      : 0;
+
+  const onDragEnd = async (result: DropResult) => {
+    const { source, destination, draggableId } = result;
 
     if (!destination) return;
 
@@ -80,58 +113,37 @@ export default function RecruitmentPostDetail() {
     const destStatus = destination.droppableId;
 
     if (sourceStatus !== destStatus) {
-      const sourceApplicants = [...(groupedApplicants[sourceStatus] ?? [])];
-      const destApplicants = [...(groupedApplicants[destStatus] ?? [])];
+      const newGroupedApplicants = { ...displayedGroupedApplicants };
+
+      const sourceApplicants = [...(newGroupedApplicants[sourceStatus] ?? [])];
       const [movedApplicant] = sourceApplicants.splice(source.index, 1);
+
+      const destApplicants = [...(newGroupedApplicants[destStatus] ?? [])];
       if (movedApplicant) {
         movedApplicant.status = destStatus;
         destApplicants.splice(destination.index, 0, movedApplicant);
       }
 
-      setApplicants(applicants.map(a => (a.id === movedApplicant?.id ? movedApplicant : a)));
+      const updatedGroupedApplicants = {
+        ...newGroupedApplicants,
+        [sourceStatus]: sourceApplicants,
+        [destStatus]: destApplicants,
+      };
+
+      setDraggedGroupedApplicants(updatedGroupedApplicants);
+
+      try {
+        // TODO: API 호출 구현
+        // await applicationQueries.updateStatus({
+        //   applicationId: Number(draggableId),
+        //   status: destStatus,
+        // });
+      } catch (error) {
+        // 에러 발생 시 원래 상태로 복구
+        setDraggedGroupedApplicants(initialGroupedApplicants);
+        console.error('Failed to update application status:', error);
+      }
     }
-  };
-
-  const handleNotificationTrigger = (status: string) => {
-    setSelectedStatus(status);
-    setNotificationSubject(`[${clubInfo.name}] 2024년 봄학기 신입 부원 모집 ${status} 결과 안내`);
-    setNotificationBody(
-      `안녕하세요, ${clubInfo.name}입니다.\n\n2024년 봄학기 신입 부원 모집 ${status} 결과를 안내드립니다.\n\n자세한 내용은 아래와 같습니다:\n\n[여기에 상세 내용 추가]\n\n문의사항이 있으시면 언제든 연락 주시기 바랍니다.\n\n감사합니다.\n\n${clubInfo.presidentName} 드림`
-    );
-    setIsNotificationModalOpen(true);
-  };
-
-  const handleSendNotification = () => {
-    console.log('Sending notifications:', {
-      subject: notificationSubject,
-      body: notificationBody,
-      status: selectedStatus,
-      contact: clubInfo,
-    });
-    setIsNotificationModalOpen(false);
-  };
-
-  const renderEmailPreview = () => {
-    return (
-      <div className="rounded-md border border-gray-600 bg-gray-900 p-4">
-        <div className="mb-4">
-          <strong>제목:</strong> {notificationSubject}
-        </div>
-        <div className="mb-4">
-          <strong>보내는 사람:</strong> {clubInfo.presidentName} &lt;{clubInfo.presidentEmail}&gt;
-        </div>
-        <div className="mb-4">
-          <strong>내용:</strong>
-          <div className="whitespace-pre-wrap">{notificationBody}</div>
-        </div>
-        <div>
-          <strong>연락처:</strong>
-          <div>{clubInfo.presidentName}</div>
-          <div>{clubInfo.presidentEmail}</div>
-          <div>{clubInfo.presidentPhone}</div>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -142,10 +154,13 @@ export default function RecruitmentPostDetail() {
         </CardHeader>
         <CardContent>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">2024년 봄학기 신입 부원 모집</h2>
+            <h2 className="text-xl font-semibold">{recruitmentPost.title}</h2>
             <Badge variant="outline">{applicants.length} 지원자</Badge>
           </div>
-          <p className="mb-2 text-sm text-gray-400">모집 기간: 2024-03-01 ~ 2024-03-31</p>
+          <p className="mb-2 text-sm text-gray-400">
+            모집 기간: {format(recruitmentPost.startDate, 'yyyy.MM.dd')} ~{' '}
+            {format(recruitmentPost.endDate, 'yyyy.MM.dd')}
+          </p>
           <p className="text-sm text-gray-400">합격률: {passRate}%</p>
         </CardContent>
       </Card>
@@ -168,136 +183,54 @@ export default function RecruitmentPostDetail() {
           </div>
 
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {statusOptions.map(status => (
-                <Droppable key={status} droppableId={status}>
-                  {provided => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="rounded-lg border border-gray-700 bg-gray-800 p-4"
-                    >
-                      <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-lg font-semibold">{status}</h3>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleNotificationTrigger(status)}
-                          className="text-blue-400 hover:text-blue-300"
-                        >
-                          <Bell className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      {groupedApplicants[status]?.map((applicant, index) => (
-                        <Draggable key={applicant.id} draggableId={applicant.id.toString()} index={index}>
-                          {provided => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className="mb-2 rounded-md bg-gray-700 p-3"
-                            >
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-medium">{applicant.name}</p>
-                                  <p className="text-sm text-gray-400">{applicant.email}</p>
-                                </div>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => router.push(`${pathname}/applicant/${applicant.id}`)}
-                                  className="text-blue-400 hover:text-blue-300"
-                                >
-                                  <ChevronRight className="h-4 w-4" />
-                                </Button>
+            <div className="overflow-x-auto pb-4">
+              <div className="flex min-w-full gap-4" style={{ width: `max(100%, ${statusOptions.length * 320}px)` }}>
+                {statusOptions.map(status => (
+                  <DroppableWrapper key={status} id={status}>
+                    {displayedGroupedApplicants[status]?.map((applicant, index) => (
+                      <Draggable
+                        key={applicant.applicationId}
+                        draggableId={applicant.applicationId.toString()}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`mb-2 rounded-md bg-gray-700 p-3 ${
+                              snapshot.isDragging ? 'shadow-lg ring-2 ring-blue-500' : ''
+                            }`}
+                            style={{
+                              ...provided.draggableProps.style,
+                              opacity: snapshot.isDragging ? 0.8 : 1,
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium">{applicant.userName}</p>
+                                <p className="text-sm text-gray-400">{applicant.userEmail}</p>
                               </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => router.push(`${pathname}/applicant/${applicant.applicationId}`)}
+                                className="text-blue-400 hover:text-blue-300"
+                              >
+                                <ChevronRight className="h-4 w-4" />
+                              </Button>
                             </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  </DroppableWrapper>
+                ))}
+              </div>
             </div>
           </DragDropContext>
         </CardContent>
       </Card>
-
-      <Dialog open={isNotificationModalOpen} onOpenChange={setIsNotificationModalOpen}>
-        <DialogContent className="max-w-4xl bg-gray-800 text-gray-100">
-          <DialogHeader>
-            <DialogTitle>알림 발송</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="subject" className="text-right">
-                제목
-              </Label>
-              <Input
-                id="subject"
-                value={notificationSubject}
-                onChange={e => setNotificationSubject(e.target.value)}
-                className="col-span-3 bg-gray-700 text-gray-100"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="presidentName" className="text-right">
-                이름
-              </Label>
-              <Input
-                id="presidentName"
-                value={clubInfo.presidentName}
-                onChange={e => setClubInfo({ ...clubInfo, presidentName: e.target.value })}
-                className="col-span-3 bg-gray-700 text-gray-100"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="presidentEmail" className="text-right">
-                이메일
-              </Label>
-              <Input
-                id="presidentEmail"
-                value={clubInfo.presidentEmail}
-                onChange={e => setClubInfo({ ...clubInfo, presidentEmail: e.target.value })}
-                className="col-span-3 bg-gray-700 text-gray-100"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="presidentPhone" className="text-right">
-                전화번호
-              </Label>
-              <Input
-                id="presidentPhone"
-                value={clubInfo.presidentPhone}
-                onChange={e => setClubInfo({ ...clubInfo, presidentPhone: e.target.value })}
-                className="col-span-3 bg-gray-700 text-gray-100"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="body" className="text-right">
-                내용
-              </Label>
-              <Textarea
-                id="body"
-                value={notificationBody}
-                onChange={e => setNotificationBody(e.target.value)}
-                className="col-span-3 bg-gray-700 text-gray-100"
-                rows={10}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">미리보기</Label>
-              <div className="col-span-3">{renderEmailPreview()}</div>
-            </div>
-          </div>
-          <Button onClick={handleSendNotification} className="bg-blue-600 text-white hover:bg-blue-700">
-            <Send className="mr-2 h-4 w-4" />
-            알림 발송
-          </Button>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

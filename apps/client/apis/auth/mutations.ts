@@ -47,7 +47,12 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
-    mutationFn: () => logout(),
+    mutationFn: () =>
+      logout({
+        headers: {
+          'Refresh-Token': CookieManager.getClientRefreshToken()!,
+        },
+      }),
     onSuccess: () => {
       toast({
         title: '로그아웃이 완료되었습니다.',
@@ -60,8 +65,7 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
-      console.log('@@@@ onSettled');
-      CookieManager.removeToken();
+      CookieManager.removeAllToken();
       router.refresh();
 
       queryClient.invalidateQueries({ queryKey: keys.all });
@@ -182,7 +186,7 @@ export const useDeleteAccount = () => {
         title: '회원탈퇴가 완료되었습니다.',
       });
 
-      CookieManager.removeToken();
+      CookieManager.removeAllToken();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
       router.replace('/login');
