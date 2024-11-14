@@ -452,18 +452,6 @@ export interface ArrayResponseAdminAuthorizedClubResponse {
   results?: AdminAuthorizedClubResponse[];
 }
 
-export interface HasAuthorityByRecruitmentIdParams {
-  recruitmentId: string;
-}
-
-export interface IsValidRecruitmentParams {
-  recruitmentId: string;
-}
-
-export interface HasAuthorityParams {
-  clubId: string;
-}
-
 export namespace Admin동아리Api {
   /**
    * @description 동아리 모집 공고를 입력받아 동아리에 추가합니다.
@@ -544,12 +532,10 @@ export namespace Admin동아리Api {
    */
   export namespace HasAuthorityByRecruitmentId {
     export type RequestParams = {
-      recruitmentId: string;
-    };
-    export type RequestQuery = {
       /** @format int64 */
       recruitmentId: number;
     };
+    export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = boolean;
@@ -566,12 +552,10 @@ export namespace Admin동아리Api {
    */
   export namespace IsValidRecruitment {
     export type RequestParams = {
-      recruitmentId: string;
-    };
-    export type RequestQuery = {
       /** @format int64 */
       recruitmentId: number;
     };
+    export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = boolean;
@@ -588,12 +572,10 @@ export namespace Admin동아리Api {
    */
   export namespace HasAuthority {
     export type RequestParams = {
-      clubId: string;
-    };
-    export type RequestQuery = {
       /** @format int64 */
       clubId: number;
     };
+    export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = boolean;
@@ -1100,14 +1082,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      * @response `200` `boolean` OK
      */
-    hasAuthorityByRecruitmentId: (
-      { recruitmentId, ...query }: HasAuthorityByRecruitmentIdParams,
-      params: RequestParams = {}
-    ) =>
+    hasAuthorityByRecruitmentId: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<boolean, any>({
         path: `/admin/api/v1/${recruitmentId}/has-authority`,
         method: 'GET',
-        query: query,
         secure: true,
         ...params,
       }),
@@ -1122,11 +1100,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      * @response `200` `boolean` OK
      */
-    isValidRecruitment: ({ recruitmentId, ...query }: IsValidRecruitmentParams, params: RequestParams = {}) =>
+    isValidRecruitment: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<boolean, any>({
         path: `/admin/api/v1/recruitment/${recruitmentId}/is-valid`,
         method: 'GET',
-        query: query,
         secure: true,
         ...params,
       }),
@@ -1141,11 +1118,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      * @response `200` `boolean` OK
      */
-    hasAuthority: ({ clubId, ...query }: HasAuthorityParams, params: RequestParams = {}) =>
+    hasAuthority: (clubId: number, params: RequestParams = {}) =>
       this.request<boolean, any>({
         path: `/admin/api/v1/has-authority/${clubId}`,
         method: 'GET',
-        query: query,
         secure: true,
         ...params,
       }),

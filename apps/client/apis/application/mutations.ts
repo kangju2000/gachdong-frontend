@@ -12,7 +12,6 @@ export const useChangeApplication = () => {
   });
 };
 
-// TODO
 export const useCreateApplication = () => {
   return useMutation({
     mutationFn: ({ applyId, data }: { applyId: number; data: CreateApplicationPayload }) =>

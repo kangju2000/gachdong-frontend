@@ -3,15 +3,10 @@ import { applicationApi } from '../config/instance';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubKeys } from '../club';
 import { useParams } from 'next/navigation';
+import { applicationKeys } from '.';
 
-const {
-  changeApplicationForm,
-  createApplicationForm,
-  deleteApplicationForm,
-  changeApplicationStatus,
-  getClubApplicationList,
-  getFormInfoAdmin,
-} = applicationApi.지원Api관리자;
+const { changeApplicationForm, createApplicationForm, deleteApplicationForm, changeApplicationStatus } =
+  applicationApi.지원Api관리자;
 
 export const useChangeApplicationForm = () => {
   return useMutation({
@@ -22,12 +17,11 @@ export const useChangeApplicationForm = () => {
 
 export const useCreateApplicationForm = () => {
   const queryClient = useQueryClient();
-  const params = useParams();
 
   return useMutation({
     mutationFn: (data: ToCreateApplicationFormDTO) => createApplicationForm(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentByClub(Number(params.id)) });
+    onSuccess: (_, { clubId }) => {
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentByClub(Number(clubId)) });
     },
   });
 };
@@ -38,20 +32,17 @@ export const useDeleteApplicationForm = () => {
   });
 };
 
-export const useGetFormInfoAdmin = () => {
-  return useMutation({
-    mutationFn: (formId: number) => getFormInfoAdmin(formId),
-  });
-};
-
 export const useChangeApplicationStatus = () => {
+  const params = useParams();
+  const queryClient = useQueryClient();
+
+  const clubId = Number(params.id);
+
   return useMutation({
     mutationFn: (data: ToChangeApplicationStatus) => changeApplicationStatus(data),
-  });
-};
-
-export const useGetClubApplicationList = () => {
-  return useMutation({
-    mutationFn: (applyId: number) => getClubApplicationList(applyId),
+    onSuccess: (_, { applicationId, status }) => {
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentsDetail(clubId, applicationId) });
+      queryClient.invalidateQueries({ queryKey: applicationKeys.clubApplicationList(clubId) });
+    },
   });
 };

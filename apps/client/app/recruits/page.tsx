@@ -63,7 +63,7 @@ export default function RecruitmentsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sortedRecruitments.map(recruitment => (
-            <RecruitmentCard recruitment={recruitment} />
+            <RecruitmentCard key={recruitment.recruitmentId} recruitment={recruitment} />
           ))}
         </div>
       )}

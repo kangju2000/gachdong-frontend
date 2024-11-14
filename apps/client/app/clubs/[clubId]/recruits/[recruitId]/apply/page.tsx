@@ -11,10 +11,9 @@ import Link from 'next/link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { clubQueries } from '@/apis/club';
 import { format } from '@/lib/date';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import { applicationQueries } from '@/apis/application';
+import { applicationQueries, useCreateApplication } from '@/apis/application';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -73,11 +72,16 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
   const router = useRouter();
   const { clubId, recruitId } = params;
 
+  const formId = 7; // FIXME: 임시 고정
+
   // 데이터 페칭
   const { data: recruitment } = useSuspenseQuery(clubQueries.recruitmentsDetail(Number(clubId), Number(recruitId)));
+  const { data: club } = useSuspenseQuery(clubQueries.club(Number(clubId)));
   const {
     data: { result: { formBody } = {} },
-  } = useSuspenseQuery(applicationQueries.formInfoUser(Number(recruitId)));
+  } = useSuspenseQuery(applicationQueries.formInfoUser(formId));
+
+  const { mutate: createApplication } = useCreateApplication();
 
   const questions: Question[] = formBody ? (Object.values(formBody) as Question[]) : [];
 
@@ -106,23 +110,31 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // API 호출 로직
-      // await applicationQueries.({
-      //   clubId: Number(clubId),
-      //   recruitId: Number(recruitId),
-      //   ...data,
-      //   status: 'SUBMITTED',
-      //   createdAt: new Date().toISOString(),
-      // });
+      createApplication(
+        {
+          applyId: Number(recruitId),
+          data: {
+            toApplyClub: {
+              applicationFormId: formId,
+              status: 'SAVED',
+              clubName: club.clubName,
+              formBody: data,
+            },
+          },
+        },
+        {
+          onSuccess: () => {
+            toast({
+              title: '지원 완료',
+              description: '지원서가 제출되었습니다.',
+            });
 
-      toast({
-        title: '지원 완료',
-        description: '지원서가 제출되었습니다.',
-      });
-
-      router.push('/mypage');
+            router.push('/mypage');
+          },
+        }
+      );
     } catch (error) {
       toast({
         title: '제출 실패',

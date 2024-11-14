@@ -91,12 +91,18 @@ export interface ToCreateApplicationFormDTO {
    */
   status: string;
   /**
-   * 지원서 양식 ID
+   * 지원서 이름
    * @minLength 0
    * @maxLength 50
-   * @example "가츠동 지원서 양식"
+   * @example "가츠동 지원서 이름"
    */
   formName: string;
+  /**
+   * 동아리 ID
+   * @format int64
+   * @example 21
+   */
+  clubId: number;
   /**
    * 지원서 양식 본문, Json 형식으로 넣어주세요.
    * @example {"name":"이름을 넣어주세요","age":"나이를 넣어주세요","education":{"university":"출신 학교를 넣어주세요","major":"전공을 넣어주세요"}}
@@ -267,6 +273,22 @@ export interface ToGetFormInfoAdminDTO {
   formBody: Record<string, object>;
   /** 지원서 양식 상태 (임시 저장인지, 삭제 가능한지 등) */
   formStatus: string;
+  /**
+   * 동아리 ID
+   * @format int64
+   */
+  clubId: number;
+  /**
+   * 지원 ID
+   * @format int64
+   */
+  applyId: number;
+}
+
+export interface ResFormListToGetFormInfoAdminDTO {
+  code?: string;
+  message?: string;
+  result?: ToGetFormInfoAdminDTO[];
 }
 
 export interface ResFormToGetApplicationDTO {
@@ -532,6 +554,26 @@ export namespace 지원Api관리자 {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ResFormObject;
+  }
+
+  /**
+   * @description clubId를 이용해 지원서 목록을 조회합니다.
+   * @tags 지원 API(관리자)
+   * @name GetClubApplicationFormList
+   * @summary club이 가지고 있는 지원서 양식 목록 조회 API
+   * @request GET:/admin/api/v1/form/list/{clubId}
+   * @secure
+   * @response `200` `ResFormListToGetFormInfoAdminDTO` OK
+   */
+  export namespace GetClubApplicationFormList {
+    export type RequestParams = {
+      /** @format int64 */
+      clubId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResFormListToGetFormInfoAdminDTO;
   }
 
   /**
@@ -1054,6 +1096,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ResFormObject, any>({
         path: `/admin/api/v1/form/${formId}`,
         method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description clubId를 이용해 지원서 목록을 조회합니다.
+     *
+     * @tags 지원 API(관리자)
+     * @name GetClubApplicationFormList
+     * @summary club이 가지고 있는 지원서 양식 목록 조회 API
+     * @request GET:/admin/api/v1/form/list/{clubId}
+     * @secure
+     * @response `200` `ResFormListToGetFormInfoAdminDTO` OK
+     */
+    getClubApplicationFormList: (clubId: number, params: RequestParams = {}) =>
+      this.request<ResFormListToGetFormInfoAdminDTO, any>({
+        path: `/admin/api/v1/form/list/${clubId}`,
+        method: 'GET',
         secure: true,
         ...params,
       }),
