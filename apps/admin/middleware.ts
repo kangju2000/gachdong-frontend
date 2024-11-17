@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { authApi, clubApi } from './apis/config/instance';
-import { CookieManager } from './lib/auth/cookies';
-
+import { removeTokens, setTokens } from '@/lib/auth/actions';
 const PUBLIC_PATHS = ['/login', '/forgot-password', '/signup'];
 
 interface AuthCheckResult {
@@ -12,7 +11,7 @@ interface AuthCheckResult {
 
 async function checkClubAuthority(clubId: string): Promise<boolean> {
   try {
-    await clubApi.admin동아리Api.hasAuthority({ clubId });
+    await clubApi.admin동아리Api.hasAuthority(Number(clubId));
     return true;
   } catch {
     return false;
@@ -32,10 +31,10 @@ async function refreshAuthToken(): Promise<boolean> {
   try {
     const { accessToken } = await authApi.관리자인증인가Api.refreshToken1();
 
-    CookieManager.setToken({ accessToken: accessToken! });
+    setTokens({ accessToken: accessToken ?? '' });
     return true;
   } catch {
-    CookieManager.removeAllToken();
+    removeTokens();
     return false;
   }
 }

@@ -3,14 +3,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../config/instance';
 import { useRouter } from 'next/navigation';
-import { CookieManager } from '@/lib/auth/cookies';
 import { keys } from './keys';
 import { toast } from '@/hooks/use-toast';
+import { removeTokens, setTokens } from '@/lib/auth/actions';
+import { getClientToken } from '@/lib/auth/cookies';
+import { LoginRequest } from '@gachdong/api/auth';
 
 const {
   login1: login,
   completeRegistration1: completeRegistration,
   resetPassword1: resetPassword,
+  // FIXME: 관리자쪽 API로 변경
+  // sendRegistrationVerificationCode1: sendVerificationCode,
 } = authApi.public관리자인증인가Api;
 
 const { logout1: logout, changePassword1: changePassword, deleteAccount1: deleteAccount } = authApi.관리자인증인가Api;
@@ -21,16 +25,21 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: login,
-    onSuccess: response => {
+    mutationFn: async (credentials: LoginRequest) => {
+      const response = await login(credentials);
+      await setTokens({
+        accessToken: response.accessToken ?? '',
+        refreshToken: response.refreshToken ?? '',
+      });
+      return response;
+    },
+    onSuccess: () => {
       toast({
         title: '로그인에 성공하였습니다.',
       });
 
-      CookieManager.setToken({ accessToken: response.accessToken!, refreshToken: response.refreshToken! });
-
       queryClient.invalidateQueries({ queryKey: keys.all });
-      router.replace('/');
+      router.replace('/dashboard');
     },
     onError: () => {
       toast({
@@ -47,7 +56,7 @@ export const useLogout = () => {
     mutationFn: () =>
       logout({
         headers: {
-          'Refresh-Token': CookieManager.getClientRefreshToken()!,
+          'Refresh-Token': `Bearer ${getClientToken().refreshToken!}`,
         },
       }),
     onSuccess: () => {
@@ -56,7 +65,7 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
-      CookieManager.removeAllToken();
+      removeTokens();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
     },
@@ -143,7 +152,7 @@ export const useDeleteAccount = () => {
         title: '회원탈퇴가 완료되었습니다.',
       });
 
-      CookieManager.removeAccessToken();
+      removeTokens();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
       router.replace('/login');

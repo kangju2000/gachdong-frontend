@@ -17,37 +17,22 @@ import { applicationQueries, useCreateApplication } from '@/apis/application';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-interface Question {
-  type: 'short' | 'long' | 'multiple' | 'checkbox';
-  title: string;
-  description: string;
-  required: boolean;
-  maxLength: number;
-  options: string[];
-}
+import { Question, RecruitmentFormData } from './schemas';
 
 // 동적 폼 필드를 위한 컴포넌트
 function QuestionField({ question, register, errors }: { question: Question; register: any; errors: any }) {
   switch (question.type) {
-    case 'short':
-      return <Input {...register(question.title)} placeholder={question.description} maxLength={question.maxLength} />;
-    case 'long':
+    case 'shortText':
+      return <Input {...register(question.label)} maxLength={question.maxLength} />;
+    case 'longText':
+      return <Textarea {...register(question.label)} maxLength={question.maxLength} rows={6} />;
+    case 'select':
       return (
-        <Textarea
-          {...register(question.title)}
-          placeholder={question.description}
-          maxLength={question.maxLength}
-          rows={6}
-        />
-      );
-    case 'multiple':
-      return (
-        <RadioGroup {...register(question.title)}>
+        <RadioGroup {...register(question.label)}>
           {question.options.map(option => (
-            <div key={option} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={option} />
-              <Label htmlFor={option}>{option}</Label>
+            <div key={option.label} className="flex items-center space-x-2">
+              <RadioGroupItem value={option.value} id={option.value} />
+              <Label htmlFor={option.value}>{option.label}</Label>
             </div>
           ))}
         </RadioGroup>
@@ -56,9 +41,9 @@ function QuestionField({ question, register, errors }: { question: Question; reg
       return (
         <div className="space-y-2">
           {question.options.map(option => (
-            <div key={option} className="flex items-center space-x-2">
-              <Checkbox {...register(question.title)} id={`${question.title}-${option}`} value={option} />
-              <Label htmlFor={`${question.title}-${option}`}>{option}</Label>
+            <div key={option.label} className="flex items-center space-x-2">
+              <Checkbox {...register(question.label)} id={`${question.label}-${option.value}`} value={option.value} />
+              <Label htmlFor={`${question.label}-${option.value}`}>{option.label}</Label>
             </div>
           ))}
         </div>
@@ -72,7 +57,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
   const router = useRouter();
   const { clubId, recruitId } = params;
 
-  const formId = 7; // FIXME: 임시 고정
+  const formId = 9; // FIXME: 임시 고정
 
   // 데이터 페칭
   const { data: recruitment } = useSuspenseQuery(clubQueries.recruitmentsDetail(Number(clubId), Number(recruitId)));
@@ -90,7 +75,7 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
     ...questions.reduce(
       (acc, question) => ({
         ...acc,
-        [question.title]: question.required
+        [question.label]: question.required
           ? question.type === 'checkbox'
             ? z.array(z.string()).min(1, '필수 항목입니다')
             : z.string().min(1, '필수 항목입니다')
@@ -156,10 +141,10 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
 
       <div className="overflow-hidden rounded-lg bg-white shadow">
         <div className="border-b p-6">
-          <h1 className="text-2xl font-bold">{recruitment.title}</h1>
-          <p className="text-muted-foreground">
-            {format(recruitment.startDate, 'yyyy.MM.dd')} - {format(recruitment.endDate, 'yyyy.MM.dd')}
-          </p>
+          <h1 className="text-3xl font-bold">{recruitment.title}</h1>
+          <Link href={`/clubs/${clubId}`} className="text-muted-foreground text-sm">
+            {club.clubName}
+          </Link>
         </div>
 
         <form className="space-y-6 p-6" onSubmit={handleSubmit(onSubmit)}>
@@ -167,17 +152,17 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
             <div key={index} className="space-y-4">
               <div className="flex items-baseline justify-between">
                 <Label className="text-base font-semibold">
-                  {question.title}
+                  {question.label}
                   {question.required && <span className="ml-1 text-red-500">*</span>}
                 </Label>
-                {question.maxLength > 0 && (
+                {'maxLength' in question && (
                   <span className="text-muted-foreground text-sm">최대 {question.maxLength}자</span>
                 )}
               </div>
               {question.description && <p className="text-muted-foreground text-sm">{question.description}</p>}
               <QuestionField question={question} register={register} errors={errors} />
-              {errors[question.title] && (
-                <p className="text-sm text-red-500">{errors[question.title]?.message as string}</p>
+              {errors[question.label] && (
+                <p className="text-sm text-red-500">{errors[question.label]?.message as string}</p>
               )}
             </div>
           ))}

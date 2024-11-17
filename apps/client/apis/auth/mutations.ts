@@ -3,9 +3,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../config/instance';
 import { useRouter } from 'next/navigation';
-import { CookieManager } from '@/lib/auth/cookies';
 import { keys } from './keys';
 import { toast } from '@/hooks/use-toast';
+import { removeTokens, setTokens } from '@/lib/auth/actions';
+import { getClientToken } from '@/lib/auth/cookies';
+import { LoginRequest } from '@gachdong/api/auth';
 
 const {
   login,
@@ -22,14 +24,18 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: login,
-    onSuccess: response => {
+    mutationFn: async (credentials: LoginRequest) => {
+      const response = await login(credentials);
+      await setTokens({
+        accessToken: response.accessToken ?? '',
+        refreshToken: response.refreshToken ?? '',
+      });
+      return response;
+    },
+    onSuccess: () => {
       toast({
         title: '로그인에 성공하였습니다.',
       });
-
-      CookieManager.setToken({ accessToken: response.accessToken ?? '' });
-      router.refresh();
 
       queryClient.invalidateQueries({ queryKey: keys.all });
       router.replace('/');
@@ -50,7 +56,7 @@ export const useLogout = () => {
     mutationFn: () =>
       logout({
         headers: {
-          'Refresh-Token': CookieManager.getClientRefreshToken()!,
+          'Refresh-Token': `Bearer ${getClientToken().refreshToken!}`,
         },
       }),
     onSuccess: () => {
@@ -65,8 +71,7 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
-      CookieManager.removeAllToken();
-      router.refresh();
+      removeTokens();
 
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
@@ -186,7 +191,7 @@ export const useDeleteAccount = () => {
         title: '회원탈퇴가 완료되었습니다.',
       });
 
-      CookieManager.removeAllToken();
+      removeTokens();
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
       router.replace('/login');

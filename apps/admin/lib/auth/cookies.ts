@@ -1,43 +1,33 @@
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
-import type { TokenPayload } from './types';
-import { AUTH_COOKIE_NAME, COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_OPTIONS } from './constants';
+import { AUTH_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from './constants';
 
-export class CookieManager {
-  static getClientAccessToken() {
-    return getCookie(AUTH_COOKIE_NAME) ?? null;
+export const getServerToken = async () => {
+  const cookieStore = (await import('next/headers')).cookies();
+
+  return {
+    accessToken: cookieStore.get(AUTH_COOKIE_NAME)?.value ?? null,
+    refreshToken: cookieStore.get(REFRESH_TOKEN_COOKIE_NAME)?.value ?? null,
+  };
+};
+
+export const getClientToken = () => {
+  if (typeof document === 'undefined') {
+    return {
+      accessToken: null,
+      refreshToken: null,
+    };
   }
 
-  static getClientRefreshToken() {
-    return getCookie(REFRESH_TOKEN_COOKIE_NAME) ?? null;
-  }
+  const cookies = document.cookie.split(';').reduce(
+    (acc, cookie) => {
+      const [key, value] = cookie.trim().split('=') as [string, string];
+      acc[key] = value;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 
-  static async getServerAccessToken() {
-    const { cookies } = await import('next/headers');
-    return getCookie(AUTH_COOKIE_NAME, { cookies }) ?? null;
-  }
-
-  static async getServerRefreshToken() {
-    const { cookies } = await import('next/headers');
-    return getCookie(REFRESH_TOKEN_COOKIE_NAME, { cookies }) ?? null;
-  }
-
-  static setToken({ accessToken, refreshToken }: TokenPayload): void {
-    setCookie(AUTH_COOKIE_NAME, accessToken, COOKIE_OPTIONS);
-    if (refreshToken) {
-      setCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
-    }
-  }
-
-  static removeAllToken(): void {
-    this.removeAccessToken();
-    this.removeRefreshToken();
-  }
-
-  static removeAccessToken(): void {
-    deleteCookie(AUTH_COOKIE_NAME);
-  }
-
-  static removeRefreshToken(): void {
-    deleteCookie(REFRESH_TOKEN_COOKIE_NAME);
-  }
-}
+  return {
+    accessToken: cookies[AUTH_COOKIE_NAME] ?? null,
+    refreshToken: cookies[REFRESH_TOKEN_COOKIE_NAME] ?? null,
+  };
+};

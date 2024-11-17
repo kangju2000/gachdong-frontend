@@ -4,20 +4,17 @@ import { PrefetchHydration } from '@/components/PrefetchHydration';
 import { authQueries } from '@/apis/auth';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { CookieManager } from '@/lib/auth/cookies';
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+import { getServerToken } from '@/lib/auth/cookies';
 
 export async function Header() {
-  const token = (await CookieManager.getServerAccessToken()) ?? CookieManager.getClientAccessToken();
+  const { accessToken } = await getServerToken();
 
   return (
-    <PrefetchHydration queries={token ? [authQueries.profile()] : []}>
+    <PrefetchHydration queries={accessToken ? [authQueries.profile()] : []}>
       <header className="bg-background fixed top-0 z-50 w-full border-b">
         <div className="mx-auto flex h-[68px] max-w-[980px] items-center justify-between px-4 py-4">
           <NavigationSection />
-          {token ? (
+          {accessToken ? (
             <AuthSection />
           ) : (
             <Button asChild>

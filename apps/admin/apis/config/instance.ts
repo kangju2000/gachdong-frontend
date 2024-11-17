@@ -3,7 +3,7 @@ import { Api as ClubApi } from '@gachdong/api/club';
 import { Api as ApplicationApi } from '@gachdong/api/application';
 import { Api as AuthApi } from '@gachdong/api/auth';
 import { Api as UserApi } from '@gachdong/api/user';
-import { CookieManager } from '@/lib/auth/cookies';
+import { getServerToken, getClientToken } from '@/lib/auth/cookies';
 
 const instance = ky.create({
   credentials: 'include',
@@ -16,9 +16,7 @@ const instance = ky.create({
     beforeRequest: [
       async request => {
         const token =
-          typeof window !== 'undefined'
-            ? CookieManager.getClientAccessToken()
-            : await CookieManager.getServerAccessToken();
+          typeof window !== 'undefined' ? getClientToken().accessToken : (await getServerToken()).accessToken;
 
         if (token) {
           request.headers.set('Authorization', `Bearer ${token}`);

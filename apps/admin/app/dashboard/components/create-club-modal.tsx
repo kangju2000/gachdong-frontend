@@ -10,8 +10,6 @@ import { CATEGORY_MAP } from '@/constants/categories';
 import { ImageIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import MDEditor from '@uiw/react-md-editor';
-import { CookieManager } from '@/lib/auth/cookies';
-import ky from 'ky';
 
 type Props = {
   isOpen: boolean;

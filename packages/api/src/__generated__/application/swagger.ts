@@ -50,7 +50,7 @@ export interface ToCreateApplicationDTO {
    * 접수된 지원 ID
    * @format int64
    */
-  applyId: number;
+  applicationId: number;
 }
 
 /** 동아리 지원자 상태 수정 요청 DTO */
@@ -83,7 +83,7 @@ export interface ToCreateApplicationFormDTO {
    * @format int64
    * @example 3
    */
-  applyId: number;
+  recruitmentId: number;
   /**
    * 지원서 양식 상태(임시저장/저장)
    * @pattern TEMPORARY_SAVED|SAVED
@@ -282,7 +282,7 @@ export interface ToGetFormInfoAdminDTO {
    * 지원 ID
    * @format int64
    */
-  applyId: number;
+  recruitmentId: number;
 }
 
 export interface ResFormListToGetFormInfoAdminDTO {
@@ -328,14 +328,14 @@ export namespace 지원Api사용자 {
    * @tags 지원 API(사용자)
    * @name ChangeApplication
    * @summary 동아리 지원 수정 API
-   * @request PUT:/api/v1/{apply_id}
+   * @request PUT:/api/v1/{recruitmentId}
    * @secure
    * @response `200` `ResFormToCreateApplicationDTO` OK
    */
   export namespace ChangeApplication {
     export type RequestParams = {
       /** @format int64 */
-      applyId: number;
+      recruitmentId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = ChangeApplicationPayload;
@@ -348,14 +348,14 @@ export namespace 지원Api사용자 {
    * @tags 지원 API(사용자)
    * @name CreateApplication
    * @summary 동아리 지원 API
-   * @request POST:/api/v1/{apply_id}
+   * @request POST:/api/v1/{recruitmentId}
    * @secure
    * @response `200` `ResFormToCreateApplicationDTO` OK
    */
   export namespace CreateApplication {
     export type RequestParams = {
       /** @format int64 */
-      applyId: number;
+      recruitmentId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = CreateApplicationPayload;
@@ -425,14 +425,14 @@ export namespace 지원Api사용자 {
    * @tags 지원 API(사용자)
    * @name DeleteApplication
    * @summary 사용자 지원 취소 API
-   * @request DELETE:/api/v1/apply/{applyId}
+   * @request DELETE:/api/v1/apply/{recruitmentId}
    * @secure
    * @response `200` `ResFormObject` OK
    */
   export namespace DeleteApplication {
     export type RequestParams = {
       /** @format int64 */
-      applyId: number;
+      recruitmentId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -879,13 +879,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(사용자)
      * @name ChangeApplication
      * @summary 동아리 지원 수정 API
-     * @request PUT:/api/v1/{apply_id}
+     * @request PUT:/api/v1/{recruitmentId}
      * @secure
      * @response `200` `ResFormToCreateApplicationDTO` OK
      */
-    changeApplication: (applyId: number, data: ChangeApplicationPayload, params: RequestParams = {}) =>
+    changeApplication: (recruitmentId: number, data: ChangeApplicationPayload, params: RequestParams = {}) =>
       this.request<ResFormToCreateApplicationDTO, any>({
-        path: `/api/v1/${applyId} `,
+        path: `/api/v1/${recruitmentId} `,
         method: 'PUT',
         body: data,
         secure: true,
@@ -899,13 +899,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(사용자)
      * @name CreateApplication
      * @summary 동아리 지원 API
-     * @request POST:/api/v1/{apply_id}
+     * @request POST:/api/v1/{recruitmentId}
      * @secure
      * @response `200` `ResFormToCreateApplicationDTO` OK
      */
-    createApplication: (applyId: number, data: CreateApplicationPayload, params: RequestParams = {}) =>
+    createApplication: (recruitmentId: number, data: CreateApplicationPayload, params: RequestParams = {}) =>
       this.request<ResFormToCreateApplicationDTO, any>({
-        path: `/api/v1/${applyId}`,
+        path: `/api/v1/${recruitmentId}`,
         method: 'POST',
         body: data,
         secure: true,
@@ -973,13 +973,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(사용자)
      * @name DeleteApplication
      * @summary 사용자 지원 취소 API
-     * @request DELETE:/api/v1/apply/{applyId}
+     * @request DELETE:/api/v1/apply/{recruitmentId}
      * @secure
      * @response `200` `ResFormObject` OK
      */
-    deleteApplication: (applyId: number, params: RequestParams = {}) =>
+    deleteApplication: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<ResFormObject, any>({
-        path: `/api/v1/apply/${applyId}`,
+        path: `/api/v1/apply/${recruitmentId}`,
         method: 'DELETE',
         secure: true,
         ...params,

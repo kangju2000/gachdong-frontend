@@ -13,7 +13,6 @@ import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';
 import { authQueries } from '@/apis/auth';
 import ky from 'ky';
-import { CookieManager } from '@/lib/auth/cookies';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
@@ -28,10 +27,7 @@ export default function DashboardCard() {
       formData.append('image', imageFile);
       const res = await ky.post(
         `https://iibli2f5x4.execute-api.ap-northeast-2.amazonaws.com/dev/club/profile-upload?clubName=${newClubData.name}`,
-        {
-          headers: { Authorization: `Bearer ${CookieManager.getClientAccessToken()}` },
-          body: formData,
-        }
+        { body: formData }
       );
 
       const { url } = await res.json<{ url: string }>();

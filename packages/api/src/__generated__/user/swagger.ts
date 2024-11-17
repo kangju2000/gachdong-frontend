@@ -41,6 +41,7 @@ export namespace 사용자프로필이미지Api {
    * @name UploadProfileImage
    * @summary 프로필 이미지 업로드
    * @request POST:/api/v1/upload-profile-image
+   * @secure
    * @response `200` `UserProfileResponse` OK
    */
   export namespace UploadProfileImage {
@@ -57,6 +58,7 @@ export namespace 사용자프로필이미지Api {
    * @name UpdateProfileImage
    * @summary 프로필 이미지 수정
    * @request POST:/api/v1/update-profile-image
+   * @secure
    * @response `200` `UserProfileResponse` OK
    */
   export namespace UpdateProfileImage {
@@ -73,6 +75,7 @@ export namespace 사용자프로필이미지Api {
    * @name GetProfileImage
    * @summary 프로필 이미지 조회
    * @request GET:/api/v1/profile-image/{userReferenceId}
+   * @secure
    * @response `200` `string` OK
    */
   export namespace GetProfileImage {
@@ -92,6 +95,7 @@ export namespace 사용자프로필이미지Api {
    * @name DeleteProfileImage
    * @summary 프로필 이미지 삭제
    * @request DELETE:/api/v1/delete-profile-image
+   * @secure
    * @response `200` `string` OK
    */
   export namespace DeleteProfileImage {
@@ -329,6 +333,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadProfileImage
      * @summary 프로필 이미지 업로드
      * @request POST:/api/v1/upload-profile-image
+     * @secure
      * @response `200` `UserProfileResponse` OK
      */
     uploadProfileImage: (data: UserProfileRequest, params: RequestParams = {}) =>
@@ -336,6 +341,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/upload-profile-image`,
         method: 'POST',
         body: data,
+        secure: true,
         type: ContentType.FormData,
         format: 'json',
         ...params,
@@ -348,6 +354,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateProfileImage
      * @summary 프로필 이미지 수정
      * @request POST:/api/v1/update-profile-image
+     * @secure
      * @response `200` `UserProfileResponse` OK
      */
     updateProfileImage: (data: UserProfileRequest, params: RequestParams = {}) =>
@@ -355,6 +362,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/update-profile-image`,
         method: 'POST',
         body: data,
+        secure: true,
         type: ContentType.FormData,
         format: 'json',
         ...params,
@@ -367,12 +375,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetProfileImage
      * @summary 프로필 이미지 조회
      * @request GET:/api/v1/profile-image/{userReferenceId}
+     * @secure
      * @response `200` `string` OK
      */
     getProfileImage: (userReferenceId: string, params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/profile-image/${userReferenceId}`,
         method: 'GET',
+        secure: true,
         format: 'json',
         ...params,
       }),
@@ -384,12 +394,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteProfileImage
      * @summary 프로필 이미지 삭제
      * @request DELETE:/api/v1/delete-profile-image
+     * @secure
      * @response `200` `string` OK
      */
     deleteProfileImage: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/delete-profile-image`,
         method: 'DELETE',
+        secure: true,
         format: 'json',
         ...params,
       }),

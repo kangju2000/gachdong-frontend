@@ -101,7 +101,7 @@ export default function RecruitmentForm() {
 
       await createApplicationForm({
         clubId: Number(params.id),
-        applyId: clubRecruitmentId,
+        recruitmentId: clubRecruitmentId,
         status: 'SAVED',
         formName: data.postInfo.title,
         formBody,

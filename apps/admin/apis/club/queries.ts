@@ -62,12 +62,12 @@ export const queries = {
   hasAuthority: (clubId: number) =>
     queryOptions({
       queryKey: keys.hasAuthority(clubId),
-      queryFn: () => hasAuthority({ clubId: clubId.toString() }),
+      queryFn: () => hasAuthority(clubId),
     }),
   isValidRecruitment: (recruitmentId: number) =>
     queryOptions({
       queryKey: keys.isValidRecruitment(recruitmentId),
-      queryFn: () => isValidRecruitment({ recruitmentId: recruitmentId.toString() }),
+      queryFn: () => isValidRecruitment(recruitmentId),
     }),
   authorizedClubs: () =>
     queryOptions({

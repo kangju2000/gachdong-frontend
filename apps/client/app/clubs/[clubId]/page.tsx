@@ -128,7 +128,7 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
                   return (
                     <ul className="space-y-4">
                       {clubRecruits.map(recruit => (
-                        <li key={recruit.clubId}>
+                        <li key={recruit.recruitmentId}>
                           <Link
                             href={`/clubs/${params.clubId}/recruits/${recruit.recruitmentId}`}
                             className="hover:bg-accent block rounded-lg p-3 transition-colors"

@@ -25,13 +25,17 @@ export function RecruitContainer() {
         <Card className="mb-6">
           <CardHeader className="border-b">
             <div className="flex items-center space-x-4">
-              <Avatar className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
-                <AvatarImage src={club.clubImageUrl} alt={club.clubName} />
-                <AvatarFallback className="bg-muted">{club.clubName.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <Avatar className="bg-muted h-16 w-16 flex-shrink-0 overflow-hidden rounded-full" asChild>
+                <Link href={`/clubs/${clubId}`}>
+                  <AvatarImage src={club.clubImageUrl} alt={club.clubName} />
+                  <AvatarFallback className="bg-muted">{club.clubName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                </Link>
               </Avatar>
               <div>
                 <CardTitle className="text-2xl">{announcement.title}</CardTitle>
-                <p className="text-muted-foreground mt-1">{club.clubName}</p>
+                <Link href={`/clubs/${clubId}`} className="text-muted-foreground mt-1">
+                  {club.clubName}
+                </Link>
               </div>
             </div>
           </CardHeader>

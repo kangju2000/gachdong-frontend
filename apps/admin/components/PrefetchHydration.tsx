@@ -15,9 +15,15 @@ export async function PrefetchHydration({ queries, children }: PropsWithChildren
   const getQueryClient = cache(() => new QueryClient());
   const queryClient = getQueryClient();
 
-  for (const query of queries) {
-    await queryClient.prefetchQuery(query);
-  }
+  await Promise.all(
+    queries.map(query =>
+      queryClient.prefetchQuery({
+        ...query,
+        staleTime: 5 * 1000,
+        gcTime: 10 * 1000,
+      })
+    )
+  );
 
   const dehydratedState = dehydrate(queryClient);
 
