@@ -10,10 +10,9 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Calendar, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { ANNOUNCEMENTS } from '@/constants/data';
-import { Announcement } from '@/types';
 
 export default function AnnouncementDetailPage({ params }: { params: { id: string } }) {
-  const [announcement, setAnnouncement] = useState<Announcement | null>(null);
+  const [announcement, setAnnouncement] = useState<any>(null);
 
   useEffect(() => {
     const foundAnnouncement = ANNOUNCEMENTS.find(a => a.id === Number(params.id));
@@ -29,7 +28,7 @@ export default function AnnouncementDetailPage({ params }: { params: { id: strin
   }
 
   return (
-    <main className="mx-auto max-w-[980px] px-4 py-6">
+    <div className="mx-auto max-w-[980px] px-4 py-6">
       <Button variant="ghost" asChild className="mb-6">
         <Link href="/announcements" className="flex items-center">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -53,7 +52,7 @@ export default function AnnouncementDetailPage({ params }: { params: { id: strin
         </CardHeader>
         <Separator className="mb-6" />
         <CardContent>
-          <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:text-base prose-ul:text-base prose-ol:text-base max-w-none">
+          <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-p:text-base prose-ul:text-base prose-ol:text-base min-h-[350px] max-w-none break-words">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -65,6 +64,6 @@ export default function AnnouncementDetailPage({ params }: { params: { id: strin
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }

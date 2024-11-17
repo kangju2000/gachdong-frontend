@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from '@/apis/auth';
 import { applicationQueries } from '@/apis/application';
+import { clubQueries } from '@/apis/club';
+import { SuspenseQuery } from '@suspensive/react-query';
 
 export default function MyPageContainer() {
   const { data: profile } = useQuery(authQueries.profile());
@@ -25,6 +27,7 @@ export default function MyPageContainer() {
         <CardHeader>
           <CardTitle className="text-2xl font-bold">내 프로필</CardTitle>
         </CardHeader>
+
         <CardContent>
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
@@ -48,50 +51,50 @@ export default function MyPageContainer() {
         <CardContent>
           <ul className="space-y-4">
             {/* TODO: application */}
-            {/* {applications.toGetApplicationHistoryDTO?.map(app => (
-              <SuspenseQuery {...clubQueries.club(app.clubId)}>
-                {({ data: club }) => (
-                  <li
-                    key={`${app.clubId}-${app.recruitId}`}
-                    className="hover:bg-muted/80 group flex flex-col rounded-lg border p-4 transition-colors"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{club.clubName || '동아리 이름'}</h3>
-                          <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-                            {app.status === 'SUBMITTED' ? '지원완료' : '임시저장'}
-                          </span>
-                        </div>
-                        <p className="text-muted-foreground text-sm">지원자: {app.name}</p>
-                        <div className="text-muted-foreground flex flex-wrap gap-x-4 text-xs">
-                          <span>
-                            제출일:{' '}
-                            {new Date(app.createdAt).toLocaleDateString('ko-KR', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                          <span>이메일: {app.email}</span>
-                          <span>연락처: {app.phone}</span>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100"
-                        asChild
-                      >
-                        <Link href={`/clubs/${app.clubId}/recruits/${app.recruitId}`}>공고 보기</Link>
-                      </Button>
+            {applications.toGetApplicationHistoryDTO!.map(app => (
+              // <SuspenseQuery {...clubQueries.club(app.clubId)}>
+              // {({ data: club }) => (
+              // TODO: 공고 이름 추가, 동아리 id 추가되면 링크 추가
+              <li
+                key={`${app.clubName}-${app.applicationId}`}
+                className="hover:bg-muted/80 group flex flex-col rounded-lg border p-4 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold">{app.clubName || '동아리 이름'}</h3>
+                      <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
+                        {app.status === 'SAVED' ? '지원완료' : '임시저장'}
+                      </span>
                     </div>
-                  </li>
-                )}
-              </SuspenseQuery>
-            ))} */}
+                    <div className="text-muted-foreground flex flex-wrap gap-x-4 text-xs">
+                      <span>
+                        제출일:{' '}
+                        {new Date(app.submitDate).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                      {/* <span>이메일: {app.}</span>
+                          <span>연락처: {app.phone}</span> */}
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100"
+                    asChild
+                  >
+                    {/* <Link href={`/clubs/${app.clubId}/recruits/${app.recruitId}`}>공고 보기</Link> */}
+                  </Button>
+                </div>
+              </li>
+              // )}
+              // </SuspenseQuery>
+            ))}
             {applications.toGetApplicationHistoryDTO?.length === 0 && (
               <div className="text-muted-foreground flex flex-col items-center py-8">
                 <p>아직 지원한 동아리가 없습니다.</p>

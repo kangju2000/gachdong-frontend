@@ -15,37 +15,37 @@ const {
 export const queries = {
   clubs: () =>
     queryOptions({
-      queryKey: keys.clubs(),
+      queryKey: keys.lists.all(),
       queryFn: getClubs,
     }),
   club: (clubId: number) =>
     queryOptions({
-      queryKey: keys.club(clubId),
+      queryKey: keys.detail.info(clubId),
       queryFn: () => getClub(clubId),
     }),
   contactInfo: (clubId: number) =>
     queryOptions({
-      queryKey: keys.contactInfo(clubId),
+      queryKey: keys.detail.contact(clubId),
       queryFn: () => getClubContactInfo(clubId),
     }),
   recruitments: () =>
     queryOptions({
-      queryKey: keys.recruitments(),
+      queryKey: keys.recruitment.all(),
       queryFn: () => getClubsRecruitments(),
     }),
   recruitmentByClub: (clubId: number) =>
     queryOptions({
-      queryKey: keys.recruitmentByClub(clubId),
+      queryKey: keys.recruitment.byClub(clubId),
       queryFn: () => getClubRecruitments(clubId),
     }),
   recruitmentsDetail: (clubId: number, recruitmentId: number) =>
     queryOptions({
-      queryKey: keys.recruitmentsDetail(clubId, recruitmentId),
+      queryKey: keys.recruitment.detail(clubId, recruitmentId),
       queryFn: () => getClubRecruitment(clubId, recruitmentId),
     }),
   activities: (clubId: number) =>
     queryOptions({
-      queryKey: keys.activities(clubId),
+      queryKey: keys.detail.activities(clubId),
       queryFn: () => getClubActivities(clubId),
     }),
 };

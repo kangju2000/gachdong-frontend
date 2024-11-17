@@ -77,17 +77,6 @@ export default function RecruitmentForm() {
         {} as Record<string, { order: number; label: string }>
       );
 
-      // 모집 공고 생성
-      const { clubRecruitmentId } = await createClubRecruitment({
-        clubId: Number(params.id),
-        title: data.postInfo.title,
-        content: data.postInfo.content,
-        recruitmentCount: 10, // TODO: Make this configurable
-        startDate: new Date(data.postInfo.startDate).toISOString(),
-        endDate: new Date(data.postInfo.endDate).toISOString(),
-        processData,
-      });
-
       // 지원서 양식 생성
       const formBody = Object.fromEntries(
         data.questions.map((question, index) => [
@@ -99,18 +88,30 @@ export default function RecruitmentForm() {
         ])
       );
 
-      await createApplicationForm({
+      const {
+        result: { applicationFormId },
+      } = await createApplicationForm({
         clubId: Number(params.id),
-        recruitmentId: clubRecruitmentId,
         status: 'SAVED',
         formName: data.postInfo.title,
         formBody,
       });
 
+      const { clubRecruitmentId } = await createClubRecruitment({
+        clubId: Number(params.id),
+        applicationFormId,
+        title: data.postInfo.title,
+        content: data.postInfo.content,
+        recruitmentCount: 10, // TODO: Make this configurable
+        startDate: new Date(data.postInfo.startDate).toISOString(),
+        endDate: new Date(data.postInfo.endDate).toISOString(),
+        processData,
+      });
+
       toast({
         title: '모집 공고가 성공적으로 등록되었습니다.',
       });
-      router.push(`/dashboard/${params.id}/recruitment`);
+      router.push(`/dashboard/${params.id}/recruitment/${clubRecruitmentId}`);
       router.refresh();
     } catch (error) {
       console.error('Publish error:', error);

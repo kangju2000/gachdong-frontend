@@ -8,7 +8,6 @@ import { getServerToken, getClientToken } from '@/lib/auth/cookies';
 const instance = ky.create({
   credentials: 'include',
   headers: {
-    'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   },
   retry: 0,
@@ -58,4 +57,4 @@ const userApi = new UserApi({
   },
 });
 
-export { clubApi, applicationApi, authApi, userApi };
+export { clubApi, applicationApi, authApi, userApi, instance };

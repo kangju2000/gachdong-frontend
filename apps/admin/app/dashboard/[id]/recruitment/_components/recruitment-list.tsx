@@ -22,7 +22,7 @@ export function RecruitmentList() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-[350px] space-y-6">
       <RecruitmentHeader searchTerm={searchTerm} onSearch={handleSearch} pathname={pathname} />
 
       <Tabs defaultValue="posts" className="space-y-6">

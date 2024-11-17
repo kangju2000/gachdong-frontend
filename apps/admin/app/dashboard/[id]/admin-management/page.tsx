@@ -56,7 +56,7 @@ export default function ClubAdminManagementComponent() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-[350px] space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-100">운영진 관리</h1>
         <Button onClick={generateInviteCode}>

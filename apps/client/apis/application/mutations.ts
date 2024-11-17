@@ -14,8 +14,10 @@ export const useChangeApplication = () => {
 
 export const useCreateApplication = () => {
   return useMutation({
-    mutationFn: ({ applyId, data }: { applyId: number; data: CreateApplicationPayload }) =>
-      createApplication(applyId, data),
+    mutationFn: ({ recruitmentId, data }: { recruitmentId: number; data: CreateApplicationPayload }) =>
+      createApplication(recruitmentId, data, {
+        format: 'formData',
+      }),
   });
 };
 

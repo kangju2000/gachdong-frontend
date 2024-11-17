@@ -79,12 +79,6 @@ export interface ResFormObject {
 /** 지원서 양식 생성 요청 DTO */
 export interface ToCreateApplicationFormDTO {
   /**
-   * 지원 ID
-   * @format int64
-   * @example 3
-   */
-  recruitmentId: number;
-  /**
    * 지원서 양식 상태(임시저장/저장)
    * @pattern TEMPORARY_SAVED|SAVED
    * @example "SAVED"
@@ -278,11 +272,6 @@ export interface ToGetFormInfoAdminDTO {
    * @format int64
    */
   clubId: number;
-  /**
-   * 지원 ID
-   * @format int64
-   */
-  recruitmentId: number;
 }
 
 export interface ResFormListToGetFormInfoAdminDTO {

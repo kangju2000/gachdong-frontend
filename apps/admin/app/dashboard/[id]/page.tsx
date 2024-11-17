@@ -13,7 +13,7 @@ export default async function DashboardPage({ params }: { params: { id: string }
         clubQueries.contactInfo(Number(params.id)),
       ]}
     >
-      <div className="space-y-6">
+      <div className="min-w-[350px] space-y-6">
         <ClubInfoCard clubId={Number(params.id)} />
         <ActivitiesCard clubId={Number(params.id)} />
         <ContactInfoCard clubId={Number(params.id)} />

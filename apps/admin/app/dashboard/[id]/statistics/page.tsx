@@ -49,7 +49,7 @@ export default function ClubStatistics() {
   const [selectedPost, setSelectedPost] = useState(postsData[0]);
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-[350px] space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-100">동아리 통계</h1>
         <Select

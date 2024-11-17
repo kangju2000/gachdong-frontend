@@ -79,18 +79,18 @@ export function Header() {
   }, [pathname]);
 
   return (
-    <header className="border-b border-gray-800 bg-gray-900 px-6 py-4">
+    <header className="min-w-[350px] border-b border-gray-800 bg-gray-900 px-6 py-4">
       <div className="flex items-center justify-between">
         <nav className="flex items-center space-x-2 text-sm" aria-label="breadcrumb">
           {breadcrumbs.map((item, index) => (
             <Fragment key={index}>
               {index > 0 && <ChevronRight className="h-4 w-4 text-gray-400" aria-hidden="true" />}
               {item.href ? (
-                <Link href={item.href} className="text-gray-400 transition-colors hover:text-gray-100">
+                <Link href={item.href} className="shrink-0 text-gray-400 transition-colors hover:text-gray-100">
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-gray-100" aria-current="page">
+                <span className="shrink-0 text-gray-100" aria-current="page">
                   {item.label}
                 </span>
               )}

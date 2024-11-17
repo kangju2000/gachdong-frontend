@@ -33,6 +33,12 @@ export interface CreateClubRecruitmentRequest {
    */
   recruitmentCount: number;
   /**
+   * 모집 공고와 연결된 지원서 양식 ID
+   * @format int64
+   * @example 1
+   */
+  applicationFormId: number;
+  /**
    * 모집 시작일
    * @format date-time
    */
@@ -67,6 +73,12 @@ export interface CreateClubRecruitmentResponse {
    * @example 1
    */
   clubRecruitmentId: number;
+  /**
+   * 동아리 지원서 양식 ID
+   * @format int64
+   * @example 1
+   */
+  applicationFormId: number;
 }
 
 export interface CreateClubRequest {
@@ -261,6 +273,12 @@ export interface ClubRecruitmentDetailResponse {
    */
   recruitmentCount: number;
   /**
+   * 동아리 지원서 양식 ID
+   * @format int64
+   * @example 1
+   */
+  applicationFormId: number;
+  /**
    * 모집 상태
    * @example true
    */
@@ -365,6 +383,12 @@ export interface ClubRecruitmentResponse {
    * @example "https://gach-dong.club"
    */
   clubImageUrl: string;
+  /**
+   * 동아리 지원서 양식 ID
+   * @format int64
+   * @example 1
+   */
+  applicationFormId: number;
   /**
    * 모집 시작일
    * @format date-time

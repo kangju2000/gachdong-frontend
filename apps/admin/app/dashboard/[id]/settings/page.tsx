@@ -50,7 +50,7 @@ export default function ClubInfoEdit() {
   };
 
   return (
-    <Card className="border-gray-700 bg-gray-800 shadow-lg">
+    <Card className="min-w-[350px] border-gray-700 bg-gray-800 shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-gray-100">동아리 설정</CardTitle>
       </CardHeader>

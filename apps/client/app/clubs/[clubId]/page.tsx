@@ -69,7 +69,7 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
               <Card>
                 <CardContent className="pt-6">
                   <h2 className="mb-4 text-xl font-semibold">동아리 소개</h2>
-                  <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:text-sm prose-ul:text-sm prose-ol:text-sm min-h-[350px] max-w-none">
+                  <div className="prose prose-sm text-foreground prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-muted-foreground prose-pre:bg-transparent prose-pre:p-0 prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:text-sm prose-ul:text-sm prose-ol:text-sm min-h-[350px] max-w-none break-words">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{

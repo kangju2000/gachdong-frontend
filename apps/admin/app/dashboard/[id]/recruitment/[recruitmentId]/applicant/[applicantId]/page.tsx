@@ -49,7 +49,7 @@ export default function ApplicantDetail() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-[350px] space-y-6">
       <Button
         variant="ghost"
         onClick={() => router.back()}

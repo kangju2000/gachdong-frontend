@@ -31,7 +31,7 @@ function DroppableWrapper({ id, children }: { id: string; children: React.ReactN
   }
 
   return (
-    <div className="flex-1" style={{ minWidth: '300px' }}>
+    <div className="flex-1">
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
           <div
@@ -147,7 +147,7 @@ export default function RecruitmentPostDetail() {
   };
 
   return (
-    <div className="space-y-6 text-gray-100">
+    <div className="min-w-[350px] space-y-6 text-gray-100">
       <Card className="border-gray-700 bg-gray-800">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">모집 공고 상세</CardTitle>

@@ -13,6 +13,7 @@ import { CreateClubModal } from './components/create-club-modal';
 import { ClubList } from './components/club-list';
 import { authQueries } from '@/apis/auth';
 import ky from 'ky';
+import { getClientToken } from '@/lib/auth/cookies';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
@@ -27,7 +28,10 @@ export default function DashboardCard() {
       formData.append('image', imageFile);
       const res = await ky.post(
         `https://iibli2f5x4.execute-api.ap-northeast-2.amazonaws.com/dev/club/profile-upload?clubName=${newClubData.name}`,
-        { body: formData }
+        {
+          headers: { Authorization: `Bearer ${getClientToken().accessToken}` },
+          body: formData,
+        }
       );
 
       const { url } = await res.json<{ url: string }>();
@@ -46,7 +50,7 @@ export default function DashboardCard() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-900 p-6 text-gray-100">
-      <Card className="w-full max-w-md border-gray-700 bg-gray-800">
+      <Card className="w-full min-w-[400px] max-w-md border-gray-700 bg-gray-800">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold text-white">동아리를 선택해주세요</CardTitle>
           <div className="flex items-center justify-center space-x-2">

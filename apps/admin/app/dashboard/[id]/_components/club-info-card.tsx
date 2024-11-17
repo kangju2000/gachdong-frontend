@@ -9,6 +9,7 @@ import { clubQueries } from '@/apis/club';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
 
 export function ClubInfoCard({ clubId }: { clubId: number }) {
   const pathname = usePathname();
@@ -19,8 +20,11 @@ export function ClubInfoCard({ clubId }: { clubId: number }) {
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-start sm:space-x-4 sm:space-y-0">
           <Avatar className="relative h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24">
-            <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} />
-            <AvatarFallback>{club.clubName.slice(0, 2)}</AvatarFallback>
+            {/* <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} /> */}
+            <AvatarImage src={club.clubImageUrl} asChild>
+              <Image src={club.clubImageUrl} alt={`${club.clubName} logo`} sizes="96px" fill priority />
+            </AvatarImage>
+            <AvatarFallback delayMs={600}>{club.clubName.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="flex-1 text-center sm:text-left">
             <h2 className="mb-2 text-xl font-bold sm:text-2xl">{club.clubName}</h2>

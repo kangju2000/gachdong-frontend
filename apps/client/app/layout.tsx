@@ -49,13 +49,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground h-screen`}>
         <Providers>
           <ErrorBoundary>
             <Suspense>
               <Header />
-              {children}
+              <main className="min-h-screen min-w-[350px]">{children}</main>
               <Toaster />
             </Suspense>
           </ErrorBoundary>

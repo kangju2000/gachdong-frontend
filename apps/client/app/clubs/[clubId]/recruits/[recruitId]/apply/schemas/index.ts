@@ -83,3 +83,61 @@ export const recruitmentFormSchema = z.object({
 export type RecruitmentFormData = z.infer<typeof recruitmentFormSchema>;
 export type Process = z.infer<typeof processSchema>;
 export type Question = z.infer<typeof questionSchema>;
+
+// 답변 스키마 (단답형/장문형)
+const textAnswerSchema = z.string().min(1, '답변을 입력해주세요');
+
+// 객관식 답변 스키마
+const selectAnswerSchema = z.string().min(1, '옵션을 선택해주세요');
+
+// 체크박스 답변 스키마
+const checkboxAnswerSchema = z.array(z.string()).min(1, '최소 1개 이상 선택해주세요');
+
+// 답변 스키마 생성 함수
+export function createAnswerSchema(questions: Question[]) {
+  return z.object(
+    questions.reduce((acc, question) => {
+      let schema;
+
+      switch (question.type) {
+        case 'shortText':
+        case 'longText':
+          schema = question.required ? textAnswerSchema : textAnswerSchema.optional();
+          break;
+        case 'select':
+          schema = question.required ? selectAnswerSchema : selectAnswerSchema.optional();
+          break;
+        case 'checkbox':
+          schema = question.required ? checkboxAnswerSchema : checkboxAnswerSchema.optional();
+          break;
+        default:
+          schema = z.never();
+      }
+
+      return {
+        ...acc,
+        [question.name]: schema,
+      };
+    }, {})
+  );
+}
+
+// 답변 타입
+export type QuestionAnswer = {
+  [key: string]: string | string[] | undefined;
+};
+
+// 지원서 제출 데이터 스키마
+export const applicationSubmitSchema = z.object({
+  recruitmentId: z.number(),
+  data: z.object({
+    toApplyClub: z.object({
+      applicationFormId: z.number(),
+      status: z.enum(['TEMPORARY_SAVED', 'SAVED', 'SAVED_CHANGEABLE']),
+      clubName: z.string(),
+      formBody: z.record(z.any()),
+    }),
+  }),
+});
+
+export type ApplicationSubmitData = z.infer<typeof applicationSubmitSchema>;

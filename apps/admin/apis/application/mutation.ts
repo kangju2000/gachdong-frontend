@@ -21,7 +21,7 @@ export const useCreateApplicationForm = () => {
   return useMutation({
     mutationFn: (data: ToCreateApplicationFormDTO) => createApplicationForm(data),
     onSuccess: (_, { clubId }) => {
-      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentByClub(Number(clubId)) });
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitment.byClub(Number(clubId)) });
     },
   });
 };
@@ -41,7 +41,7 @@ export const useChangeApplicationStatus = () => {
   return useMutation({
     mutationFn: (data: ToChangeApplicationStatus) => changeApplicationStatus(data),
     onSuccess: (_, { applicationId, status }) => {
-      queryClient.invalidateQueries({ queryKey: clubKeys.recruitmentsDetail(clubId, applicationId) });
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitment.detail(clubId, applicationId) });
       queryClient.invalidateQueries({ queryKey: applicationKeys.clubApplicationList(clubId) });
     },
   });

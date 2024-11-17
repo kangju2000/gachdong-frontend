@@ -18,7 +18,7 @@ export const useCreateClub = () => {
       toast({
         title: '동아리가 추가되었습니다.',
       });
-      queryClient.invalidateQueries({ queryKey: keys.clubs() });
+      queryClient.invalidateQueries({ queryKey: keys.all });
       router.push(`/dashboard/${club.clubId}`);
     },
     onError: () => {
@@ -35,7 +35,7 @@ export const useCreateClubActivity = () => {
   return useMutation({
     mutationFn: createClubActivity,
     onSuccess: ({ clubId }) => {
-      queryClient.invalidateQueries({ queryKey: keys.activities(clubId) });
+      queryClient.invalidateQueries({ queryKey: keys.detail.activities(clubId) });
       toast({
         title: '동아리 활동이 추가되었습니다.',
       });
@@ -54,7 +54,7 @@ export const useCreateClubContactInfo = () => {
   return useMutation({
     mutationFn: createClubContactInfo,
     onSuccess: ({ clubId }) => {
-      queryClient.invalidateQueries({ queryKey: keys.contactInfo(clubId) });
+      queryClient.invalidateQueries({ queryKey: keys.detail.contact(clubId) });
       toast({
         title: '동아리 연락처가 추가되었습니다.',
       });
@@ -74,7 +74,7 @@ export const useCreateClubRecruitment = () => {
     mutationFn: createClubRecruitment,
     onSuccess: () => {
       // TODO: 리턴으로 recruitmentId 생기면 recruitmentsDetail 쿼리 invalidate 처리하기
-      queryClient.invalidateQueries({ queryKey: keys.recruitments() });
+      queryClient.invalidateQueries({ queryKey: keys.recruitment.all() });
       toast({
         title: '동아리 채용 공고가 추가되었습니다.',
       });

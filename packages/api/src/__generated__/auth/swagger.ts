@@ -124,6 +124,19 @@ export interface ChangePasswordRequest {
   newPassword?: string;
 }
 
+export interface ChangeNameResponse {
+  /**
+   * 사용자 참조 ID
+   * @example "user12345"
+   */
+  userReferenceId?: string;
+  /**
+   * 변경된 사용자 이름
+   * @example "변경한 이름"
+   */
+  newName?: string;
+}
+
 export interface VerifyCodeParams {
   /** 사용자의 이메일 주소 */
   email: string;
@@ -158,6 +171,16 @@ export interface ResetPassword1Params {
   email: string;
   /** 인증 코드 */
   code: string;
+}
+
+export interface ChangeNameParams {
+  /** 변경할 새로운 이름 */
+  newName: string;
+}
+
+export interface ChangeName1Params {
+  /** 변경할 새로운 이름 */
+  newName: string;
 }
 
 export namespace Public사용자인증인가Api {
@@ -371,6 +394,7 @@ export namespace 사용자인증인가Api {
    * @name DeleteAccount
    * @summary 회원탈퇴
    * @request POST:/api/v1/unregister
+   * @secure
    * @response `200` `string` OK
    */
   export namespace DeleteAccount {
@@ -390,6 +414,7 @@ export namespace 사용자인증인가Api {
    * @name RefreshToken
    * @summary Refresh Token 재발급
    * @request POST:/api/v1/refresh-token
+   * @secure
    * @response `200` `TokenResponse` OK
    */
   export namespace RefreshToken {
@@ -409,6 +434,7 @@ export namespace 사용자인증인가Api {
    * @name Logout
    * @summary 로그아웃
    * @request POST:/api/v1/logout
+   * @secure
    * @response `200` `string` OK
    */
   export namespace Logout {
@@ -430,6 +456,7 @@ export namespace 사용자인증인가Api {
    * @name ChangePassword
    * @summary 비밀번호 변경
    * @request POST:/api/v1/change-password
+   * @secure
    * @response `200` `string` OK
    */
   export namespace ChangePassword {
@@ -444,11 +471,35 @@ export namespace 사용자인증인가Api {
   }
 
   /**
+   * @description 사용자의 이름을 변경합니다.
+   * @tags 사용자 인증/인가 API
+   * @name ChangeName
+   * @summary 이름 변경
+   * @request POST:/api/v1/change-name
+   * @secure
+   * @response `200` `ChangeNameResponse` OK
+   */
+  export namespace ChangeName {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 변경할 새로운 이름 */
+      newName: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = ChangeNameResponse;
+  }
+
+  /**
    * @description 사용자의 프로필 정보를 조회합니다.
    * @tags 사용자 인증/인가 API
    * @name GetProfile
    * @summary 회원 정보 조회
    * @request GET:/api/v1/profile
+   * @secure
    * @response `200` `UserProfileResponse` OK
    */
   export namespace GetProfile {
@@ -470,6 +521,7 @@ export namespace 관리자인증인가Api {
    * @name DeleteAccount1
    * @summary 회원탈퇴
    * @request POST:/admin/api/v1/unregister
+   * @secure
    * @response `200` `string` OK
    */
   export namespace DeleteAccount1 {
@@ -489,6 +541,7 @@ export namespace 관리자인증인가Api {
    * @name RefreshToken1
    * @summary Refresh Token 재발급
    * @request POST:/admin/api/v1/refresh-token
+   * @secure
    * @response `200` `TokenResponse` OK
    */
   export namespace RefreshToken1 {
@@ -508,6 +561,7 @@ export namespace 관리자인증인가Api {
    * @name Logout1
    * @summary 로그아웃
    * @request POST:/admin/api/v1/logout
+   * @secure
    * @response `200` `string` OK
    */
   export namespace Logout1 {
@@ -529,6 +583,7 @@ export namespace 관리자인증인가Api {
    * @name ChangePassword1
    * @summary 비밀번호 변경
    * @request POST:/admin/api/v1/change-password
+   * @secure
    * @response `200` `string` OK
    */
   export namespace ChangePassword1 {
@@ -543,11 +598,35 @@ export namespace 관리자인증인가Api {
   }
 
   /**
+   * @description 사용자의 이름을 변경합니다.
+   * @tags 관리자 인증/인가 API
+   * @name ChangeName1
+   * @summary 이름 변경
+   * @request POST:/admin/api/v1/change-name
+   * @secure
+   * @response `200` `ChangeNameResponse` OK
+   */
+  export namespace ChangeName1 {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** 변경할 새로운 이름 */
+      newName: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** JWT 토큰 */
+      Authorization: string;
+    };
+    export type ResponseBody = ChangeNameResponse;
+  }
+
+  /**
    * @description 사용자의 프로필 정보를 조회합니다.
    * @tags 관리자 인증/인가 API
    * @name GetProfile1
    * @summary 회원 정보 조회
    * @request GET:/admin/api/v1/profile
+   * @secure
    * @response `200` `UserProfileResponse` OK
    */
   export namespace GetProfile1 {
@@ -982,12 +1061,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteAccount
      * @summary 회원탈퇴
      * @request POST:/api/v1/unregister
+     * @secure
      * @response `200` `string` OK
      */
     deleteAccount: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/unregister`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -998,12 +1079,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name RefreshToken
      * @summary Refresh Token 재발급
      * @request POST:/api/v1/refresh-token
+     * @secure
      * @response `200` `TokenResponse` OK
      */
     refreshToken: (params: RequestParams = {}) =>
       this.request<TokenResponse, any>({
         path: `/api/v1/refresh-token`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -1014,12 +1097,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name Logout
      * @summary 로그아웃
      * @request POST:/api/v1/logout
+     * @secure
      * @response `200` `string` OK
      */
     logout: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/api/v1/logout`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -1030,6 +1115,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ChangePassword
      * @summary 비밀번호 변경
      * @request POST:/api/v1/change-password
+     * @secure
      * @response `200` `string` OK
      */
     changePassword: (data: ChangePasswordRequest, params: RequestParams = {}) =>
@@ -1037,7 +1123,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/change-password`,
         method: 'POST',
         body: data,
+        secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 사용자의 이름을 변경합니다.
+     *
+     * @tags 사용자 인증/인가 API
+     * @name ChangeName
+     * @summary 이름 변경
+     * @request POST:/api/v1/change-name
+     * @secure
+     * @response `200` `ChangeNameResponse` OK
+     */
+    changeName: (query: ChangeNameParams, params: RequestParams = {}) =>
+      this.request<ChangeNameResponse, any>({
+        path: `/api/v1/change-name`,
+        method: 'POST',
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1048,12 +1154,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetProfile
      * @summary 회원 정보 조회
      * @request GET:/api/v1/profile
+     * @secure
      * @response `200` `UserProfileResponse` OK
      */
     getProfile: (params: RequestParams = {}) =>
       this.request<UserProfileResponse, any>({
         path: `/api/v1/profile`,
         method: 'GET',
+        secure: true,
         ...params,
       }),
   };
@@ -1065,12 +1173,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteAccount1
      * @summary 회원탈퇴
      * @request POST:/admin/api/v1/unregister
+     * @secure
      * @response `200` `string` OK
      */
     deleteAccount1: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/admin/api/v1/unregister`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -1081,12 +1191,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name RefreshToken1
      * @summary Refresh Token 재발급
      * @request POST:/admin/api/v1/refresh-token
+     * @secure
      * @response `200` `TokenResponse` OK
      */
     refreshToken1: (params: RequestParams = {}) =>
       this.request<TokenResponse, any>({
         path: `/admin/api/v1/refresh-token`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -1097,12 +1209,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name Logout1
      * @summary 로그아웃
      * @request POST:/admin/api/v1/logout
+     * @secure
      * @response `200` `string` OK
      */
     logout1: (params: RequestParams = {}) =>
       this.request<string, any>({
         path: `/admin/api/v1/logout`,
         method: 'POST',
+        secure: true,
         ...params,
       }),
 
@@ -1113,6 +1227,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ChangePassword1
      * @summary 비밀번호 변경
      * @request POST:/admin/api/v1/change-password
+     * @secure
      * @response `200` `string` OK
      */
     changePassword1: (data: ChangePasswordRequest, params: RequestParams = {}) =>
@@ -1120,7 +1235,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/admin/api/v1/change-password`,
         method: 'POST',
         body: data,
+        secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 사용자의 이름을 변경합니다.
+     *
+     * @tags 관리자 인증/인가 API
+     * @name ChangeName1
+     * @summary 이름 변경
+     * @request POST:/admin/api/v1/change-name
+     * @secure
+     * @response `200` `ChangeNameResponse` OK
+     */
+    changeName1: (query: ChangeName1Params, params: RequestParams = {}) =>
+      this.request<ChangeNameResponse, any>({
+        path: `/admin/api/v1/change-name`,
+        method: 'POST',
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1131,12 +1266,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetProfile1
      * @summary 회원 정보 조회
      * @request GET:/admin/api/v1/profile
+     * @secure
      * @response `200` `UserProfileResponse` OK
      */
     getProfile1: (params: RequestParams = {}) =>
       this.request<UserProfileResponse, any>({
         path: `/admin/api/v1/profile`,
         method: 'GET',
+        secure: true,
         ...params,
       }),
   };
