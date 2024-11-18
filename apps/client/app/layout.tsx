@@ -55,7 +55,9 @@ export default function RootLayout({
           <ErrorBoundary>
             <Suspense>
               <Header />
-              <main className="min-h-screen min-w-[350px]">{children}</main>
+              <ErrorBoundary>
+                <main className="min-h-screen min-w-[350px]">{children}</main>
+              </ErrorBoundary>
               <Toaster />
             </Suspense>
           </ErrorBoundary>

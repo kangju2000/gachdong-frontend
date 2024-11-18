@@ -104,6 +104,11 @@ export interface TokenResponse {
    */
   accessToken?: string;
   /**
+   * JWT Refresh Token
+   * @example "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+   */
+  refreshToken?: string;
+  /**
    * 응답 메시지
    * @example "Access Token 재발급 성공"
    */
@@ -409,7 +414,7 @@ export namespace 사용자인증인가Api {
   }
 
   /**
-   * @description 유효한 Refresh Token을 사용하여 새로운 Access Token을 발급받습니다.
+   * @description 유효한 Refresh Token을 사용하여 새로운 Refresh Token과 Access Token을 발급받습니다.
    * @tags 사용자 인증/인가 API
    * @name RefreshToken
    * @summary Refresh Token 재발급
@@ -536,7 +541,7 @@ export namespace 관리자인증인가Api {
   }
 
   /**
-   * @description 유효한 Refresh Token을 사용하여 새로운 Access Token을 발급받습니다.
+   * @description 유효한 Refresh Token을 사용하여 새로운 Refresh Token과 Access Token을 발급받습니다.
    * @tags 관리자 인증/인가 API
    * @name RefreshToken1
    * @summary Refresh Token 재발급
@@ -1073,7 +1078,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 유효한 Refresh Token을 사용하여 새로운 Access Token을 발급받습니다.
+     * @description 유효한 Refresh Token을 사용하여 새로운 Refresh Token과 Access Token을 발급받습니다.
      *
      * @tags 사용자 인증/인가 API
      * @name RefreshToken
@@ -1185,7 +1190,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 유효한 Refresh Token을 사용하여 새로운 Access Token을 발급받습니다.
+     * @description 유효한 Refresh Token을 사용하여 새로운 Refresh Token과 Access Token을 발급받습니다.
      *
      * @tags 관리자 인증/인가 API
      * @name RefreshToken1

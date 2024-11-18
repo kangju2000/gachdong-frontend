@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
 import { Question, QuestionAnswer } from './schemas';
 import { createAnswerSchema, ApplicationSubmitData } from './schemas';
+import { CreateApplicationPayload } from '@gachdong/api/application';
 
 interface QuestionFieldProps {
   question: Question;
@@ -110,14 +111,14 @@ export default function ApplyPage({ params }: { params: { clubId: string; recrui
 
   const onSubmit = async (data: QuestionAnswer) => {
     try {
-      const submitData: ApplicationSubmitData = {
+      const submitData: { recruitmentId: number; data: CreateApplicationPayload } = {
         recruitmentId: Number(recruitId),
         data: {
           toApplyClub: {
+            clubId: Number(clubId),
             applicationFormId: recruitment.applicationFormId,
             status: 'SAVED',
-            clubName: club.clubName,
-            formBody: data,
+            formBody: data as Record<string, object>,
           },
         },
       };

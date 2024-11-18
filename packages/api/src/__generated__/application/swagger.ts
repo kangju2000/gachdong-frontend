@@ -24,12 +24,11 @@ export interface ToApplyClubDTO {
    */
   status: string;
   /**
-   * 지원할 동아리 이름
-   * @minLength 0
-   * @maxLength 80
-   * @example "가츠동"
+   * 지원할 동아리 id
+   * @format int64
+   * @example 3
    */
-  clubName: string;
+  clubId: number;
   /**
    * 지원서 답변 본문, Json 형식으로 넣어주세요.
    * @example {"name":"가츠동","age":25,"education":{"university":"가천대학교","major":"컴퓨터공학"}}
@@ -154,8 +153,6 @@ export interface ToGetApplicationHistoryDTO {
    * @format int64
    */
   applicationId: number;
-  /** 지원한 동아리 이름 */
-  clubName: string;
   /** 지원 상태(합격, 불합격, 서류 합격 등) */
   status: string;
   /**
@@ -163,6 +160,11 @@ export interface ToGetApplicationHistoryDTO {
    * @format date-time
    */
   submitDate: string;
+  /**
+   * 지원한 동아리 ID
+   * @format int64
+   */
+  clubId: number;
 }
 
 /** 지원 내역 목록 조회 결과 반환 DTO */

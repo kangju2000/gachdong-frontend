@@ -9,6 +9,7 @@ import { authQueries } from '@/apis/auth';
 import { applicationQueries } from '@/apis/application';
 import { clubQueries } from '@/apis/club';
 import { SuspenseQuery } from '@suspensive/react-query';
+import { format } from 'date-fns/format';
 
 export default function MyPageContainer() {
   const { data: profile } = useQuery(authQueries.profile());
@@ -52,48 +53,36 @@ export default function MyPageContainer() {
           <ul className="space-y-4">
             {/* TODO: application */}
             {applications.toGetApplicationHistoryDTO!.map(app => (
-              // <SuspenseQuery {...clubQueries.club(app.clubId)}>
-              // {({ data: club }) => (
-              // TODO: 공고 이름 추가, 동아리 id 추가되면 링크 추가
-              <li
-                key={`${app.clubName}-${app.applicationId}`}
-                className="hover:bg-muted/80 group flex flex-col rounded-lg border p-4 transition-colors"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">{app.clubName || '동아리 이름'}</h3>
-                      <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-                        {app.status === 'SAVED' ? '지원완료' : '임시저장'}
-                      </span>
-                    </div>
-                    <div className="text-muted-foreground flex flex-wrap gap-x-4 text-xs">
-                      <span>
-                        제출일:{' '}
-                        {new Date(app.submitDate).toLocaleDateString('ko-KR', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </span>
-                      {/* <span>이메일: {app.}</span>
-                          <span>연락처: {app.phone}</span> */}
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100"
-                    asChild
+              <SuspenseQuery {...clubQueries.club(app.clubId)}>
+                {({ data: club }) => (
+                  <li
+                    key={`${app.clubId}-${app.applicationId}`}
+                    className="hover:bg-muted/80 group flex flex-col rounded-lg border p-4 transition-colors"
                   >
-                    {/* <Link href={`/clubs/${app.clubId}/recruits/${app.recruitId}`}>공고 보기</Link> */}
-                  </Button>
-                </div>
-              </li>
-              // )}
-              // </SuspenseQuery>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold">{club.clubName || '동아리 이름'}</h3>
+                          <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
+                            {app.status === 'SAVED' ? '지원완료' : '임시저장'}
+                          </span>
+                        </div>
+                        <div className="text-muted-foreground flex flex-wrap gap-x-4 text-xs">
+                          <span>제출일: {format(new Date(app.submitDate), 'yyyy년 MM월 dd일 HH시 mm분')}</span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100"
+                        asChild
+                      >
+                        <Link href={`/clubs/${app.clubId}/recruits/${app.applicationId}`}>공고 보기</Link>
+                      </Button>
+                    </div>
+                  </li>
+                )}
+              </SuspenseQuery>
             ))}
             {applications.toGetApplicationHistoryDTO?.length === 0 && (
               <div className="text-muted-foreground flex flex-col items-center py-8">
