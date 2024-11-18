@@ -32,12 +32,12 @@ export function FeaturedClubs() {
           <Link key={club.clubId} href={`/clubs/${club.clubId}`}>
             <div className="group rounded-xl border border-gray-200 bg-white p-4 transition-all hover:shadow-lg">
               <div className="flex gap-4">
-                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
-                  <Avatar>
-                    <AvatarImage src={club.clubImageUrl} alt={club.clubName} />
-                    <AvatarFallback>{club.clubName.slice(0, 2).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                </div>
+                <Avatar className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
+                  <AvatarImage src={club.clubImageUrl} asChild>
+                    <Image src={club.clubImageUrl ?? ''} alt={`${club.clubName} 로고`} sizes="96px" fill />
+                  </AvatarImage>
+                  <AvatarFallback delayMs={600}>{club.clubName.slice(0, 2)}</AvatarFallback>
+                </Avatar>
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="group-hover:text-primary font-semibold text-gray-900">{club.clubName}</h3>

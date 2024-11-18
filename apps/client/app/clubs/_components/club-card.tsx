@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { ClubSummaryResponse } from '@gachdong/api/club';
 import { CATEGORY_MAP } from '@/constants/categories';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface ClubCardProps {
   club: ClubSummaryResponse;
@@ -15,17 +16,21 @@ export function ClubCard({ club }: ClubCardProps) {
     <Link href={`/clubs/${club.clubId}`}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
         <div className="relative aspect-video w-full overflow-hidden">
-          {club.clubImageUrl ? (
-            <Image
-              src={club.clubImageUrl}
-              alt={`${club.clubName} 대표 이미지`}
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="bg-muted relative h-full w-full" />
-          )}
+          <Avatar className="relative aspect-video w-full overflow-hidden">
+            <AvatarImage src={club.clubImageUrl} asChild>
+              <Image
+                src={club.clubImageUrl ?? ''}
+                alt={`${club.clubName} 로고`}
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                fill
+                priority
+              />
+            </AvatarImage>
+            <AvatarFallback delayMs={600} className="bg-muted relative flex h-full w-full items-center justify-center">
+              {club.clubName.slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
         </div>
         <div className="p-4">
           <div className="flex items-start justify-between gap-2">

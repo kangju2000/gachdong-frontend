@@ -396,14 +396,14 @@ export namespace 지원Api사용자 {
    * @tags 지원 API(사용자)
    * @name GetTempApplication
    * @summary 사용자 임시저장 여부 및 내용 반환 API
-   * @request GET:/api/v1/apply/{applyId}
+   * @request GET:/api/v1/apply/{recruitmentId}
    * @secure
    * @response `200` `ResFormToGetApplicationTempDTO` OK
    */
   export namespace GetTempApplication {
     export type RequestParams = {
       /** @format int64 */
-      applyId: number;
+      recruitmentId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -492,14 +492,14 @@ export namespace 지원Api관리자 {
    * @tags 지원 API(관리자)
    * @name GetClubApplicationList
    * @summary 지원 목록 조회 API
-   * @request GET:/admin/api/v1/{applyId}
+   * @request GET:/admin/api/v1/{recruitmentId}
    * @secure
    * @response `200` `ResFormToGetApplicationListAdminDTO` OK
    */
   export namespace GetClubApplicationList {
     export type RequestParams = {
       /** @format int64 */
-      applyId: number;
+      recruitmentId: number;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -946,13 +946,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(사용자)
      * @name GetTempApplication
      * @summary 사용자 임시저장 여부 및 내용 반환 API
-     * @request GET:/api/v1/apply/{applyId}
+     * @request GET:/api/v1/apply/{recruitmentId}
      * @secure
      * @response `200` `ResFormToGetApplicationTempDTO` OK
      */
-    getTempApplication: (applyId: number, params: RequestParams = {}) =>
+    getTempApplication: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<ResFormToGetApplicationTempDTO, any>({
-        path: `/api/v1/apply/${applyId}`,
+        path: `/api/v1/apply/${recruitmentId}`,
         method: 'GET',
         secure: true,
         ...params,
@@ -1043,13 +1043,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 지원 API(관리자)
      * @name GetClubApplicationList
      * @summary 지원 목록 조회 API
-     * @request GET:/admin/api/v1/{applyId}
+     * @request GET:/admin/api/v1/{recruitmentId}
      * @secure
      * @response `200` `ResFormToGetApplicationListAdminDTO` OK
      */
-    getClubApplicationList: (applyId: number, params: RequestParams = {}) =>
+    getClubApplicationList: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<ResFormToGetApplicationListAdminDTO, any>({
-        path: `/admin/api/v1/${applyId}`,
+        path: `/admin/api/v1/${recruitmentId}`,
         method: 'GET',
         secure: true,
         ...params,

@@ -29,6 +29,16 @@ const apis = [
     url: `${PREFIX_URL}/user/v3/api-docs`,
     output: 'src/__generated__/user',
   },
+  {
+    name: 'admin',
+    url: `${PREFIX_URL}/admin/v3/api-docs`,
+    output: 'src/__generated__/admin',
+  },
+  {
+    name: 'notification',
+    url: `${PREFIX_URL}/notification/v3/api-docs`,
+    output: 'src/__generated__/notification',
+  },
 ];
 
 async function getPrettierConfig() {

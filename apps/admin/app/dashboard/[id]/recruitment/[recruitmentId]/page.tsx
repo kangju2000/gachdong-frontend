@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -71,6 +71,7 @@ export default function RecruitmentPostDetail() {
     data: { result: { toGetApplicationDTO } = {} },
   } = useSuspenseQuery(applicationQueries.clubApplicationList(Number(params.recruitmentId)));
 
+  console.log(toGetApplicationDTO);
   const [searchTerm, setSearchTerm] = useState('');
 
   const applicants = toGetApplicationDTO ?? [];

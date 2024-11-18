@@ -17,6 +17,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserProfileResponse } from '@gachdong/api/auth';
+import Image from 'next/image';
 
 export function AuthSection() {
   const { data: profile, isLoading } = useQuery(authQueries.profile());
@@ -80,9 +81,11 @@ function UserDropdown({ profile }: { profile: UserProfileResponse }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-8 w-8 cursor-pointer">
-          <AvatarImage src={profile.profileImageUrl} alt={profile.name} />
-          <AvatarFallback>{profile.name?.[0]}</AvatarFallback>
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={profile.profileImageUrl} asChild>
+            <Image src={profile.profileImageUrl ?? ''} alt="프로필 이미지" sizes="32px" fill priority />
+          </AvatarImage>
+          <AvatarFallback delayMs={600}>{profile.name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

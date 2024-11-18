@@ -14,6 +14,7 @@ import { clubQueries } from '@/apis/club';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { SuspenseQuery } from '@suspensive/react-query';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
 
 export default function ClubDetailPage({ params }: { params: { clubId: string } }) {
   const [
@@ -38,8 +39,10 @@ export default function ClubDetailPage({ params }: { params: { clubId: string } 
         <CardContent className="p-6">
           <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
             <Avatar className="bg-muted relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
-              <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} />
-              <AvatarFallback>{club.clubName[0]}</AvatarFallback>
+              <AvatarImage src={club.clubImageUrl} asChild>
+                <Image src={club.clubImageUrl} alt={`${club.clubName} 로고`} sizes="96px" fill priority />
+              </AvatarImage>
+              <AvatarFallback delayMs={600}>{club.clubName[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-grow">
               <h1 className="mb-2 text-3xl font-bold">{club.clubName}</h1>

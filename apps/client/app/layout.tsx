@@ -50,13 +50,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground h-screen`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground min-h-screen`}>
         <Providers>
           <ErrorBoundary>
             <Suspense>
               <Header />
               <ErrorBoundary>
-                <main className="min-h-screen min-w-[350px]">{children}</main>
+                <main className="h-[calc(100vh-68px)] min-w-[350px]">{children}</main>
               </ErrorBoundary>
               <Toaster />
             </Suspense>

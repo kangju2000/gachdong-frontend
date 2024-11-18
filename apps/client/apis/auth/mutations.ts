@@ -125,19 +125,9 @@ export const useSendRegistrationVerificationCode = () => {
         title: '인증 코드가 전송되었습니다.',
       });
     },
-    onError: e => {
-      console.log({ Response: e.response });
-      // FIXME: 400 에러 처리
-      if (e.response.status === 400) {
-        toast({
-          title: '이미 등록된 이메일입니다.',
-          variant: 'destructive',
-        });
-
-        return;
-      }
+    onError: async err => {
       toast({
-        title: '인증 코드 전송에 실패하였습니다.',
+        title: (await err.response.text()) ?? '인증 코드 전송에 실패하였습니다.',
         variant: 'destructive',
       });
     },
@@ -155,9 +145,9 @@ export const useResetPassword = () => {
       });
       router.replace('/login');
     },
-    onError: () => {
+    onError: async err => {
       toast({
-        title: '비밀번호 재설정에 실패하였습니다.',
+        title: (await err.response.text()) ?? '비밀번호 재설정에 실패하였습니다.',
         variant: 'destructive',
       });
     },
@@ -172,9 +162,9 @@ export const useChangePassword = () => {
         title: '비밀번호 변경이 완료되었습니다.',
       });
     },
-    onError: () => {
+    onError: async err => {
       toast({
-        title: '비밀번호 변경에 실패하였습니다.',
+        title: (await err.response.text()) ?? '비밀번호 변경에 실패하였습니다.',
         variant: 'destructive',
       });
     },
