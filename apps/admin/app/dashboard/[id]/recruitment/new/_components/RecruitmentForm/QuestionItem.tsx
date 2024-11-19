@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { GripVertical, Trash2, Plus } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
