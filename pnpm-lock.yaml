@@ -24,10 +24,10 @@ importers:
   apps/admin:
     dependencies:
       '@gachdong/api':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/api
       '@gachdong/ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/ui
       '@hello-pangea/dnd':
         specifier: ^17.0.0
@@ -172,10 +172,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@gachdong/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/eslint-config
       '@gachdong/typescript-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/typescript-config
       '@tailwindcss/typography':
         specifier: ^0.5.15
@@ -208,10 +208,10 @@ importers:
   apps/client:
     dependencies:
       '@gachdong/api':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/api
       '@gachdong/ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/ui
       '@hookform/resolvers':
         specifier: ^3.9.1
@@ -326,10 +326,10 @@ importers:
         version: 5.0.1(@types/react@18.3.10)(react@18.3.1)
     devDependencies:
       '@gachdong/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/eslint-config
       '@gachdong/typescript-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/typescript-config
       '@tailwindcss/typography':
         specifier: ^0.5.15
