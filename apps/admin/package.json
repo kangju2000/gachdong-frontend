@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gachdong/api": "workspace:*",
-    "@gachdong/ui": "workspace:*",
+    "@gachdong/api": "workspace:^",
+    "@gachdong/ui": "workspace:^",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^3.9.1",
     "@mdxeditor/editor": "^3.19.0",
@@ -60,8 +60,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@gachdong/eslint-config": "workspace:*",
-    "@gachdong/typescript-config": "workspace:*",
+    "@gachdong/eslint-config": "workspace:^",
+    "@gachdong/typescript-config": "workspace:^",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^18",

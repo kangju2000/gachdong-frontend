@@ -16,7 +16,7 @@ export function ClubCard({ club }: ClubCardProps) {
     <Link href={`/clubs/${club.clubId}`}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-md">
         <div className="relative aspect-video w-full overflow-hidden">
-          <Avatar className="relative aspect-video w-full overflow-hidden">
+          <Avatar className="relative aspect-video h-full w-full rounded-none">
             <AvatarImage src={club.clubImageUrl} asChild>
               <Image
                 src={club.clubImageUrl ?? ''}

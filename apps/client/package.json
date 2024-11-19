@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gachdong/api": "workspace:*",
-    "@gachdong/ui": "workspace:*",
+    "@gachdong/api": "workspace:^",
+    "@gachdong/ui": "workspace:^",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -50,8 +50,8 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@gachdong/eslint-config": "workspace:*",
-    "@gachdong/typescript-config": "workspace:*",
+    "@gachdong/eslint-config": "workspace:^",
+    "@gachdong/typescript-config": "workspace:^",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^18",
