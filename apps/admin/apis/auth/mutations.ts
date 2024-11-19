@@ -43,7 +43,7 @@ export const useLogin = () => {
     },
     onError: () => {
       toast({
-        title: '로그인에 실패하였습니다.',
+        title: '이메일 또는 비밀번호가 올바르지 않습니다.',
       });
     },
   });

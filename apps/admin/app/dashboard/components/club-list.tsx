@@ -5,6 +5,7 @@ import { clubQueries } from '@/apis/club';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { AdminAuthorizedClubResponse } from '@gachdong/api/club';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
 
 export function ClubList() {
   const {
@@ -31,8 +32,10 @@ function ClubItem({ club }: { club: AdminAuthorizedClubResponse }) {
       <div className="flex items-center space-x-4">
         <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-800">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={club.clubImageUrl} alt={`${club.clubName} logo`} />
-            <AvatarFallback>{club.clubName.slice(0, 2)}</AvatarFallback>
+            <AvatarImage src={club.clubImageUrl} asChild>
+              <Image src={club.clubImageUrl ?? ''} alt={`${club.clubName} logo`} sizes="32px" fill priority />
+            </AvatarImage>
+            <AvatarFallback delayMs={600}>{club.clubName.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </div>
         <div>

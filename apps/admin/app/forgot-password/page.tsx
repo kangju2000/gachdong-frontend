@@ -15,14 +15,14 @@ export default function AdminForgotPassword() {
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [error, setError] = useState('');
 
-  const { mutateAsync: sendResetPassword } = useResetPassword();
+  const { mutateAsync: sendResetPassword, isPending: isResetPasswordPending } = useResetPassword();
   const { mutateAsync: sendVerificationCode } = useSendVerificationCode();
 
   const handleSendVerificationCode = async () => {
     try {
-      await sendVerificationCode({ email: `${username}@gachon.ac.kr` });
       setIsVerificationSent(true);
       setError('');
+      await sendVerificationCode({ email: `${username}@gachon.ac.kr` });
     } catch (err) {
       setError('인증 코드 전송에 실패했습니다.');
     }
@@ -47,7 +47,7 @@ export default function AdminForgotPassword() {
           </div>
           <CardTitle className="text-center text-2xl font-bold text-white">비밀번호 찾기</CardTitle>
           <CardDescription className="text-center text-gray-400">
-            가입하신 아이디를 입력해 주세요. 비밀번호 재설정 링크를 보내드립니다.
+            비밀번호를 초기화하기 위해 이메일 인증을 진행합니다.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -108,7 +108,7 @@ export default function AdminForgotPassword() {
             <Button
               type="submit"
               className="w-full bg-blue-500 text-white hover:bg-blue-600"
-              disabled={!isVerificationSent}
+              disabled={!isVerificationSent || isResetPasswordPending}
             >
               비밀번호 재설정 링크 보내기
             </Button>
