@@ -24,6 +24,16 @@
       "types": "./dist/__generated__/user/swagger.d.ts",
       "require": "./dist/__generated__/user/swagger.js",
       "import": "./dist/__generated__/user/swagger.mjs"
+    },
+    "./notification": {
+      "types": "./dist/__generated__/notification/swagger.d.ts",
+      "require": "./dist/__generated__/notification/swagger.js",
+      "import": "./dist/__generated__/notification/swagger.mjs"
+    },
+    "./admin": {
+      "types": "./dist/__generated__/admin/swagger.d.ts",
+      "require": "./dist/__generated__/admin/swagger.js",
+      "import": "./dist/__generated__/admin/swagger.mjs"
     }
   },
   "scripts": {
