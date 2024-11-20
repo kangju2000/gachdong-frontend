@@ -65,7 +65,7 @@ export function PostInfoSection() {
               <FormItem>
                 <FormLabel>시작일</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" min={new Date().toISOString().split('T')[0]} />
+                  <Input {...field} type="datetime-local" min={new Date().toISOString().split('T')[0]} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -79,7 +79,7 @@ export function PostInfoSection() {
               <FormItem>
                 <FormLabel>종료일</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" min={new Date().toISOString().split('T')[0]} />
+                  <Input {...field} type="datetime-local" min={new Date().toISOString().split('T')[0]} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -128,22 +128,10 @@ export default function RecruitmentForm() {
         <ProcessSection />
         <ApplicationTemplate />
         <ActionButtons
-          onSaveDraft={handleSaveDraft}
           onPublish={handleSubmit(handlePublish)}
           isValid={isValid && isDirty}
           isSubmitting={isSubmitting}
         />
-
-        {process.env.NODE_ENV === 'development' && (
-          <div className="fixed bottom-4 right-4 max-w-md">
-            <details className="bg-muted rounded-lg p-4 shadow-lg">
-              <summary className="cursor-pointer text-sm font-medium">Debug Info</summary>
-              <pre className="mt-2 max-h-96 overflow-auto text-xs">
-                {JSON.stringify({ isValid, isDirty, errors }, null, 2)}
-              </pre>
-            </details>
-          </div>
-        )}
       </form>
     </FormProvider>
   );

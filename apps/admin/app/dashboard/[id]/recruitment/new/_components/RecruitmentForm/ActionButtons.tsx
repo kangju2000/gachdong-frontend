@@ -3,13 +3,12 @@ import { SaveIcon, SendIcon } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ActionButtonsProps {
-  onSaveDraft: () => Promise<void>;
   onPublish: () => Promise<void>;
   isValid: boolean;
   isSubmitting: boolean;
 }
 
-export function ActionButtons({ onSaveDraft, onPublish, isValid, isSubmitting }: ActionButtonsProps) {
+export function ActionButtons({ onPublish, isValid, isSubmitting }: ActionButtonsProps) {
   const getValidationMessage = () => {
     if (!isValid) {
       return '모든 필수 항목을 올바르게 입력해주세요';
