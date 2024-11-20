@@ -50,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground min-h-screen`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} text-foreground bg-background`}>
         <Providers>
           <ErrorBoundary>
             <Suspense>

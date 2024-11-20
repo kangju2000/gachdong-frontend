@@ -68,8 +68,8 @@ export function RecruitContainer() {
                   모집기간
                 </span>
                 <span className="font-medium">
-                  {formatDate(new Date(announcement.startDate ?? ''), 'yyyy년 MM월 dd일')} -{' '}
-                  {formatDate(new Date(announcement.endDate ?? ''), 'yyyy년 MM월 dd일')}
+                  {formatDate(new Date(announcement.startDate ?? ''), 'yyyy.MM.dd')} -{' '}
+                  {formatDate(new Date(announcement.endDate ?? ''), 'yyyy.MM.dd')}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -84,22 +84,20 @@ export function RecruitContainer() {
                   <Eye className="mr-2 h-4 w-4" />
                   조회수
                 </span>
-                <span className="font-medium">
-                  {
-                    100
-                    // TODO: 조회수 추가
-                  }
-                </span>
+                <span className="font-medium">{typeof window !== 'undefined' ? announcement.viewCount : null}</span>
               </div>
               <div className="pt-2">
                 <Badge variant="outline" className="w-full justify-center py-1 text-sm">
-                  마감까지 {formatDistanceToNow(announcement.endDate, { locale: ko, addSuffix: true })}
+                  {announcement.recruitmentStatus === 'RECRUITMENT_END'
+                    ? '마감됨'
+                    : `마감까지 ${formatDistanceToNow(announcement.endDate, { locale: ko })} 남음`}
                 </Badge>
               </div>
             </CardContent>
           </Card>
 
-          <Button className="w-full" size="lg" asChild>
+          <Button className="w-full" size="lg" asChild disabled={announcement.recruitmentStatus === 'RECRUITMENT_END'}>
+            {/* TODO: 만약 apply 페이지로 바로 접근했을 때 막아주는 대응 필요 */}
             <Link href={`/clubs/${clubId}/recruits/${recruitId}/apply`}>지원하기</Link>
           </Button>
         </div>

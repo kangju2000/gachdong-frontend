@@ -120,11 +120,6 @@ export const useSendVerificationCode = () => {
 export const useSendRegistrationVerificationCode = () => {
   return useMutation({
     mutationFn: sendRegistrationVerificationCode,
-    onSuccess: () => {
-      toast({
-        title: '인증 코드가 전송되었습니다.',
-      });
-    },
     onError: async err => {
       toast({
         title: (await err.response.text()) ?? '인증 코드 전송에 실패하였습니다.',

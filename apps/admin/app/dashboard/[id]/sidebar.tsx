@@ -7,48 +7,53 @@ import { LayoutDashboard, BarChart, Settings, FileText, UserCog } from 'lucide-r
 import Link from 'next/link';
 import { CLUBS } from '@/constants/data';
 import { useParams } from 'next/navigation';
+import { clubQueries } from '@/apis/club';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+
+const menuItems = [
+  {
+    icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
+    label: '홈',
+    href: '/',
+  },
+  {
+    icon: <FileText className="mr-2 h-4 w-4" />,
+    label: '모집 공고',
+    href: '/recruitment',
+  },
+  {
+    icon: <BarChart className="mr-2 h-4 w-4" />,
+    label: '동아리 통계',
+    href: '/statistics',
+  },
+  {
+    icon: <UserCog className="mr-2 h-4 w-4" />,
+    label: '운영진 관리',
+    href: '/admin-management',
+  },
+  {
+    icon: <Settings className="mr-2 h-4 w-4" />,
+    label: '동아리 설정',
+    href: '/settings',
+  },
+];
 
 export function Sidebar() {
   const params = useParams();
-  const menuItems = [
-    {
-      icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-      label: '홈',
-      href: '/',
-    },
-    {
-      icon: <FileText className="mr-2 h-4 w-4" />,
-      label: '모집 공고',
-      href: '/recruitment',
-    },
-    {
-      icon: <BarChart className="mr-2 h-4 w-4" />,
-      label: '동아리 통계',
-      href: '/statistics',
-    },
-    {
-      icon: <UserCog className="mr-2 h-4 w-4" />,
-      label: '운영진 관리',
-      href: '/admin-management',
-    },
-    {
-      icon: <Settings className="mr-2 h-4 w-4" />,
-      label: '동아리 설정',
-      href: '/settings',
-    },
-  ];
+
+  const { data: authorizedClubs } = useSuspenseQuery(clubQueries.authorizedClubs());
 
   return (
     <div className="flex w-64 flex-col border-r border-gray-800 bg-gray-900">
       <div className="p-4">
-        <Select>
+        <Select defaultValue={String(params.id)}>
           <SelectTrigger className="w-full border-gray-700 bg-gray-800 text-gray-100">
             <SelectValue placeholder="동아리 선택" />
           </SelectTrigger>
           <SelectContent className="border-gray-700 bg-gray-800 text-gray-100">
-            {CLUBS.map((club, index) => (
-              <SelectItem key={index} value={String(club.id)}>
-                {club.name}
+            {authorizedClubs.map((club, index) => (
+              <SelectItem key={index} value={String(club.clubId)}>
+                {club.clubName}
               </SelectItem>
             ))}
           </SelectContent>

@@ -5,6 +5,7 @@ import { clubApi } from '../config/instance';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { keys } from './keys';
+import { CreateClubRecruitmentRequest } from '@gachdong/api/club';
 
 const { createClub, createClubActivity, createClubContactInfo, createClubRecruitment } = clubApi.admin동아리Api;
 
@@ -71,7 +72,11 @@ export const useCreateClubRecruitment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createClubRecruitment,
+    mutationFn: (
+      data: Omit<CreateClubRecruitmentRequest, 'processData'> & {
+        processData: Record<string, { label: string; order: number }>;
+      }
+    ) => createClubRecruitment(data),
     onSuccess: () => {
       // TODO: 리턴으로 recruitmentId 생기면 recruitmentsDetail 쿼리 invalidate 처리하기
       queryClient.invalidateQueries({ queryKey: keys.recruitment.all() });

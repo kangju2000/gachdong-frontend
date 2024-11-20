@@ -8,9 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 
 export function ClubList() {
-  const {
-    data: { results: clubs = [] },
-  } = useSuspenseQuery(clubQueries.authorizedClubs());
+  const { data: clubs } = useSuspenseQuery(clubQueries.authorizedClubs());
 
   return (
     <>

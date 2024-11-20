@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+nextjs-portal {
+  display: none;
+}
+
 html,
 body {
   max-width: 100vw;

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 import { useRegister, useSendRegistrationVerificationCode, useVerifyCode } from '@/apis/auth';
 import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -26,8 +27,10 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleSendVerification = () => {
+    toast({
+      title: '인증 코드가 전송되었습니다.',
+    });
     sendVerificationCode({ email: `${username}@gachon.ac.kr` });
-    // TODO: 실패 처리?
     setIsVerificationSent(true);
   };
 

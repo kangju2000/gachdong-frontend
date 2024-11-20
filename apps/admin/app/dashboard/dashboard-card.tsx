@@ -35,7 +35,11 @@ export default function DashboardCard() {
       );
 
       const { url } = await res.json<{ url: string }>();
-      await createClub({ ...newClubData, clubImageUrl: url });
+      await createClub({
+        ...newClubData,
+        ...(newClubData.establishedAt ? { establishedAt: new Date(newClubData.establishedAt).toISOString() } : {}),
+        clubImageUrl: url,
+      });
     } else {
       await createClub(newClubData);
     }

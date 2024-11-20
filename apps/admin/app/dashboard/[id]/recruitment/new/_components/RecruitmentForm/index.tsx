@@ -88,9 +88,8 @@ export default function RecruitmentForm() {
         ])
       );
 
-      const {
-        result: { applicationFormId },
-      } = await createApplicationForm({
+      // FIXME
+      const { result: { applicationFormId } = {} } = await createApplicationForm({
         clubId: Number(params.id),
         status: 'SAVED',
         formName: data.postInfo.title,

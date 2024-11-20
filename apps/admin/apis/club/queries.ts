@@ -41,6 +41,10 @@ export const queries = {
     queryOptions({
       queryKey: keys.recruitment.detail(clubId, recruitmentId),
       queryFn: () => getClubRecruitment(clubId, recruitmentId),
+      select: data => ({
+        ...data,
+        processData: data.processData as unknown as Record<`process${number}`, { label: string; order: number }>,
+      }),
     }),
   activities: (clubId: number) =>
     queryOptions({
@@ -65,5 +69,6 @@ export const queries = {
     queryOptions({
       queryKey: keys.lists.authorized(),
       queryFn: getAuthorizedClubs,
+      select: data => data.results!,
     }),
 };

@@ -35,11 +35,11 @@ export function RecruitmentTable({ posts, searchTerm, onPostClick }: Recruitment
               <Badge
                 variant="default"
                 className={cn({
-                  'bg-blue-600 text-white': post.recruitmentStatus === true,
-                  'bg-gray-600 text-white': post.recruitmentStatus === false,
+                  'bg-blue-600 text-white': post.recruitmentStatus === 'RECRUITING',
+                  'bg-gray-600 text-white': post.recruitmentStatus === 'RECRUITMENT_END',
                 })}
               >
-                {post.recruitmentStatus ? '진행 중' : '마감'}
+                {post.recruitmentStatus === 'RECRUITING' ? '진행 중' : '마감'}
               </Badge>
             </TableCell>
             <TableCell className="text-gray-300">

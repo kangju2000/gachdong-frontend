@@ -54,14 +54,6 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit, isLoading }: P
   const handleSubmit = async () => {
     if (formData.name && formData.shortDescription) {
       onSubmit(formData, imageFile || undefined);
-      setFormData({
-        name: '',
-        shortDescription: '',
-        category: 'ACADEMIC',
-        introduction: '',
-        establishedAt: '',
-      });
-      removeImage();
     }
   };
 
@@ -134,7 +126,7 @@ export function CreateClubModal({ isOpen, onOpenChange, onSubmit, isLoading }: P
             </Label>
             <Input
               id="establishedAt"
-              type="datetime-local"
+              type="date"
               value={formData.establishedAt}
               onChange={e => setFormData(prev => ({ ...prev, establishedAt: e.target.value }))}
               className="col-span-3 border-gray-600 bg-gray-700 text-white"

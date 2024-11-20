@@ -47,9 +47,7 @@ export function RecruitmentCard({ recruitment }: RecruitmentCardProps) {
             </div>
             <div className="flex items-center gap-1">
               <Eye className="h-4 w-4" />
-              {/* TODO: 조회수 추가 */}
-              {/* <span>{recruitment.views || 0}</span> */}
-              <span>100</span>
+              <span>{recruitment.viewCount}</span>
             </div>
           </div>
         </div>

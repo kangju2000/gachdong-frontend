@@ -40,9 +40,10 @@ export const useChangeApplicationStatus = () => {
 
   return useMutation({
     mutationFn: (data: ToChangeApplicationStatus) => changeApplicationStatus(data),
-    onSuccess: (_, { applicationId, status }) => {
-      queryClient.invalidateQueries({ queryKey: clubKeys.recruitment.detail(clubId, applicationId) });
-      queryClient.invalidateQueries({ queryKey: applicationKeys.clubApplicationList(clubId) });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: clubKeys.recruitment.detail(clubId, Number(params.recruitmentId)) });
+      queryClient.invalidateQueries({ queryKey: applicationKeys.clubApplicationList(Number(params.recruitmentId)) });
+      queryClient.invalidateQueries({ queryKey: applicationKeys.clubApplication(Number(params.recruitmentId)) });
     },
   });
 };

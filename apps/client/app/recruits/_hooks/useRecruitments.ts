@@ -13,6 +13,8 @@ export function useRecruitments() {
     data: { results: recruitments = [] },
   } = useSuspenseQuery(clubQueries.recruitments());
 
+  console.log(recruitments);
+
   const filteredRecruitments = recruitments.filter(recruitment => {
     const matchesCategory = selectedCategory === 'ALL' || recruitment.category === selectedCategory;
     const matchesSearch =
@@ -22,16 +24,17 @@ export function useRecruitments() {
     return matchesCategory && matchesSearch;
   });
 
-  const sortedRecruitments = [...filteredRecruitments].sort((a, b) => {
-    switch (sortBy) {
-      case 'deadline':
-        return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
-      case 'views':
-        return 0;
-      default:
-        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
-    }
-  });
+  const sortedRecruitments =
+    sortBy === 'latest'
+      ? [...filteredRecruitments].reverse()
+      : [...filteredRecruitments].sort((a, b) => {
+          switch (sortBy) {
+            case 'deadline':
+              return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+            case 'views':
+              return 0;
+          }
+        });
 
   return {
     searchTerm,
