@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { useRegisterInviteCode } from '@/apis/admin';
 
 type Props = {
   isOpen: boolean;
@@ -18,7 +19,6 @@ export function InviteCodeModal({ isOpen, onOpenChange, onSubmit }: Props) {
   const handleSubmit = () => {
     if (inviteCode.trim()) {
       onSubmit(inviteCode);
-      setInviteCode('');
     }
   };
 

@@ -17,6 +17,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries, useLogout } from '@/apis/auth';
 import { Fragment, useMemo } from 'react';
 
+// TODO: 페이지 ENUM으로 관리하기
 const PATH_LABELS: Record<string, string> = {
   dashboard: '대시보드',
   recruitment: '모집 공고',
@@ -25,7 +26,7 @@ const PATH_LABELS: Record<string, string> = {
   'applicant-detail': '지원자 상세',
   statistics: '동아리 통계',
   settings: '동아리 설정',
-  'admin-management': '운영진 관리',
+  'admin-list': '운영진 목록',
   new: '생성',
 } as const;
 
@@ -118,7 +119,10 @@ export function Header() {
               <User className="mr-2 h-4 w-4" />
               <span>설정</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-gray-700" onSelect={() => logout()}>
+            <DropdownMenuItem
+              className="hover:bg-gray-700"
+              onSelect={() => logout(undefined, { onSettled: () => router.replace('/login') })}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>로그아웃</span>
             </DropdownMenuItem>

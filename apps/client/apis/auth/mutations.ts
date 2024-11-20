@@ -52,6 +52,7 @@ export const useLogin = () => {
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+
   return useMutation({
     mutationFn: () =>
       logout({
@@ -71,11 +72,10 @@ export const useLogout = () => {
       });
     },
     onSettled: () => {
-      removeTokens();
-
+      router.replace('/login');
       queryClient.invalidateQueries({ queryKey: keys.all });
       queryClient.resetQueries({ queryKey: keys.profile() });
-      router.replace('/login');
+      removeTokens();
     },
   });
 };

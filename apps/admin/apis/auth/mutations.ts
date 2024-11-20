@@ -21,7 +21,6 @@ const { logout1: logout, changePassword1: changePassword, deleteAccount1: delete
 const { sendVerificationCode, verifyCode } = authApi.public사용자인증인가Api;
 
 export const useLogin = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,7 +38,6 @@ export const useLogin = () => {
       });
 
       queryClient.invalidateQueries({ queryKey: keys.all });
-      router.replace('/dashboard');
     },
     onError: () => {
       toast({
@@ -64,10 +62,15 @@ export const useLogout = () => {
         title: '로그아웃이 완료되었습니다.',
       });
     },
+    onError: () => {
+      toast({
+        title: '로그아웃에 실패하였습니다.',
+        variant: 'destructive',
+      });
+    },
     onSettled: () => {
       removeTokens();
       queryClient.invalidateQueries({ queryKey: keys.all });
-      queryClient.resetQueries({ queryKey: keys.profile() });
     },
   });
 };

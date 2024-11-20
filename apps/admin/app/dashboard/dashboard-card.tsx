@@ -14,10 +14,14 @@ import { ClubList } from './components/club-list';
 import { authQueries } from '@/apis/auth';
 import ky from 'ky';
 import { getClientToken } from '@/lib/auth/cookies';
+import { useRegisterInviteCode } from '@/apis/admin';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
   const { mutateAsync: createClub, isPending: isCreatingClub } = useCreateClub();
+  const { mutateAsync: registerInviteCode } = useRegisterInviteCode();
+  const router = useRouter();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
@@ -35,21 +39,21 @@ export default function DashboardCard() {
       );
 
       const { url } = await res.json<{ url: string }>();
-      await createClub({
+      const { clubId } = await createClub({
         ...newClubData,
         ...(newClubData.establishedAt ? { establishedAt: new Date(newClubData.establishedAt).toISOString() } : {}),
         clubImageUrl: url,
       });
+      router.push(`/dashboard/${clubId}`);
     } else {
-      await createClub(newClubData);
+      const { clubId } = await createClub(newClubData);
+      router.push(`/dashboard/${clubId}`);
     }
-
-    setIsAddDialogOpen(false);
   };
 
-  const handleInviteCodeSubmit = (code: string) => {
-    console.log('Invite code submitted:', code);
-    setIsInviteDialogOpen(false);
+  const handleInviteCodeSubmit = async (code: string) => {
+    const { clubId } = await registerInviteCode({ inviteCode: code });
+    router.push(`/dashboard/${clubId}`);
   };
 
   return (

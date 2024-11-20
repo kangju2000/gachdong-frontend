@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
 import { Copy, UserPlus, Crown } from 'lucide-react';
+import { useCreateInviteCode } from '@/apis/admin';
+import { useParams } from 'next/navigation';
 
 const initialAdmins = [
   { id: 1, name: '김철수', email: 'chulsoo@gachon.ac.kr', role: '회장' },
@@ -21,18 +23,15 @@ const initialAdmins = [
   { id: 3, name: '박민수', email: 'minsoo@gachon.ac.kr', role: '총무' },
 ];
 
-export default function ClubAdminManagementComponent() {
+export default function AdminListComponent() {
   const [admins, setAdmins] = useState(initialAdmins);
   const [inviteCode, setInviteCode] = useState('');
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const params = useParams();
 
-  const generateInviteCode = () => {
-    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-    setInviteCode(code);
-    setIsInviteModalOpen(true);
-  };
+  const { mutateAsync: createInviteCode } = useCreateInviteCode();
 
   const copyInviteCode = () => {
     navigator.clipboard.writeText(inviteCode);
@@ -59,7 +58,13 @@ export default function ClubAdminManagementComponent() {
     <div className="min-w-[350px] space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-100">운영진 관리</h1>
-        <Button onClick={generateInviteCode}>
+        <Button
+          onClick={async () => {
+            const { inviteCode } = await createInviteCode({ clubId: Number(params.id) });
+            setInviteCode(inviteCode!);
+            setIsInviteModalOpen(true);
+          }}
+        >
           <UserPlus className="mr-2 h-4 w-4" /> 운영진 초대
         </Button>
       </div>

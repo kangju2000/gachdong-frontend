@@ -609,6 +609,31 @@ export interface ClubSummaryResponse {
 }
 
 /** 결과 목록 */
+export interface AdminInfoResponse {
+  /**
+   * club Id
+   * @format int64
+   * @example 1
+   */
+  clubId?: number;
+  /**
+   * user reference Id
+   * @example "00000000-0000-0000-0000-000000000000"
+   */
+  userReferenceId?: string;
+  /**
+   * club admin role
+   * @example "PRESIDENT"
+   */
+  clubAdminRole?: 'PRESIDENT' | 'MEMBER';
+}
+
+export interface ArrayResponseAdminInfoResponse {
+  /** 결과 목록 */
+  results?: AdminInfoResponse[];
+}
+
+/** 결과 목록 */
 export interface AdminAuthorizedClubResponse {
   /**
    * 동아리 ID
@@ -776,6 +801,26 @@ export namespace Admin동아리Api {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = boolean;
+  }
+
+  /**
+   * @description 동아리 관리자를 조회합니다.
+   * @tags Admin 동아리 API
+   * @name GetAdmins
+   * @summary 동아리 관리자 조회
+   * @request GET:/admin/api/v1/{clubId}/admins
+   * @secure
+   * @response `200` `ArrayResponseAdminInfoResponse` OK
+   */
+  export namespace GetAdmins {
+    export type RequestParams = {
+      /** @format int64 */
+      clubId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ArrayResponseAdminInfoResponse;
   }
 
   /**
@@ -1411,6 +1456,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     hasAuthorityByRecruitmentId: (recruitmentId: number, params: RequestParams = {}) =>
       this.request<boolean, any>({
         path: `/admin/api/v1/${recruitmentId}/has-authority`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 동아리 관리자를 조회합니다.
+     *
+     * @tags Admin 동아리 API
+     * @name GetAdmins
+     * @summary 동아리 관리자 조회
+     * @request GET:/admin/api/v1/{clubId}/admins
+     * @secure
+     * @response `200` `ArrayResponseAdminInfoResponse` OK
+     */
+    getAdmins: (clubId: number, params: RequestParams = {}) =>
+      this.request<ArrayResponseAdminInfoResponse, any>({
+        path: `/admin/api/v1/${clubId}/admins`,
         method: 'GET',
         secure: true,
         ...params,

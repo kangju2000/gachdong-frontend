@@ -9,6 +9,7 @@ import { Shield, Eye, EyeOff } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import { useLogin } from '@/apis/auth';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -16,11 +17,19 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: login } = useLogin();
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    login({ email: `${username}@gachon.ac.kr`, password });
+    login(
+      { email: `${username}@gachon.ac.kr`, password },
+      {
+        onSuccess: () => {
+          router.push('/dashboard');
+        },
+      }
+    );
   };
 
   return (

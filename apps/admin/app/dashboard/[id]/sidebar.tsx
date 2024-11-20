@@ -5,10 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LayoutDashboard, BarChart, Settings, FileText, UserCog } from 'lucide-react';
 import Link from 'next/link';
-import { CLUBS } from '@/constants/data';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { clubQueries } from '@/apis/club';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const menuItems = [
   {
@@ -28,8 +27,8 @@ const menuItems = [
   },
   {
     icon: <UserCog className="mr-2 h-4 w-4" />,
-    label: '운영진 관리',
-    href: '/admin-management',
+    label: '운영진 목록',
+    href: '/admin-list',
   },
   {
     icon: <Settings className="mr-2 h-4 w-4" />,
@@ -40,13 +39,17 @@ const menuItems = [
 
 export function Sidebar() {
   const params = useParams();
-
+  const router = useRouter();
   const { data: authorizedClubs } = useSuspenseQuery(clubQueries.authorizedClubs());
+
+  const handleClubChange = (value: string) => {
+    router.push(`/dashboard/${value}`);
+  };
 
   return (
     <div className="flex w-64 flex-col border-r border-gray-800 bg-gray-900">
       <div className="p-4">
-        <Select defaultValue={String(params.id)}>
+        <Select defaultValue={String(params.id)} onValueChange={handleClubChange}>
           <SelectTrigger className="w-full border-gray-700 bg-gray-800 text-gray-100">
             <SelectValue placeholder="동아리 선택" />
           </SelectTrigger>

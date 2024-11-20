@@ -3,6 +3,7 @@ import { Api as ClubApi } from '@gachdong/api/club';
 import { Api as ApplicationApi } from '@gachdong/api/application';
 import { Api as AuthApi } from '@gachdong/api/auth';
 import { Api as UserApi } from '@gachdong/api/user';
+import { Api as AdminApi } from '@gachdong/api/admin';
 import { getServerToken, getClientToken } from '@/lib/auth/cookies';
 
 const instance = ky.create({
@@ -57,4 +58,12 @@ const userApi = new UserApi({
   },
 });
 
-export { clubApi, applicationApi, authApi, userApi, instance };
+const adminApi = new AdminApi({
+  customFetch: instance,
+  baseUrl: process.env.NEXT_PUBLIC_API_URL + '/admin',
+  baseApiParams: {
+    format: 'json',
+  },
+});
+
+export { clubApi, applicationApi, authApi, userApi, instance, adminApi };

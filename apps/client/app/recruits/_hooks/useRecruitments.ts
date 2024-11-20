@@ -13,8 +13,6 @@ export function useRecruitments() {
     data: { results: recruitments = [] },
   } = useSuspenseQuery(clubQueries.recruitments());
 
-  console.log(recruitments);
-
   const filteredRecruitments = recruitments.filter(recruitment => {
     const matchesCategory = selectedCategory === 'ALL' || recruitment.category === selectedCategory;
     const matchesSearch =

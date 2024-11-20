@@ -3,7 +3,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clubApi } from '../config/instance';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
 import { keys } from './keys';
 import { CreateClubRecruitmentRequest } from '@gachdong/api/club';
 
@@ -11,7 +10,6 @@ const { createClub, createClubActivity, createClubContactInfo, createClubRecruit
 
 export const useCreateClub = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: createClub,
@@ -20,7 +18,6 @@ export const useCreateClub = () => {
         title: '동아리가 추가되었습니다.',
       });
       queryClient.invalidateQueries({ queryKey: keys.all });
-      router.push(`/dashboard/${club.clubId}`);
     },
     onError: () => {
       toast({
