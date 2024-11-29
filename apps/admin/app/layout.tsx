@@ -1,20 +1,10 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
 import { Providers } from './providers';
 import { Suspense } from 'react';
 import { ErrorBoundary } from '@/components/error-boundary/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import '@uiw/react-md-editor/markdown-editor.css';
-
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://admin.gachdong.club'),
@@ -50,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground min-h-screen`}>
+      <body className="bg-background text-foreground min-h-screen">
         <Providers>
           <ErrorBoundary>
             <Suspense>

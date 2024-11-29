@@ -16,6 +16,7 @@ import ky from 'ky';
 import { getClientToken } from '@/lib/auth/cookies';
 import { useRegisterInviteCode } from '@/apis/admin';
 import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
 
 export default function DashboardCard() {
   const { data: profile } = useSuspenseQuery(authQueries.profile());
@@ -53,6 +54,10 @@ export default function DashboardCard() {
 
   const handleInviteCodeSubmit = async (code: string) => {
     const { clubId } = await registerInviteCode({ inviteCode: code });
+    toast({
+      title: '초대코드 등록 완료',
+      description: '동아리 페이지로 이동합니다.',
+    });
     router.push(`/dashboard/${clubId}`);
   };
 
